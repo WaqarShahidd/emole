@@ -1,35 +1,29 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React from "react";
-import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormControl from "@mui/material/FormControl";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import IconButton from "@mui/material/IconButton";
-import PasswordIcon from "@mui/icons-material/Password";
-import MenuItem from "@mui/material/MenuItem";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import EastIcon from "@mui/icons-material/East";
+import Divider from "@mui/material/Divider";
+import Checkbox from "@mui/material/Checkbox";
 import { useNavigate } from "react-router-dom";
 import { colors } from "./../../theme/theme";
+import { useMediaQuery } from "@mui/material";
+import { CustomInput, CustomPasswordInput } from "../../components/CustomInput";
+import CustomBtn from "../../components/CustomBtn";
+import SocialLoginBtn from "../../components/SocialLoginBtn";
 
 const Register = () => {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = React.useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
+  const [checked, setChecked] = React.useState(false);
+
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
   };
 
   const handleSubmit = (event) => {
@@ -40,6 +34,8 @@ const Register = () => {
       password: data.get("password"),
     });
   };
+
+  const smallScreen = useMediaQuery("(max-width:600px)");
 
   return (
     <Grid
@@ -63,26 +59,30 @@ const Register = () => {
           position: "relative",
         }}
       >
-        {/* First image */}
-        <img
-          src={require("../../assets/images/back.png")}
-          style={{
-            position: "absolute",
-            bottom: 50, // Position the image at the bottom
-            right: 50,
-            width: "40%",
-            zIndex: 1, // Ensure it's above the second image
-          }}
-        />
-        {/* Second image */}
-        <img
-          src={require("../../assets/images/front.png")}
-          style={{
-            position: "relative", // Positioned relative to the container
-            height: "60%",
-            zIndex: 0, // Place it behind the first image
-          }}
-        />
+        {!smallScreen && (
+          <>
+            {/* First image */}
+            <img
+              src={require("../../assets/images/back.png")}
+              style={{
+                position: "absolute",
+                bottom: 50,
+                right: 50,
+                width: "40%",
+                zIndex: 1,
+              }}
+            />
+            {/* Second image */}
+            <img
+              src={require("../../assets/images/front.png")}
+              style={{
+                position: "relative",
+                height: "60%",
+                zIndex: 0,
+              }}
+            />
+          </>
+        )}
       </Grid>
       <Grid
         item
@@ -133,78 +133,101 @@ const Register = () => {
             onSubmit={handleSubmit}
             sx={{ mt: 3, width: "100%" }}
           >
-            <div>
+            <SocialLoginBtn
+              title="Register with Google"
+              icon={require("../../assets/images/Google.png")}
+              mB
+              mT
+            />
+            <SocialLoginBtn
+              title="Register with Facebook"
+              icon={require("../../assets/images/Facebook.png")}
+              mB
+            />
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                margin: "16px 0",
+              }}
+            >
+              <Divider style={{ flexGrow: 1, backgroundColor: "#E0E2E7" }} />
               <Typography
-                sx={{
-                  fontWeight: "700",
-                  fontSize: "14px",
-                  color: "#222",
-                  textAlign: "left",
-                  lineHeight: "20px",
-                  marginBottom: "2px",
-                  fontFamily: "Urbanist",
+                variant="body1"
+                style={{
+                  margin: "0 6px",
+                  color: "#858D9D",
+                  fontSize: "12px",
+                  fontWeight: "400",
                 }}
               >
-                Email Address
+                or
               </Typography>
-              <FormControl fullWidth variant="outlined">
-                <OutlinedInput
-                  placeholder="Email address"
-                  sx={{
-                    height: "40px",
-                    borderRadius: "8px",
-                    backgroundColor: "#fff",
-                    border: "1px solid #E0E2E7",
-                    elevation: 0,
-                    fontFamily: "Urbanist",
-                    fontSize: "14px",
-                    fontWeight: "400",
-                  }}
-                />
-              </FormControl>
+              <Divider style={{ flexGrow: 1, backgroundColor: "#E0E2E7" }} />
             </div>
-            <div style={{ marginTop: "15px" }}>
-              <Typography
+            <CustomInput
+              label="Email Address"
+              value={email}
+              setValue={setEmail}
+              placeholder="eg. youremail@email.com"
+            />
+            <CustomPasswordInput value={password} setValue={setPassword} />
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                margin: "10px 0px",
+              }}
+            >
+              <Checkbox
+                checked={checked}
+                onChange={handleChange}
                 sx={{
-                  fontWeight: "700",
+                  padding: 0,
+                  borderRadius: "8px",
+                  "& .MuiSvgIcon-root": {
+                    width: "20px",
+                    height: "20px",
+                    borderRadius: "6px", // Adjust border radius for the checkbox icon
+                  },
+                  "&:hover, &.Mui-checked:hover": {
+                    backgroundColor: "transparent", // Remove hover background color
+                  },
+                  "& .MuiCheckbox-indeterminate": {
+                    backgroundColor: "transparent", // Remove indeterminate background color
+                  },
+                  "& .MuiIconButton-label": {
+                    borderRadius: "8px",
+                    border: "2px solid #858D9D",
+                    width: "20px",
+                    height: "20px",
+                  },
+                }}
+              />
+              <Typography
+                variant="body1"
+                style={{
+                  color: "#667085",
                   fontSize: "14px",
-                  color: "#222",
-                  textAlign: "left",
-                  lineHeight: "20px",
-                  marginBottom: "2px",
+                  fontWeight: "500",
                   fontFamily: "Urbanist",
+                  marginLeft: "5px",
                 }}
               >
-                Password
-              </Typography>
-              <FormControl fullWidth variant="outlined">
-                <OutlinedInput
-                  placeholder="Password"
-                  type={showPassword ? "text" : "password"}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                  sx={{
-                    height: "40px",
-                    borderRadius: "8px",
-                    backgroundColor: "#fff",
-                    border: "1px solid #E0E2E7",
-                    elevation: 0,
-                    fontFamily: "Urbanist",
-                    fontSize: "14px",
-                    fontWeight: "400",
+                I agree to all the{" "}
+                <div
+                  style={{
+                    color: "#2D60FF",
+                    fontWeight: "600",
+                    display: "inline",
+                    cursor: "pointer",
                   }}
-                />
-              </FormControl>
+                >
+                  Terms & Privacy Policy
+                </div>
+              </Typography>
             </div>
 
             <Box
@@ -214,41 +237,40 @@ const Register = () => {
                 justifyContent: "center",
               }}
             >
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  mt: 3,
-                  mb: 2,
-                  width: "100%",
-                  height: "50px",
-                  background:
-                    "linear-gradient(90deg, #2D60FF 0%, #1B3A99 100%)",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  textTransform: "none",
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "#1aaa1a",
-                  },
-                  fontFamily: "Urbanist",
-                  fontSize: "16px",
-                  fontWeight: "700",
-                }}
-                onClick={() => navigate("/")}
-              >
-                Register
-              </Button>
+              <CustomBtn title="Register" onClick={() => navigate("/")} />
             </Box>
-            {/* <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
-              
-            </Grid> */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                mt: 2,
+              }}
+            >
+              <Typography
+                variant="body1"
+                style={{
+                  color: "#667085",
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  fontFamily: "Urbanist",
+                }}
+              >
+                Already have an account?{" "}
+                <div
+                  style={{
+                    color: "#2D60FF",
+                    fontWeight: "600",
+                    display: "inline",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                  onClick={() => navigate("/login")}
+                >
+                  Login
+                </div>
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Grid>
