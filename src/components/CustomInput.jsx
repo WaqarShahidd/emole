@@ -3,23 +3,37 @@ import { Typography, FormControl, OutlinedInput } from "@mui/material";
 import { InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-export const CustomInput = ({ label, value, setValue, placeholder }) => {
+export const CustomInput = ({
+  label,
+  value,
+  setValue,
+  placeholder,
+  mB,
+  mT,
+}) => {
   return (
-    <div>
-      <Typography
-        sx={{
-          fontWeight: "700",
-          fontSize: "14px",
-          color: "#222",
-          textAlign: "left",
-          lineHeight: "20px",
-          marginBottom: "2px",
-          fontFamily: "Urbanist",
-        }}
-      >
-        {label}
-      </Typography>
-      <FormControl fullWidth variant="outlined">
+    <div
+      style={{
+        marginBottom: mB ? mB : "0px",
+        marginTop: mT ? mT : "0px",
+      }}
+    >
+      {label && (
+        <Typography
+          sx={{
+            fontWeight: "700",
+            fontSize: "14px",
+            color: "#222",
+            textAlign: "left",
+            lineHeight: "20px",
+            marginBottom: "2px",
+            fontFamily: "Urbanist",
+          }}
+        >
+          {label}
+        </Typography>
+      )}
+      <FormControl fullWidth variant="outlined" sx={{ elevation: 0 }}>
         <OutlinedInput
           placeholder={placeholder}
           sx={{

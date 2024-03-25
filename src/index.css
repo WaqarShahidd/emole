@@ -20,3 +20,8 @@ code {
   font-family: "Urbanist";
   src: url("../src/assets/fonts/Urbanist-Regular.ttf") format("truetype");
 }
+
+@font-face {
+  font-family: "Urbanist-bold";
+  src: url("../src/assets/fonts/Urbanist-Bold.ttf") format("truetype");
+}

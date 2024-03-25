@@ -1,15 +1,16 @@
 import React from "react";
 import Button from "@mui/material/Button";
 
-const CustomBtn = ({ title, onClick }) => {
+const CustomBtn = ({ title, onClick, fixedH, mB, mT }) => {
   return (
     <Button
       type="submit"
       variant="contained"
       sx={{
-        mb: 2,
+        mb: mB ? 2 : 0,
+        mt: mT ? 2 : 0,
         width: "100%",
-        height: "50px",
+        height: fixedH ? fixedH : "50px",
         background: "linear-gradient(90deg, #2D60FF 0%, #1B3A99 100%)",
         display: "flex",
         justifyContent: "center",
