@@ -13,9 +13,13 @@ import { useMediaQuery } from "@mui/material";
 import { CustomInput, CustomPasswordInput } from "../../components/CustomInput";
 import CustomBtn from "../../components/CustomBtn";
 import SocialLoginBtn from "../../components/SocialLoginBtn";
+import axios from "axios";
+import { useState } from "react";
 
 const Login = () => {
   const navigate = useNavigate();
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -165,8 +169,15 @@ const Login = () => {
               value={email}
               setValue={setEmail}
               placeholder="eg. youremail@email.com"
+              emailError={emailError}
+              setEmailError={setEmailError}
             />
-            <CustomPasswordInput value={password} setValue={setPassword} />
+            <CustomPasswordInput
+              value={password}
+              setValue={setPassword}
+              passwordError={passwordError}
+              setPasswordError={setPasswordError}
+            />
 
             <Box
               sx={{
@@ -198,7 +209,25 @@ const Login = () => {
                 justifyContent: "center",
               }}
             >
-              <CustomBtn title="Login" onClick={() => navigate("/")} />
+              <CustomBtn
+                title="Login"
+                onClick={async () => {
+                  const result = await axios.post(
+                    "http://localhost:54114/api/loginUser",
+                    {
+                      email: email,
+                      password: email,
+                    }
+                  );
+                  console.log(result);
+                  if (result.status) {
+                    alert(result.status);
+                    navigate("/");
+                  } else {
+                    alert(result.status);
+                  }
+                }}
+              />
             </Box>
             <Box
               sx={{

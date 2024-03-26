@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from "react";
+import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -13,10 +13,12 @@ import { useMediaQuery } from "@mui/material";
 import { CustomInput, CustomPasswordInput } from "../../components/CustomInput";
 import CustomBtn from "../../components/CustomBtn";
 import SocialLoginBtn from "../../components/SocialLoginBtn";
+import axios from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
-
+  const [emailError, setEmailError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
@@ -171,8 +173,15 @@ const Register = () => {
               value={email}
               setValue={setEmail}
               placeholder="eg. youremail@email.com"
+              emailError={emailError}
+              setEmailError={setEmailError}
             />
-            <CustomPasswordInput value={password} setValue={setPassword} />
+            <CustomPasswordInput
+              value={password}
+              setValue={setPassword}
+              passwordError={passwordError}
+              setPasswordError={setPasswordError}
+            />
 
             <div
               style={{
@@ -237,7 +246,30 @@ const Register = () => {
                 justifyContent: "center",
               }}
             >
-              <CustomBtn title="Register" onClick={() => navigate("/")} />
+              <CustomBtn
+                title="Register"
+                onClick={async () => {
+                  const result = await axios.post(
+                    "http://localhost:54114/api/addUser",
+                    {
+                      user: {
+                        name: "no name",
+                        email: email,
+                        password: password,
+                      },
+                    }
+                  );
+                  console.log(result);
+                  if (result.status) {
+                    alert(result.status);
+                    navigate("/");
+                  } else {
+                    alert(result.status);
+                  }
+
+                  navigate("/");
+                }}
+              />
             </Box>
             <Box
               sx={{

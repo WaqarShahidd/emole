@@ -1,5 +1,10 @@
 import React from "react";
-import { Typography, FormControl, OutlinedInput } from "@mui/material";
+import {
+  Typography,
+  FormControl,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
 import { InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
@@ -10,6 +15,8 @@ export const CustomInput = ({
   placeholder,
   mB,
   mT,
+  emailError,
+  setEmailError,
 }) => {
   return (
     <div
@@ -34,27 +41,53 @@ export const CustomInput = ({
         </Typography>
       )}
       <FormControl fullWidth variant="outlined" sx={{ elevation: 0 }}>
-        <OutlinedInput
+        <TextField
           placeholder={placeholder}
+          // sx={{
+          //   height: "40px",
+          //   borderRadius: "8px",
+          //   backgroundColor: "#fff",
+          //   border: "1px solid #E0E2E7",
+          //   elevation: 0,
+          //   fontFamily: "Urbanist",
+          //   fontSize: "14px",
+          //   fontWeight: "400",
+          // }}
+          inputProps={{
+            sx: {
+              height: 7,
+
+              fontFamily: "Urbanist",
+              fontSize: "14px",
+              fontWeight: "400",
+            },
+          }}
           sx={{
-            height: "40px",
-            borderRadius: "8px",
             backgroundColor: "#fff",
+            borderRadius: "8px",
             border: "1px solid #E0E2E7",
-            elevation: 0,
-            fontFamily: "Urbanist",
-            fontSize: "14px",
-            fontWeight: "400",
+            textShadow: 1,
           }}
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          error={emailError}
+          helperText={emailError ? "Invalid Email" : ""}
+          onBlur={(e) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            setEmailError(!emailRegex.test(e.target.value));
+          }}
         />
       </FormControl>
     </div>
   );
 };
 
-export const CustomPasswordInput = ({ value, setValue }) => {
+export const CustomPasswordInput = ({
+  value,
+  setValue,
+  passwordError,
+  setPasswordError,
+}) => {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -79,32 +112,70 @@ export const CustomPasswordInput = ({ value, setValue }) => {
         Password
       </Typography>
       <FormControl fullWidth variant="outlined">
-        <OutlinedInput
+        <TextField
           value={value}
           onChange={(e) => setValue(e.target.value)}
           placeholder="Your password"
           type={showPassword ? "text" : "password"}
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-                onMouseDown={handleMouseDownPassword}
-                edge="end"
-              >
-                {showPassword ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            </InputAdornment>
-          }
+          error={passwordError}
+          helperText={passwordError ? "Minimum 8 characters required" : ""}
+          onBlur={(e) => {
+            if (e.target.value.length < 8) {
+              setPasswordError(true);
+            } else {
+              setPasswordError(false);
+            }
+          }}
+          // endAdornment={
+          //   <InputAdornment position="end">
+          //     <IconButton
+          //       aria-label="toggle password visibility"
+          //       onClick={handleClickShowPassword}
+          //       onMouseDown={handleMouseDownPassword}
+          //       edge="end"
+          //     >
+          //       {showPassword ? <VisibilityOff /> : <Visibility />}
+          //     </IconButton>
+          //   </InputAdornment>
+          // }
+          // sx={{
+          //   height: "40px",
+          //   borderRadius: "8px",
+          //   backgroundColor: "#fff",
+          //   border: "1px solid #E0E2E7",
+          //   elevation: 0,
+          //   fontFamily: "Urbanist",
+          //   fontSize: "14px",
+          //   fontWeight: "400",
+          // }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="start">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+          inputProps={{
+            sx: {
+              height: 7,
+
+              fontFamily: "Urbanist",
+              fontSize: "14px",
+              fontWeight: "400",
+            },
+          }}
           sx={{
-            height: "40px",
-            borderRadius: "8px",
             backgroundColor: "#fff",
+            borderRadius: "8px",
             border: "1px solid #E0E2E7",
-            elevation: 0,
-            fontFamily: "Urbanist",
-            fontSize: "14px",
-            fontWeight: "400",
+            textShadow: 1,
           }}
         />
       </FormControl>

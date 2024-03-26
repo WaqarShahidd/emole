@@ -14,6 +14,12 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { useNavigate } from "react-router-dom";
+import {
+  DonutLarge,
+  Notifications,
+  ShoppingCart,
+  ThreeP,
+} from "@mui/icons-material";
 
 const drawerWidth = 75;
 
@@ -33,25 +39,25 @@ const listRoutes = [
   {
     id: 2,
     name: "Products",
-    icon: <InboxIcon />,
+    icon: <ShoppingCart />,
     route: "/products",
   },
   {
     id: 3,
     name: "Segments",
-    icon: <InboxIcon />,
+    icon: <DonutLarge />,
     route: "/segments",
   },
   {
     id: 4,
     name: "Notifications",
-    icon: <InboxIcon />,
+    icon: <Notifications />,
     route: "/notifications",
   },
   {
     id: 5,
     name: "Account",
-    icon: <InboxIcon />,
+    icon: <ThreeP />,
     route: "/account",
   },
 ];
