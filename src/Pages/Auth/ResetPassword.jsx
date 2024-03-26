@@ -147,7 +147,7 @@ const ResetPassword = () => {
                 Back to log in page?{" "}
                 <div
                   style={{
-                    color: "#2D60FF",
+                    color: colors.blueText,
                     fontWeight: "600",
                     display: "inline",
                     textDecoration: "underline",

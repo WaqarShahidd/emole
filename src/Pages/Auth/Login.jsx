@@ -187,7 +187,7 @@ const Login = () => {
             >
               <Typography
                 style={{
-                  color: "#2D60FF",
+                  color: colors.blueText,
                   fontWeight: "500",
                   fontSize: "14px",
                   display: "inline",
@@ -249,7 +249,7 @@ const Login = () => {
                 Don’t have an account?{" "}
                 <div
                   style={{
-                    color: "#2D60FF",
+                    color: colors.blueText,
                     fontWeight: "600",
                     display: "inline",
                     textDecoration: "underline",

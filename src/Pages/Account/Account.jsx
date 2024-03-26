@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SideDrawer from "../../components/SideDrawer";
 import Header from "../../components/Header";
 import { Typography, Grid, Box } from "@mui/material";
@@ -16,102 +16,157 @@ import EventIcon from "@mui/icons-material/Event";
 import Divider from "@mui/material/Divider";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import { DataGrid, gridClasses } from "@mui/x-data-grid";
-
-const billingColumns = [
-  {
-    field: "name",
-    headerName: "Plan",
-    width: 125,
-    renderCell: (params) => (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "row",
-        }}
-      >
-        <div
-          style={{
-            fontWeight: "700",
-            color: "#222222",
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params.row.name}
-        </div>
-
-        {/* <div style={{ fontWeight: "500", color: "#667085", fontSize: "14px" }}>
-          3 Websites
-        </div> */}
-      </div>
-    ),
-  },
-  {
-    field: "amount",
-    headerName: "Products",
-    width: 90,
-    renderCell: (params) => (
-      <div
-        style={{
-          marginLeft: 10,
-          fontWeight: "500",
-          fontSize: "14px",
-          color: "#667085",
-        }}
-      >
-        ${params.row.amount}
-      </div>
-    ),
-  },
-  {
-    field: "status",
-    headerName: "Status",
-    renderCell: (params) => (
-      <div
-        style={{
-          marginLeft: 10,
-          fontWeight: "500",
-          fontSize: "14px",
-          color: "#667085",
-        }}
-      >
-        {params.row.status}
-      </div>
-    ),
-    width: 100,
-  },
-
-  {
-    field: "date",
-    headerName: "Date",
-    width: 160,
-    renderCell: (params) => (
-      <div
-        style={{
-          marginLeft: 10,
-          fontWeight: "500",
-          fontSize: "14px",
-          color: "#667085",
-        }}
-      >
-        {params.row.date}
-      </div>
-    ),
-  },
-];
+import { DataGrid } from "@mui/x-data-grid";
+import Drawer from "@mui/material/Drawer";
+import Button from "@mui/material/Button";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { RowSpaceBwText } from "../../components/RowSpaceBwText";
+import { useNavigate } from "react-router-dom";
+import ProductDetailsDrawer from "../../components/account.components/ProductDetailDrawer";
+import ChoosePlanDrawer from "../../components/account.components/ChoosePlanDrawer";
+import { ConfirmModal, DeleteModal } from "../../components/CustomModals";
 
 const Account = () => {
+  const navigate = useNavigate();
   const [checked, setChecked] = React.useState(false);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
   };
 
+  const [openDetailModal, setopenDetailModal] = useState(false);
+  const [planModal, setplanModal] = useState(false);
+  const [deleteConfirmation, setdeleteConfirmation] = useState(false);
+  const [confirmationModal, setconfirmationModal] = useState(false);
+  const [planUpdated, setplanUpdated] = useState(false);
+
+  const billingColumns = [
+    {
+      field: "name",
+      headerName: "Plan",
+      width: 125,
+      renderCell: (params) => (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row",
+          }}
+        >
+          <div
+            style={{
+              fontWeight: "700",
+              color: "#222222",
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params.row.name}
+          </div>
+
+          {/* <div style={{ fontWeight: "500", color: "#667085", fontSize: "14px" }}>
+            3 Websites
+          </div> */}
+        </div>
+      ),
+    },
+    {
+      field: "amount",
+      headerName: "Products",
+      width: 90,
+      renderCell: (params) => (
+        <div
+          style={{
+            marginLeft: 10,
+            fontWeight: "500",
+            fontSize: "14px",
+            color: "#667085",
+            fontFamily: "PublicSans",
+          }}
+        >
+          ${params.row.amount}
+        </div>
+      ),
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      renderCell: (params) => (
+        <div
+          style={{
+            marginLeft: 10,
+            fontWeight: "500",
+            fontSize: "14px",
+            color: "#667085",
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params.row.status}
+        </div>
+      ),
+      width: 100,
+    },
+    {
+      field: "date",
+      headerName: "Date",
+      width: 160,
+      renderCell: (params) => (
+        <div
+          style={{
+            marginLeft: 10,
+            fontWeight: "500",
+            fontSize: "14px",
+            color: "#667085",
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params.row.date}
+        </div>
+      ),
+    },
+    {
+      field: "view",
+      headerName: "View",
+      width: 60,
+      renderCell: (params) => (
+        <div
+          style={{ cursor: "pointer" }}
+          onClick={() => setopenDetailModal(true)}
+        >
+          <VisibilityIcon sx={{ color: "#858D9D", fontSize: "18px" }} />
+        </div>
+      ),
+    },
+  ];
+
   return (
     <Box style={{ display: "flex", flex: 1 }}>
       <SideDrawer id={5} />
-
+      <ProductDetailsDrawer
+        open={openDetailModal}
+        onClose={() => setopenDetailModal(false)}
+        onClick={() => setdeleteConfirmation(true)}
+      />
+      <ChoosePlanDrawer
+        open={planModal}
+        onClose={() => setplanModal(false)}
+        onClick={() => setplanUpdated(true)}
+      />
+      <DeleteModal
+        open={deleteConfirmation}
+        onClose={() => setdeleteConfirmation(false)}
+      />
+      <ConfirmModal
+        open={confirmationModal}
+        onClose={() => setconfirmationModal(false)}
+        title="Website Added"
+        btnText="Add products"
+      />
+      <ConfirmModal
+        open={planUpdated}
+        onClose={() => setplanUpdated(false)}
+        title="Payment updated"
+        btnText="Back to dashboard"
+      />
       <Box
         sx={{
           display: "flex",
@@ -291,7 +346,7 @@ const Account = () => {
                       </>
                       <Typography
                         sx={{
-                          color: "#2D60FF",
+                          color: colors.blueText,
                           fontSize: "12px",
                           fontWeight: "700",
                           fontFamily: "Urbanist",
@@ -366,7 +421,12 @@ const Account = () => {
                 </Typography>
               </div>
 
-              <CustomBtn title="Create" fixedH="34px" mT />
+              <CustomBtn
+                title="Create"
+                fixedH="34px"
+                mT
+                onClick={() => setconfirmationModal(true)}
+              />
             </Box>
           </Grid>
 
@@ -393,7 +453,7 @@ const Account = () => {
               </Typography>
               <Typography
                 sx={{
-                  color: "#2d60ff",
+                  color: colors.blueText,
                   fontFamily: "Urbanist-bolder",
                   fontWeight: "bold",
                   fontSize: "22px",
@@ -409,6 +469,7 @@ const Account = () => {
                   color: "#222",
                   mt: 1,
                   mb: 1,
+                  fontFamily: "PublicSans",
                 }}
               >
                 more recently with desktop publishing
@@ -422,6 +483,7 @@ const Account = () => {
                     fontWeight: "700",
                     color: "#667085",
                     ml: 2,
+                    fontFamily: "Poppins",
                   }}
                 >
                   SaulDesign@gmail.com
@@ -441,6 +503,7 @@ const Account = () => {
                     fontWeight: "700",
                     color: "#667085",
                     ml: 2,
+                    fontFamily: "Poppins",
                   }}
                 >
                   WhatsApp
@@ -454,6 +517,7 @@ const Account = () => {
                     fontWeight: "700",
                     color: "#667085",
                     ml: 2,
+                    fontFamily: "Poppins",
                   }}
                 >
                   Messenger
@@ -503,6 +567,7 @@ const Account = () => {
                           fontSize: "14px",
                           fontWeight: "500",
                           color: "#667085",
+                          fontFamily: "PublicSans",
                         }}
                       >
                         Email
@@ -512,6 +577,7 @@ const Account = () => {
                           fontSize: "14px",
                           fontWeight: "700",
                           color: "#1D1F2C",
+                          fontFamily: "PublicSans",
                         }}
                       >
                         lindablair@mail.com
@@ -520,7 +586,7 @@ const Account = () => {
                   </div>
                   <Typography
                     sx={{
-                      color: "#2D60FF",
+                      color: colors.blueText,
                       fontSize: "12px",
                       fontWeight: "700",
                       fontFamily: "Urbanist",
@@ -554,6 +620,7 @@ const Account = () => {
                           fontSize: "14px",
                           fontWeight: "500",
                           color: "#667085",
+                          fontFamily: "PublicSans",
                         }}
                       >
                         Password
@@ -563,6 +630,7 @@ const Account = () => {
                           fontSize: "14px",
                           fontWeight: "700",
                           color: "#1D1F2C",
+                          fontFamily: "PublicSans",
                         }}
                       >
                         ********
@@ -571,7 +639,7 @@ const Account = () => {
                   </div>
                   <Typography
                     sx={{
-                      color: "#2D60FF",
+                      color: colors.blueText,
                       fontSize: "12px",
                       fontWeight: "700",
                       fontFamily: "Urbanist",
@@ -604,6 +672,7 @@ const Account = () => {
                           fontSize: "14px",
                           fontWeight: "500",
                           color: "#667085",
+                          fontFamily: "PublicSans",
                         }}
                       >
                         Join date
@@ -613,6 +682,7 @@ const Account = () => {
                           fontSize: "14px",
                           fontWeight: "700",
                           color: "#1D1F2C",
+                          fontFamily: "PublicSans",
                         }}
                       >
                         12.12.24{" "}
@@ -621,7 +691,7 @@ const Account = () => {
                   </div>
                   <Typography
                     sx={{
-                      color: "#2D60FF",
+                      color: colors.blueText,
                       fontSize: "12px",
                       fontWeight: "700",
                       fontFamily: "Urbanist",
@@ -678,6 +748,7 @@ const Account = () => {
                           fontSize: "14px",
                           fontWeight: "500",
                           color: "#667085",
+                          fontFamily: "PublicSans",
                         }}
                       >
                         Plan
@@ -687,6 +758,7 @@ const Account = () => {
                           fontSize: "14px",
                           fontWeight: "700",
                           color: "#1D1F2C",
+                          fontFamily: "PublicSans",
                         }}
                       >
                         Growth{" "}
@@ -695,12 +767,14 @@ const Account = () => {
                   </div>
                   <Typography
                     sx={{
-                      color: "#2D60FF",
+                      color: colors.blueText,
                       fontSize: "12px",
                       fontWeight: "700",
                       fontFamily: "Urbanist",
                       textDecoration: "underline",
+                      cursor: "pointer",
                     }}
+                    onClick={() => setplanModal(true)}
                   >
                     Change Plan
                   </Typography>
@@ -729,6 +803,7 @@ const Account = () => {
                           fontSize: "14px",
                           fontWeight: "500",
                           color: "#667085",
+                          fontFamily: "PublicSans",
                         }}
                       >
                         Payment Method{" "}
@@ -739,6 +814,7 @@ const Account = () => {
                           fontWeight: "700",
                           color: "#1D1F2C",
                           display: "inline",
+                          fontFamily: "PublicSans",
                         }}
                       >
                         <img
@@ -751,7 +827,7 @@ const Account = () => {
                   </div>
                   <Typography
                     sx={{
-                      color: "#2D60FF",
+                      color: colors.blueText,
                       fontSize: "12px",
                       fontWeight: "700",
                       fontFamily: "Urbanist",
@@ -800,6 +876,7 @@ const Account = () => {
                     fontWeight: "700",
                     color: "#fff",
                     ml: 2,
+                    fontFamily: "Poppins",
                   }}
                 >
                   SaulDesign@gmail.com
@@ -819,6 +896,7 @@ const Account = () => {
                     fontWeight: "700",
                     color: "#fff",
                     ml: 2,
+                    fontFamily: "Poppins",
                   }}
                 >
                   WhatsApp
@@ -832,6 +910,7 @@ const Account = () => {
                     fontWeight: "700",
                     color: "#fff",
                     ml: 2,
+                    fontFamily: "Poppins",
                   }}
                 >
                   Messenger
@@ -873,11 +952,35 @@ const Account = () => {
                 }}
                 pageSizeOptions={[5, 10]}
                 checkboxSelection
-                headerClassName="custom-header"
               />
             </Box>
           </Grid>
         </Grid>
+
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "flex-end",
+            width: "100%",
+            px: 2,
+            mb: 2,
+          }}
+        >
+          <Typography
+            sx={{
+              color: colors.blueText,
+              fontSize: "12px",
+              fontWeight: "700",
+              fontFamily: "Urbanist",
+              textDecoration: "underline",
+              cursor: "pointer",
+            }}
+            onClick={() => navigate("/terms")}
+          >
+            Terms of use | Privacy Policy | Refund Policy
+          </Typography>
+        </Box>
       </Box>
     </Box>
   );

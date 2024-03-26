@@ -9,6 +9,7 @@ import Products from "../Pages/Products/Products";
 import Segments from "../Pages/Segments/Segments";
 import Notifications from "../Pages/Notifications/Notifications";
 import Account from "../Pages/Account/Account";
+import Terms from "../Pages/Account/Terms";
 
 export default function Router() {
   return (
@@ -29,6 +30,7 @@ export default function Router() {
 
         {/* Extra */}
         <Route path="*" element={<h1>Not Found</h1>} />
+        <Route path="/terms" element={<Terms />} />
       </Routes>
     </BrowserRouter>
   );

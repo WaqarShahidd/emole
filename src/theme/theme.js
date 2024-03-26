@@ -8,4 +8,6 @@ export const colors = {
   text: "#161721",
 
   darkText: "#1D1FC",
+
+  blueText: "#2D60FF",
 };
