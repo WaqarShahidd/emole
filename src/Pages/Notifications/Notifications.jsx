@@ -6,7 +6,7 @@ import Header from "../../components/Header";
 const Notifications = () => {
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
-      <SideDrawer />
+      <SideDrawer id={4} />
       <Header title="Notifications" />
     </Box>
   );

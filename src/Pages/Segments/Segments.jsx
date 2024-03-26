@@ -6,7 +6,7 @@ import Header from "../../components/Header";
 const Segments = () => {
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
-      <SideDrawer />
+      <SideDrawer id={3} />
       <Header title="Segments" />
     </Box>
   );

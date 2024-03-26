@@ -6,7 +6,7 @@ import Header from "../../components/Header";
 const Dashboard = () => {
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
-      <SideDrawer />
+      <SideDrawer id={1} />
       <Header title="Dashboard" />
     </Box>
   );

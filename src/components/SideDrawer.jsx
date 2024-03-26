@@ -20,6 +20,7 @@ import {
   ShoppingCart,
   ThreeP,
 } from "@mui/icons-material";
+import { useEffect } from "react";
 
 const drawerWidth = 75;
 
@@ -62,9 +63,14 @@ const listRoutes = [
   },
 ];
 
-const SideDrawer = () => {
+const SideDrawer = ({ id }) => {
   const navigate = useNavigate();
   const [selected, setselected] = React.useState("");
+
+  useEffect(() => {
+    setselected(id);
+  }, [id]);
+
   return (
     <Box sx={{ display: "flex" }}>
       <Drawer
@@ -114,7 +120,7 @@ const SideDrawer = () => {
             >
               <ListItemButton
                 onClick={() => {
-                  setselected(text.id);
+                  // setselected(text.id);
                   navigate(text.route);
                 }}
               >

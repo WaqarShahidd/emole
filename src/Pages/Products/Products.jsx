@@ -6,7 +6,7 @@ import Header from "../../components/Header";
 const Products = () => {
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
-      <SideDrawer />
+      <SideDrawer id={2} />
       <Header title="Products" />
     </Box>
   );
