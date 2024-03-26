@@ -25,3 +25,33 @@ code {
   font-family: "Urbanist-bold";
   src: url("../src/assets/fonts/Urbanist-Bold.ttf") format("truetype");
 }
+
+@font-face {
+  font-family: "Urbanist-bolder";
+  src: url("../src/assets/fonts/Urbanist-ExtraBold.ttf") format("truetype");
+}
+
+.custom-header .MuiDataGrid-colCellTitle {
+  font-size: 14px;
+  font-family: "Urbanist";
+  font-weight: 700;
+  color: #222;
+}
+
+/* Customize scrollbar for webkit browsers (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 4px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f0f1f3; /* Background color of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1d1f2c; /* Color of the scrollbar thumb */
+  border-radius: 6px; /* Radius of the scrollbar thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Color of the scrollbar thumb on hover */
+}
