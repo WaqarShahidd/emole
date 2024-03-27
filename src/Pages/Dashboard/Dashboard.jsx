@@ -111,6 +111,7 @@ const Dashboard = () => {
       >
         <Header title="Dashboard" />
 
+        {/* Boxes */}
         <Grid container spacing={2} sx={{ p: 2 }}>
           <Grid item xs={12} sm={6} md={4} lg={2.4}>
             <DashboardBox
@@ -146,6 +147,55 @@ const Dashboard = () => {
               productCount={85}
               Icon={DonutLarge}
             />
+          </Grid>
+        </Grid>
+
+        {/* Tables */}
+        <Grid container spacing={2} sx={{ px: 2, pb: 2 }}>
+          <Grid item xs={12} sm={4}>
+            <Box
+              sx={{
+                height: "50vh",
+                backgroundColor: "#fff",
+                borderRadius: "8px",
+              }}
+            >
+              New Products Update
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={8}>
+            <Box
+              sx={{
+                height: "50vh",
+                backgroundColor: "#fff",
+                borderRadius: "8px",
+              }}
+            >
+              Latest Updates
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Box
+              sx={{
+                height: "50vh",
+                backgroundColor: "#fff",
+                borderRadius: "8px",
+              }}
+            >
+              Price updates
+            </Box>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Box
+              sx={{
+                height: "50vh",
+                backgroundColor: "#fff",
+                borderRadius: "8px",
+              }}
+            >
+              Stock Updates
+            </Box>
           </Grid>
         </Grid>
       </Box>

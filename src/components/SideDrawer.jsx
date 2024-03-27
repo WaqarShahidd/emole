@@ -109,7 +109,6 @@ const SideDrawer = ({ id }) => {
             >
               <ListItemButton
                 onClick={() => {
-                  // setselected(text.id);
                   navigate(text.route);
                 }}
                 sx={{
