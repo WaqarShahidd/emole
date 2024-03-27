@@ -3,7 +3,11 @@ import SideDrawer from "../../components/SideDrawer";
 import Box from "@mui/material/Box";
 import Header from "../../components/Header";
 import { DataGrid } from "@mui/x-data-grid";
-import { prodRows } from "../../assets/DummyData";
+import {
+  getStatusBackgroundColor,
+  getStatusTextColor,
+  prodRows,
+} from "../../assets/DummyData";
 import {
   FormControl,
   Grid,
@@ -25,39 +29,6 @@ import {
 } from "@mui/icons-material";
 
 const Products = () => {
-  const getStatusBackgroundColor = (status) => {
-    switch (status) {
-      case "New":
-        return "#F0F0F0";
-      case "Low":
-        return "#f4cccc";
-      case "In Stock":
-        return "#d1fae5";
-      case "Out of stock":
-        return "#f4cccc";
-      case "Medium":
-        return "#fff2cc";
-      default:
-        return "#fff"; // Default background color
-    }
-  };
-
-  const getStatusTextColor = (status) => {
-    switch (status) {
-      case "New":
-        return "#F0F0F0";
-      case "Low":
-        return "red";
-      case "In Stock":
-        return "green";
-      case "Out of stock":
-        return "red";
-      case "Medium":
-        return "orange";
-      default:
-        return "#fff"; // Default background color
-    }
-  };
   const latestUpdatesColumnsData = [
     {
       field: "ItemName",
@@ -255,7 +226,6 @@ const Products = () => {
             fontSize={13}
             px={1}
             py={0.1}
-            // className="w-full"
             style={{
               textAlign: "center",
               backgroundColor: getStatusBackgroundColor(params?.value),

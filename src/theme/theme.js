@@ -10,4 +10,6 @@ export const colors = {
   darkText: "#1D1FC",
 
   blueText: "#2D60FF",
+
+  columnHeader: "#4A4C56",
 };
