@@ -45,6 +45,7 @@ const Account = () => {
       field: "name",
       headerName: "Plan",
       width: 125,
+
       renderCell: (params) => (
         <div
           style={{
@@ -73,6 +74,13 @@ const Account = () => {
       field: "amount",
       headerName: "Products",
       width: 90,
+      headerAlign: "center",
+      align: "center",
+      renderHeader: (params) => (
+        <Typography fontSize={13} fontFamily={"Urbanist"} fontWeight={"bold"}>
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
       renderCell: (params) => (
         <div
           style={{
@@ -90,6 +98,13 @@ const Account = () => {
     {
       field: "status",
       headerName: "Status",
+      headerAlign: "center",
+      align: "center",
+      renderHeader: (params) => (
+        <Typography fontSize={13} fontFamily={"Urbanist"} fontWeight={"bold"}>
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
       renderCell: (params) => (
         <div
           style={{
@@ -109,6 +124,13 @@ const Account = () => {
       field: "date",
       headerName: "Date",
       width: 160,
+      headerAlign: "center",
+      align: "center",
+      renderHeader: (params) => (
+        <Typography fontSize={13} fontFamily={"Urbanist"} fontWeight={"bold"}>
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
       renderCell: (params) => (
         <div
           style={{
@@ -127,6 +149,13 @@ const Account = () => {
       field: "view",
       headerName: "View",
       width: 60,
+      headerAlign: "center",
+      align: "center",
+      renderHeader: (params) => (
+        <Typography fontSize={13} fontFamily={"Urbanist"} fontWeight={"bold"}>
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
       renderCell: (params) => (
         <div
           style={{ cursor: "pointer" }}
@@ -192,7 +221,7 @@ const Account = () => {
             >
               <Box
                 sx={{
-                  height: "60vh",
+                  height: "56.5vh",
                   overflowY: "auto",
                 }}
               >
@@ -439,6 +468,7 @@ const Account = () => {
               width="100%"
               p={2}
               mb={2}
+              pt={4}
               sx={{ borderRadius: "8px", px: 5 }}
             >
               <Typography
@@ -846,7 +876,7 @@ const Account = () => {
             {/* Banner Box */}
             <Box
               bgcolor="primary.main"
-              height="225px"
+              height="275px"
               width="100%"
               p={4}
               mb={2}
@@ -941,17 +971,13 @@ const Account = () => {
               <DataGrid
                 rows={billingRows}
                 columns={billingColumns}
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
                 sx={{
                   borderRadius: "12px",
                   border: "none",
+                  height: "358px",
                 }}
-                pageSizeOptions={[5, 10]}
                 checkboxSelection
+                hideFooter={true}
               />
             </Box>
           </Grid>

@@ -432,7 +432,43 @@ const Dashboard = () => {
                 borderRadius: "8px",
               }}
             >
-              Latest Updates
+              <Box>
+                <Typography
+                  fontWeight={"bold"}
+                  fontFamily={"Urbanist"}
+                  fontSize={18}
+                >
+                  Latest Updates
+                </Typography>
+              </Box>
+
+              <Box
+                sx={{
+                  "& .super-app-theme--header": {
+                    paddingLeft: "1px",
+                    border: "none",
+                  },
+                }}
+              >
+                <DataGrid
+                  sx={{
+                    "&, [class^=MuiDataGrid-main]": { border: "none" },
+                  }}
+                  showColumnVerticalBorder={false}
+                  showCellVerticalBorder={true}
+                  rows={latestUpdatesRowsData}
+                  columns={latestUpdatesColumnsData}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 5,
+                      },
+                    },
+                  }}
+                  pageSizeOptions={[5]}
+                  hideFooter={true}
+                />
+              </Box>
             </Box>
           </Grid>
 
