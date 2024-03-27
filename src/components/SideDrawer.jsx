@@ -1,18 +1,11 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
-import CssBaseline from "@mui/material/CssBaseline";
-import AppBar from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import { useNavigate } from "react-router-dom";
 import {
   DonutLarge,
@@ -20,7 +13,9 @@ import {
   ShoppingCart,
   ThreeP,
 } from "@mui/icons-material";
+import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import { useEffect } from "react";
+import { colors } from "../theme/theme";
 
 const drawerWidth = 75;
 
@@ -28,13 +23,7 @@ const listRoutes = [
   {
     id: 1,
     name: "Dashboard",
-    icon: (
-      <img
-        src={require("../assets/images/dashboard.png")}
-        style={{ height: "24px", width: "24px", color: "blue" }}
-        alt=""
-      />
-    ),
+    icon: <GridViewRoundedIcon />,
     route: "/",
   },
   {
@@ -120,11 +109,21 @@ const SideDrawer = ({ id }) => {
             >
               <ListItemButton
                 onClick={() => {
-                  // setselected(text.id);
                   navigate(text.route);
                 }}
+                sx={{
+                  ":hover": {
+                    backgroundColor: "#F0F1F3",
+                  },
+                }}
               >
-                <ListItemIcon>{text.icon}</ListItemIcon>
+                <ListItemIcon
+                  sx={{
+                    color: selected === text.id ? colors.blueText : "#667085",
+                  }}
+                >
+                  {text.icon}
+                </ListItemIcon>
               </ListItemButton>
             </ListItem>
           ))}

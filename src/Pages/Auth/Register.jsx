@@ -228,7 +228,7 @@ const Register = () => {
                 I agree to all the{" "}
                 <div
                   style={{
-                    color: "#2D60FF",
+                    color: colors.blueText,
                     fontWeight: "600",
                     display: "inline",
                     cursor: "pointer",
@@ -291,7 +291,7 @@ const Register = () => {
                 Already have an account?{" "}
                 <div
                   style={{
-                    color: "#2D60FF",
+                    color: colors.blueText,
                     fontWeight: "600",
                     display: "inline",
                     textDecoration: "underline",
