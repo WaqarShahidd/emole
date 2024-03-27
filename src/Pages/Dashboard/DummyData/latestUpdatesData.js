@@ -1,0 +1,171 @@
+const { Typography, Box } = require("@mui/material");
+
+const latestUpdatesColumnsData = [
+  {
+    field: "TagName",
+    headerName: "Tag name",
+    width: 250,
+    renderCell: (params) => (
+      <Box>
+        <Typography>{params?.TagName}</Typography>
+        <Typography>Website Name</Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "Priority",
+    headerName: "Priority",
+    width: 150,
+  },
+  {
+    field: "Data",
+    headerName: "Data",
+    width: 150,
+  },
+  {
+    field: "Value",
+    headerName: "Value",
+    width: 150,
+  },
+  {
+    field: "Old_Value",
+    headerName: "Old Value",
+    width: 150,
+  },
+  {
+    field: "New_Value",
+    headerName: "New Value",
+    width: 150,
+  },
+  {
+    field: "Date",
+    headerName: "Date",
+    width: 150,
+  },
+  {
+    field: "Status",
+    headerName: "Status",
+    width: 150,
+  },
+  {
+    field: "View",
+    headerName: "View",
+    width: 150,
+  },
+];
+
+const latestUpdatesRowsData = [
+  {
+    id: 1,
+    TagName: "TagName",
+    Priority: "Priority",
+    Data: "Data",
+    Value: "Value",
+    Old_Value: "Old_Value",
+    New_Value: "New_Value",
+    Date: "Date",
+    Status: "Status",
+    View: "View",
+  },
+  {
+    id: 2,
+    TagName: "TagName",
+    Priority: "Priority",
+    Data: "Data",
+    Value: "Value",
+    Old_Value: "Old_Value",
+    New_Value: "New_Value",
+    Date: "Date",
+    Status: "Status",
+    View: "View",
+  },
+  {
+    id: 3,
+    TagName: "TagName",
+    Priority: "Priority",
+    Data: "Data",
+    Value: "Value",
+    Old_Value: "Old_Value",
+    New_Value: "New_Value",
+    Date: "Date",
+    Status: "Status",
+    View: "View",
+  },
+  {
+    id: 4,
+    TagName: "TagName",
+    Priority: "Priority",
+    Data: "Data",
+    Value: "Value",
+    Old_Value: "Old_Value",
+    New_Value: "New_Value",
+    Date: "Date",
+    Status: "Status",
+    View: "View",
+  },
+  {
+    id: 5,
+    TagName: "TagName",
+    Priority: "Priority",
+    Data: "Data",
+    Value: "Value",
+    Old_Value: "Old_Value",
+    New_Value: "New_Value",
+    Date: "Date",
+    Status: "Status",
+    View: "View",
+  },
+  {
+    id: 6,
+    TagName: "TagName",
+    Priority: "Priority",
+    Data: "Data",
+    Value: "Value",
+    Old_Value: "Old_Value",
+    New_Value: "New_Value",
+    Date: "Date",
+    Status: "Status",
+    View: "View",
+  },
+  {
+    id: 7,
+    TagName: "TagName",
+    Priority: "Priority",
+    Data: "Data",
+    Value: "Value",
+    Old_Value: "Old_Value",
+    New_Value: "New_Value",
+    Date: "Date",
+    Status: "Status",
+    View: "View",
+  },
+  {
+    id: 8,
+    TagName: "TagName",
+    Priority: "Priority",
+    Data: "Data",
+    Value: "Value",
+    Old_Value: "Old_Value",
+    New_Value: "New_Value",
+    Date: "Date",
+    Status: "Status",
+    View: "View",
+  },
+  {
+    id: 9,
+    TagName: "TagName",
+    Priority: "Priority",
+    Data: "Data",
+    Value: "Value",
+    Old_Value: "Old_Value",
+    New_Value: "New_Value",
+    Date: "Date",
+    Status: "Status",
+    View: "View",
+  },
+];
+
+module.exports = {
+  latestUpdatesColumnsData,
+  latestUpdatesRowsData,
+};
