@@ -557,9 +557,10 @@ const Products = () => {
               <Stack direction={"row"}>
                 <Box width={200} height={20}>
                   <FormControl fullWidth>
+                    <InputLabel>X - page</InputLabel>
                     <Select
                       input={
-                        <OutlinedInput sx={{ fontSize: "2rem" }} label="Tag" />
+                        <OutlinedInput sx={{ fontSize: 14 }} label="Tag" />
                       }
                       size="small"
                       labelId="demo-simple-select-label"
