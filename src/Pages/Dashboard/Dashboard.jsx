@@ -2,7 +2,6 @@ import React from "react";
 import Box from "@mui/material/Box";
 import SideDrawer from "../../components/SideDrawer";
 import Header from "../../components/Header";
-
 import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
 import BadgeDashboard from "./components/BadgeDashboard";
 import { Visibility } from "@mui/icons-material";
@@ -12,52 +11,40 @@ import { colors } from "../../theme/theme";
 import { DonutLarge, Notifications, ShoppingCart } from "@mui/icons-material";
 import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
-const getStatusBackgroundColor = (status) => {
-  switch (status) {
-    case "New":
-      return "#F0F0F0";
-    case "Low":
-      return "#f4cccc";
-    case "High":
-      return "#d1fae5";
-    case "Out of stock":
-      return "#f4cccc";
-    case "Medium":
-      return "#fff2cc";
-    default:
-      return "#fff"; // Default background color
-  }
-};
+import { useNavigate } from "react-router-dom";
+import {
+  getStatusBackgroundColor,
+  getStatusTextColor,
+} from "../../assets/DummyData";
 
-const getStatusTextColor = (status) => {
-  switch (status) {
-    case "New":
-      return "#F0F0F0";
-    case "Low":
-      return "red";
-    case "High":
-      return "green";
-    case "Out of stock":
-      return "red";
-    case "Medium":
-      return "orange";
-    default:
-      return "#fff"; // Default background color
-  }
-};
 const latestUpdatesColumnsData = [
   {
     field: "TagName",
     headerName: "Tag name",
     headerClassName: "super-app-theme--header",
-
-    width: 250,
+    flex: 0.85,
     renderHeader: (params) => (
-      <Typography fontWeight={"bold"}>{params?.colDef?.headerName}</Typography>
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
     ),
     renderCell: (params) => (
       <Box className="flex-col flex w-full h-full  justify-center">
-        <Typography color={"gray"} fontWeight={"bold"} fontSize={13}>
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "700",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
           {params?.value}
         </Typography>
         <Typography
@@ -76,8 +63,18 @@ const latestUpdatesColumnsData = [
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
     align: "center",
+    flex: 0.75,
     renderHeader: (params) => (
-      <Typography fontWeight={"bold"}>{params?.colDef?.headerName}</Typography>
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
     ),
     renderCell: (params) => (
       <Box
@@ -108,11 +105,39 @@ const latestUpdatesColumnsData = [
     field: "Data",
     headerName: "Data",
     headerClassName: "super-app-theme--header",
-
     headerAlign: "center",
     align: "center",
+    flex: 0.5,
     renderHeader: (params) => (
-      <Typography fontWeight={"bold"}>{params?.colDef?.headerName}</Typography>
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
     ),
   },
   {
@@ -122,8 +147,37 @@ const latestUpdatesColumnsData = [
 
     headerAlign: "center",
     align: "center",
+    flex: 0.5,
     renderHeader: (params) => (
-      <Typography fontWeight={"bold"}>{params?.colDef?.headerName}</Typography>
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
     ),
   },
   {
@@ -133,8 +187,37 @@ const latestUpdatesColumnsData = [
 
     headerAlign: "center",
     align: "center",
+    flex: 0.5,
     renderHeader: (params) => (
-      <Typography fontWeight={"bold"}>{params?.colDef?.headerName}</Typography>
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
     ),
   },
   {
@@ -144,8 +227,37 @@ const latestUpdatesColumnsData = [
 
     headerAlign: "center",
     align: "center",
+    flex: 0.5,
     renderHeader: (params) => (
-      <Typography fontWeight={"bold"}>{params?.colDef?.headerName}</Typography>
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
     ),
   },
   {
@@ -155,30 +267,96 @@ const latestUpdatesColumnsData = [
 
     headerAlign: "center",
     align: "center",
+    flex: 0.5,
     renderHeader: (params) => (
-      <Typography fontWeight={"bold"}>{params?.colDef?.headerName}</Typography>
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
     ),
   },
   {
     field: "Status",
     headerName: "Status",
     headerClassName: "super-app-theme--header",
-
     headerAlign: "center",
     align: "center",
+    flex: 0.5,
     renderHeader: (params) => (
-      <Typography fontWeight={"bold"}>{params?.colDef?.headerName}</Typography>
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
     ),
   },
   {
     field: "View",
     headerName: "View",
     headerClassName: "super-app-theme--header",
-
     headerAlign: "center",
     align: "center",
+    flex: 0.5,
     renderHeader: (params) => (
-      <Typography fontWeight={"bold"}>{params?.colDef?.headerName}</Typography>
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
     ),
     renderCell: (params) => (
       <IconButton>
@@ -298,7 +476,639 @@ const latestUpdatesRowsData = [
     View: "View",
   },
 ];
-const DashboardBox = ({ title, productCount, Icon }) => (
+
+const newProductUpdatesColumnsData = [
+  {
+    field: "productName",
+    headerName: "Product name",
+    headerClassName: "super-app-theme--header",
+    flex: 0.75,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box className="flex-col flex w-full h-full  justify-center">
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "700",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+        <Typography
+          fontWeight={"bold"}
+          fontSize={13}
+          className="underline text-blue-500 cursor-pointer"
+        >
+          Website Name
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "price",
+    headerName: "Price",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "date",
+    headerName: "Date",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "View",
+    headerName: "View",
+    headerClassName: "super-app-theme--header",
+    flex: 0.25,
+    headerAlign: "center",
+    align: "center",
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <IconButton>
+        <Visibility />
+      </IconButton>
+    ),
+  },
+];
+
+const newProductUpdatesRowsData = [
+  {
+    id: 1,
+    productName: "Product A",
+    price: "$50",
+    date: "2024-03-27",
+  },
+  {
+    id: 2,
+    productName: "Product B",
+    price: "$30",
+    date: "2024-03-26",
+  },
+  {
+    id: 3,
+    productName: "Product C",
+    price: "$70",
+    date: "2024-03-25",
+  },
+  {
+    id: 4,
+    productName: "Product D",
+    price: "$20",
+    date: "2024-03-24",
+  },
+  {
+    id: 5,
+    productName: "Product E",
+    price: "$45",
+    date: "2024-03-23",
+  },
+];
+
+const priceUpdateColumns = [
+  {
+    field: "productName",
+    headerName: "Product name",
+    headerClassName: "super-app-theme--header",
+    flex: 0.75,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box className="flex-col flex w-full h-full  justify-center">
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "700",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+        <Typography
+          fontWeight={"bold"}
+          fontSize={13}
+          className="underline text-blue-500 cursor-pointer"
+        >
+          Website Name
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "oldValue",
+    headerName: "Old Value",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "newValue",
+    headerName: "New Value",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "date",
+    headerName: "Date",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "View",
+    headerName: "View",
+    headerClassName: "super-app-theme--header",
+    flex: 0.25,
+    headerAlign: "center",
+    align: "center",
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <IconButton>
+        <Visibility />
+      </IconButton>
+    ),
+  },
+];
+
+const priceUpdateRowData = [
+  {
+    id: 1,
+    productName: "Product A",
+    oldValue: "$50",
+    newValue: "$60",
+    date: "2024-03-27",
+  },
+  {
+    id: 2,
+    productName: "Product B",
+    oldValue: "$30",
+    newValue: "$60",
+    date: "2024-03-26",
+  },
+  {
+    id: 3,
+    productName: "Product C",
+    oldValue: "$70",
+    newValue: "$60",
+    date: "2024-03-25",
+  },
+  {
+    id: 4,
+    productName: "Product D",
+    oldValue: "$20",
+    newValue: "$60",
+    date: "2024-03-24",
+  },
+  {
+    id: 5,
+    productName: "Product E",
+    oldValue: "$45",
+    newValue: "$60",
+    date: "2024-03-23",
+  },
+];
+
+const stockUpdateColumns = [
+  {
+    field: "productName",
+    headerName: "Product name",
+    headerClassName: "super-app-theme--header",
+    flex: 0.75,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box className="flex-col flex w-full h-full  justify-center">
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "700",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+        <Typography
+          fontWeight={"bold"}
+          fontSize={13}
+          className="underline text-blue-500 cursor-pointer"
+        >
+          Website Name
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "oldValue",
+    headerName: "Old Value",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          fontSize={13}
+          px={1}
+          py={0.1}
+          style={{
+            textAlign: "center",
+            backgroundColor: getStatusBackgroundColor(params?.value),
+            color: getStatusTextColor(params?.value),
+            fontWeight: "bold",
+            borderRadius: "8px",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "newValue",
+    headerName: "New Value",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          fontSize={13}
+          px={1}
+          py={0.1}
+          // className="w-full"
+          style={{
+            textAlign: "center",
+            backgroundColor: getStatusBackgroundColor(params?.value),
+            color: getStatusTextColor(params?.value),
+            fontWeight: "bold",
+            borderRadius: "8px",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "date",
+    headerName: "Date",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "View",
+    headerName: "View",
+    headerClassName: "super-app-theme--header",
+    flex: 0.25,
+    headerAlign: "center",
+    align: "center",
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist",
+          color: "#222",
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <IconButton>
+        <Visibility />
+      </IconButton>
+    ),
+  },
+];
+
+const stockUpdateRowData = [
+  {
+    id: 1,
+    productName: "Product A",
+    oldValue: "Low",
+    newValue: "Out of stock",
+    date: "2024-03-27",
+  },
+  {
+    id: 2,
+    productName: "Product B",
+    oldValue: "Out of stock",
+    newValue: "Low",
+    date: "2024-03-26",
+  },
+  {
+    id: 3,
+    productName: "Product C",
+    oldValue: "Out of stock",
+    newValue: "Low",
+    date: "2024-03-25",
+  },
+  {
+    id: 4,
+    productName: "Product D",
+    oldValue: "Out of stock",
+    newValue: "Low",
+    date: "2024-03-24",
+  },
+  {
+    id: 5,
+    productName: "Product E",
+    oldValue: "Low",
+    newValue: "Out of stock",
+    date: "2024-03-23",
+  },
+];
+
+const DashboardBox = ({ title, productCount, Icon, navigate }) => (
   <Box
     sx={{
       height: 135,
@@ -349,6 +1159,7 @@ const DashboardBox = ({ title, productCount, Icon }) => (
         fontSize: "12px",
         textTransform: "none",
       }}
+      onClick={() => navigate("/products")}
     >
       Discover Products
     </Button>
@@ -356,6 +1167,7 @@ const DashboardBox = ({ title, productCount, Icon }) => (
 );
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
       <SideDrawer id={1} />
@@ -379,6 +1191,7 @@ const Dashboard = () => {
               title="Website 1"
               productCount={50}
               Icon={ShoppingCart}
+              navigate={navigate}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2.4}>
@@ -386,6 +1199,7 @@ const Dashboard = () => {
               title="Website 2"
               productCount={535}
               Icon={GridViewRoundedIcon}
+              navigate={navigate}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2.4}>
@@ -393,6 +1207,7 @@ const Dashboard = () => {
               title="Website 3"
               productCount={72}
               Icon={LocalOfferRoundedIcon}
+              navigate={navigate}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2.4}>
@@ -400,6 +1215,7 @@ const Dashboard = () => {
               title="Website 4"
               productCount={7}
               Icon={Notifications}
+              navigate={navigate}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2.4}>
@@ -407,12 +1223,14 @@ const Dashboard = () => {
               title="Website 5"
               productCount={85}
               Icon={DonutLarge}
+              navigate={navigate}
             />
           </Grid>
         </Grid>
 
         {/* Tables */}
         <Grid container spacing={2} sx={{ px: 2, pb: 2 }}>
+          {/* New products updates Table */}
           <Grid item xs={12} sm={4}>
             <Box
               sx={{
@@ -421,9 +1239,73 @@ const Dashboard = () => {
                 borderRadius: "8px",
               }}
             >
-              New Products Update
+              <Box p={2}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    fontWeight={"bold"}
+                    fontFamily={"Urbanist"}
+                    fontSize={18}
+                  >
+                    New Product Updates
+                  </Typography>
+                  <Button
+                    disableElevation
+                    sx={{
+                      height: "30px",
+                      backgroundColor: "#FFF",
+                      border: "1px solid #2D60FF",
+                      borderRadius: "8px",
+                      color: colors.blueText,
+                      fontFamily: "Urbanist",
+                      fontWeight: "700",
+                      fontSize: "12px",
+                      textTransform: "none",
+                    }}
+                    onClick={() => navigate("/products")}
+                  >
+                    View All
+                  </Button>
+                </Box>
+
+                <Box
+                  sx={{
+                    "& .super-app-theme--header": {
+                      paddingLeft: "1px",
+                      border: "none",
+                    },
+                    height: "calc(50vh - 50px)",
+                  }}
+                >
+                  <DataGrid
+                    sx={{
+                      "&, [class^=MuiDataGrid-main]": { border: "none" },
+                    }}
+                    showColumnVerticalBorder={false}
+                    showCellVerticalBorder={true}
+                    rows={newProductUpdatesRowsData}
+                    columns={newProductUpdatesColumnsData}
+                    initialState={{
+                      pagination: {
+                        paginationModel: {
+                          pageSize: 5,
+                        },
+                      },
+                    }}
+                    pageSizeOptions={[5]}
+                    hideFooter={true}
+                  />
+                </Box>
+              </Box>
             </Box>
           </Grid>
+
+          {/* Latest Updates Table */}
           <Grid item xs={12} sm={8}>
             <Box
               sx={{
@@ -432,46 +1314,73 @@ const Dashboard = () => {
                 borderRadius: "8px",
               }}
             >
-              <Box>
-                <Typography
-                  fontWeight={"bold"}
-                  fontFamily={"Urbanist"}
-                  fontSize={18}
-                >
-                  Latest Updates
-                </Typography>
-              </Box>
-
-              <Box
-                sx={{
-                  "& .super-app-theme--header": {
-                    paddingLeft: "1px",
-                    border: "none",
-                  },
-                }}
-              >
-                <DataGrid
+              <Box p={2}>
+                <Box
                   sx={{
-                    "&, [class^=MuiDataGrid-main]": { border: "none" },
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
-                  showColumnVerticalBorder={false}
-                  showCellVerticalBorder={true}
-                  rows={latestUpdatesRowsData}
-                  columns={latestUpdatesColumnsData}
-                  initialState={{
-                    pagination: {
-                      paginationModel: {
-                        pageSize: 5,
-                      },
+                >
+                  <Typography
+                    fontWeight={"bold"}
+                    fontFamily={"Urbanist"}
+                    fontSize={18}
+                  >
+                    New Product Updates
+                  </Typography>
+                  <Button
+                    disableElevation
+                    sx={{
+                      height: "30px",
+                      backgroundColor: "#FFF",
+                      border: "1px solid #2D60FF",
+                      borderRadius: "8px",
+                      color: colors.blueText,
+                      fontFamily: "Urbanist",
+                      fontWeight: "700",
+                      fontSize: "12px",
+                      textTransform: "none",
+                    }}
+                    onClick={() => navigate("/products")}
+                  >
+                    View All
+                  </Button>
+                </Box>
+
+                <Box
+                  sx={{
+                    "& .super-app-theme--header": {
+                      paddingLeft: "1px",
+                      border: "none",
                     },
+                    height: "calc(50vh - 50px)",
                   }}
-                  pageSizeOptions={[5]}
-                  hideFooter={true}
-                />
+                >
+                  <DataGrid
+                    sx={{
+                      "&, [class^=MuiDataGrid-main]": { border: "none" },
+                    }}
+                    showColumnVerticalBorder={false}
+                    showCellVerticalBorder={true}
+                    rows={latestUpdatesRowsData}
+                    columns={latestUpdatesColumnsData}
+                    initialState={{
+                      pagination: {
+                        paginationModel: {
+                          pageSize: 5,
+                        },
+                      },
+                    }}
+                    pageSizeOptions={[5]}
+                    hideFooter={true}
+                  />
+                </Box>
               </Box>
             </Box>
           </Grid>
 
+          {/* Price Update Table */}
           <Grid item xs={12} sm={6}>
             <Box
               sx={{
@@ -480,9 +1389,73 @@ const Dashboard = () => {
                 borderRadius: "8px",
               }}
             >
-              Price updates
+              <Box p={2}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    fontWeight={"bold"}
+                    fontFamily={"Urbanist"}
+                    fontSize={18}
+                  >
+                    Price updates
+                  </Typography>
+                  <Button
+                    disableElevation
+                    sx={{
+                      height: "30px",
+                      backgroundColor: "#FFF",
+                      border: "1px solid #2D60FF",
+                      borderRadius: "8px",
+                      color: colors.blueText,
+                      fontFamily: "Urbanist",
+                      fontWeight: "700",
+                      fontSize: "12px",
+                      textTransform: "none",
+                    }}
+                    onClick={() => navigate("/products")}
+                  >
+                    View All
+                  </Button>
+                </Box>
+
+                <Box
+                  sx={{
+                    "& .super-app-theme--header": {
+                      paddingLeft: "1px",
+                      border: "none",
+                    },
+                    height: "calc(50vh - 50px)",
+                  }}
+                >
+                  <DataGrid
+                    sx={{
+                      "&, [class^=MuiDataGrid-main]": { border: "none" },
+                    }}
+                    showColumnVerticalBorder={false}
+                    showCellVerticalBorder={true}
+                    rows={priceUpdateRowData}
+                    columns={priceUpdateColumns}
+                    initialState={{
+                      pagination: {
+                        paginationModel: {
+                          pageSize: 5,
+                        },
+                      },
+                    }}
+                    pageSizeOptions={[5]}
+                    hideFooter={true}
+                  />
+                </Box>
+              </Box>
             </Box>
           </Grid>
+
+          {/* Stock Updates Table */}
           <Grid item xs={12} sm={6}>
             <Box
               sx={{
@@ -491,7 +1464,69 @@ const Dashboard = () => {
                 borderRadius: "8px",
               }}
             >
-              Stock Updates
+              <Box p={2}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <Typography
+                    fontWeight={"bold"}
+                    fontFamily={"Urbanist"}
+                    fontSize={18}
+                  >
+                    Stock updates
+                  </Typography>
+                  <Button
+                    disableElevation
+                    sx={{
+                      height: "30px",
+                      backgroundColor: "#FFF",
+                      border: "1px solid #2D60FF",
+                      borderRadius: "8px",
+                      color: colors.blueText,
+                      fontFamily: "Urbanist",
+                      fontWeight: "700",
+                      fontSize: "12px",
+                      textTransform: "none",
+                    }}
+                    onClick={() => navigate("/products")}
+                  >
+                    View All
+                  </Button>
+                </Box>
+
+                <Box
+                  sx={{
+                    "& .super-app-theme--header": {
+                      paddingLeft: "1px",
+                      border: "none",
+                    },
+                    height: "calc(50vh - 50px)",
+                  }}
+                >
+                  <DataGrid
+                    sx={{
+                      "&, [class^=MuiDataGrid-main]": { border: "none" },
+                    }}
+                    showColumnVerticalBorder={false}
+                    showCellVerticalBorder={true}
+                    rows={stockUpdateRowData}
+                    columns={stockUpdateColumns}
+                    initialState={{
+                      pagination: {
+                        paginationModel: {
+                          pageSize: 5,
+                        },
+                      },
+                    }}
+                    pageSizeOptions={[5]}
+                    hideFooter={true}
+                  />
+                </Box>
+              </Box>
             </Box>
           </Grid>
         </Grid>

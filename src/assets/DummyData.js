@@ -150,3 +150,41 @@ export const prodRows = [
     createdAt: "2021-10-05",
   },
 ];
+
+export const getStatusBackgroundColor = (status) => {
+  switch (status) {
+    case "New":
+      return "#F0F0F0";
+    case "Low":
+      return "#E9FAF7";
+    case "In Stock":
+      return "#E9FAF7";
+    case "High":
+      return "#FEECEE";
+    case "Out of stock":
+      return "#FEECEE";
+    case "Medium":
+      return "#FFF0EA";
+    default:
+      return "#fff";
+  }
+};
+
+export const getStatusTextColor = (status) => {
+  switch (status) {
+    case "New":
+      return "#F0F0F0";
+    case "Low":
+      return "#1A9882";
+    case "In Stock":
+      return "#1A9882";
+    case "High":
+      return "#EB3D4D";
+    case "Out of stock":
+      return "#EB3D4D";
+    case "Medium":
+      return "#F86624";
+    default:
+      return "#fff";
+  }
+};
