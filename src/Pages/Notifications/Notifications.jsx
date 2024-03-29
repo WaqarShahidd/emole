@@ -2,7 +2,17 @@ import React, { useState } from "react";
 import SideDrawer from "../../components/SideDrawer";
 import Header from "../../components/Header";
 import { DataGrid } from "@mui/x-data-grid";
-import { Grid, Typography, Box, IconButton, Stack } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  Box,
+  IconButton,
+  Stack,
+  Pagination,
+  FormControl,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import { colors } from "../../theme/theme";
 import {
   getStatusBackgroundColor,
@@ -512,6 +522,42 @@ const Notifications = () => {
                 hideFooter={true}
                 checkboxSelection
               />
+            </Box>
+            <Box className="mt-4 mx-4">
+              <Stack direction={"row-reverse"}>
+                <Pagination count={10} variant="outlined" shape="rounded" />
+                <Box mx={2} width={200} height={20}>
+                  <FormControl
+                    variant="outlined"
+                    style={{ width: "100%" }}
+                    margin={"1"}
+                  >
+                    {/* <InputLabel
+                      style={{
+                        fontSize: 12,
+                      }}
+                      id="test-select-label"
+                    >
+                      X-Per page
+                    </InputLabel> */}
+                    <Select
+                      fullWidth
+                      defaultValue={10}
+                      // input={<OutlinedInput sx={{ fontSize: 14 }} label="Tag" />}
+                      size="small"
+                      variant="outlined"
+                      // value={num}
+
+                      style={{ height: 32 }}
+                      // onChange={handleChange}
+                    >
+                      <MenuItem value={10}>Ten</MenuItem>
+                      <MenuItem value={20}>Twenty</MenuItem>
+                      <MenuItem value={30}>Thirty</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
+              </Stack>
             </Box>
           </Grid>
         </Grid>

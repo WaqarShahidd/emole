@@ -523,21 +523,32 @@ const Products = () => {
                 checkboxSelection
               />
             </Box>
-            <Box>
-              <Stack direction={"row"}>
-                <Box width={200} height={20}>
-                  <FormControl fullWidth>
-                    <InputLabel>X - page</InputLabel>
+            <Box className="mt-4 mx-4">
+              <Stack direction={"row-reverse"}>
+                <Pagination count={10} variant="outlined" shape="rounded" />
+                <Box mx={2} width={200} height={20}>
+                  <FormControl
+                    variant="outlined"
+                    style={{ width: "100%" }}
+                    margin={"1"}
+                  >
+                    {/* <InputLabel
+                      style={{
+                        fontSize: 12,
+                      }}
+                      id="test-select-label"
+                    >
+                      X-Per page
+                    </InputLabel> */}
                     <Select
-                      input={
-                        <OutlinedInput sx={{ fontSize: 14 }} label="Tag" />
-                      }
+                      fullWidth
+                      defaultValue={10}
+                      // input={<OutlinedInput sx={{ fontSize: 14 }} label="Tag" />}
                       size="small"
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      variant="outlined"
                       // value={num}
-                      label="X - page"
-                      style={{ height: 31 }}
+
+                      style={{ height: 32 }}
                       // onChange={handleChange}
                     >
                       <MenuItem value={10}>Ten</MenuItem>
@@ -546,7 +557,6 @@ const Products = () => {
                     </Select>
                   </FormControl>
                 </Box>
-                <Pagination count={10} variant="outlined" shape="rounded" />
               </Stack>
             </Box>
           </Grid>
