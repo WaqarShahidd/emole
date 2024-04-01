@@ -27,8 +27,17 @@ import {
   Visibility,
   WatchLater,
 } from "@mui/icons-material";
+import ProductDetailModal from "../../components/ProductDetailModal";
 
 const Products = () => {
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
   const latestUpdatesColumnsData = [
     {
       field: "ItemName",
@@ -302,7 +311,11 @@ const Products = () => {
           <IconButton>
             <WatchLater fontSize="small" />
           </IconButton>
-          <IconButton>
+          <IconButton
+            onClick={() => {
+              handleClickOpen();
+            }}
+          >
             <Visibility fontSize="small" />
           </IconButton>
         </Stack>
@@ -498,6 +511,7 @@ const Products = () => {
         }}
       >
         <Header title="Products" />
+        <ProductDetailModal handleClose={handleClose} open={open} />
         <Grid container p={2}>
           <Grid item xs={12}>
             <Box
@@ -515,6 +529,7 @@ const Products = () => {
                     borderRight: "none",
                   },
                 }}
+                disableRowSelectionOnClick
                 showColumnVerticalBorder={false}
                 showCellVerticalBorder={true}
                 rows={latestUpdatesRowsData}
