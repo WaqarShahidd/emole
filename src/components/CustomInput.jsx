@@ -56,7 +56,6 @@ export const CustomInput = ({
           inputProps={{
             sx: {
               height: 7,
-
               fontFamily: "Urbanist",
               fontSize: "14px",
               fontWeight: "400",
@@ -70,12 +69,12 @@ export const CustomInput = ({
           }}
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          error={emailError}
-          helperText={emailError ? "Invalid Email" : ""}
-          onBlur={(e) => {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            setEmailError(!emailRegex.test(e.target.value));
-          }}
+          // error={emailError}
+          // helperText={emailError ? "Invalid Email" : ""}
+          // onBlur={(e) => {
+          //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          //   setEmailError(!emailRegex.test(e.target.value));
+          // }}
         />
       </FormControl>
     </div>
