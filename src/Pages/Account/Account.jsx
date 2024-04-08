@@ -40,6 +40,9 @@ const Account = () => {
   const [confirmationModal, setconfirmationModal] = useState(false);
   const [planUpdated, setplanUpdated] = useState(false);
 
+  const [websiteName, setwebsiteName] = useState("");
+  const [websiteUrl, setwebsiteUrl] = useState("");
+
   const billingColumns = [
     {
       field: "name",
@@ -215,7 +218,7 @@ const Account = () => {
               bgcolor="#fff"
               width="100%"
               // height="700px"
-              // height={"85vh"}
+              height={"105vh"}
               p={3}
               sx={{ borderRadius: "8px", overflowY: "auto" }}
             >
@@ -401,8 +404,17 @@ const Account = () => {
               >
                 Add Website
               </Typography>
-              <CustomInput placeholder="Website Name" mB="10px" />
-              <CustomInput placeholder="Website URL" />
+              <CustomInput
+                placeholder="Website Name"
+                mB="10px"
+                value={websiteName}
+                setValue={() => setwebsiteName()}
+              />
+              <CustomInput
+                placeholder="Website URL"
+                value={websiteUrl}
+                setValue={() => setwebsiteUrl()}
+              />
 
               <div
                 style={{
@@ -876,7 +888,7 @@ const Account = () => {
             {/* Banner Box */}
             <Box
               bgcolor="primary.main"
-              height="275px"
+              height="37.5vh"
               width="100%"
               p={4}
               mb={2}
