@@ -212,20 +212,20 @@ const Login = () => {
               <CustomBtn
                 title="Login"
                 onClick={async () => {
-                  // const result = await axios.post(
-                  //   "http://localhost:54114/api/loginUser",
-                  //   {
-                  //     email: email,
-                  //     password: email,
-                  //   }
-                  // );
-                  // console.log(result);
-                  // if (result.status) {
-                  //   alert(result.status);
-                  navigate("/");
-                  // } else {
-                  //   alert(result.status);
-                  // }
+                  const result = await axios.post(
+                    "http://13.53.197.244:5000/api/loginUser",
+                    {
+                      email: email,
+                      password: email,
+                    }
+                  );
+                  console.log(result);
+                  if (result.status) {
+                    alert(result.status);
+                    navigate("/");
+                  } else {
+                    alert(result.status);
+                  }
                 }}
               />
             </Box>

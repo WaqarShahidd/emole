@@ -250,7 +250,7 @@ const Register = () => {
                 title="Register"
                 onClick={async () => {
                   const result = await axios.post(
-                    "http://localhost:54114/api/addUser",
+                    "http://13.53.197.244:5000/api/addUser",
                     {
                       user: {
                         name: "no name",
