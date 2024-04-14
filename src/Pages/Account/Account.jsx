@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SideDrawer from "../../components/SideDrawer";
 import Header from "../../components/Header";
-import { Typography, Grid, Box } from "@mui/material";
+import { Typography, Grid, Box, useMediaQuery } from "@mui/material";
 import { colors } from "../../theme/theme";
 import { billingRows, websites } from "../../assets/DummyData";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -170,6 +170,7 @@ const Account = () => {
     },
   ];
 
+  const smallScreen = useMediaQuery("(max-width:1200px)");
   return (
     <Box style={{ display: "flex", flex: 1 }}>
       <SideDrawer id={5} />
@@ -218,13 +219,14 @@ const Account = () => {
               bgcolor="#fff"
               width="100%"
               // height="700px"
-              height={"105vh"}
+              // height={"97vh"}
+              height="100%"
               p={3}
-              sx={{ borderRadius: "8px", overflowY: "auto" }}
+              sx={{ borderRadius: "8px" }}
             >
               <Box
                 sx={{
-                  height: "56.5vh",
+                  height: "62.5%",
                   overflowY: "auto",
                 }}
               >
@@ -481,7 +483,11 @@ const Account = () => {
               p={2}
               mb={2}
               pt={4}
-              sx={{ borderRadius: "8px", px: 5 }}
+              sx={{
+                borderRadius: "8px",
+                px: smallScreen ? 2 : 5,
+                overflowY: "auto",
+              }}
             >
               <Typography
                 sx={{

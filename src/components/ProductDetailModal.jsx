@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import React from "react";
 
-const ProductDetailModal = ({ open, handleClose }) => {
+const ProductDetailModal = ({ open, handleClose, data }) => {
   return (
     <Box>
       <Dialog
@@ -37,7 +37,7 @@ const ProductDetailModal = ({ open, handleClose }) => {
         <DialogContent>
           <Box px={2}>
             <Stack direction={"row"} spacing={2}>
-              <Box>
+              {/* <Box>
                 <img
                   className="rounded-md mr-6"
                   width={120}
@@ -46,10 +46,10 @@ const ProductDetailModal = ({ open, handleClose }) => {
                   }
                   alt="new"
                 />
-              </Box>
+              </Box> */}
               <Box width={"100%"} mb={1}>
                 <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                  Product Name Product Name Product Name Product Name
+                  {data?.productName}
                 </Typography>
                 <Stack direction={"row"} justifyContent={"space-between"}>
                   <Typography
@@ -60,7 +60,7 @@ const ProductDetailModal = ({ open, handleClose }) => {
                     Product Price
                   </Typography>
                   <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                    323
+                    {data?.productPrice}
                   </Typography>
                 </Stack>
                 <Stack direction={"row"} justifyContent={"space-between"}>
@@ -72,10 +72,10 @@ const ProductDetailModal = ({ open, handleClose }) => {
                     Last Price
                   </Typography>
                   <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                    3232
+                    {data?.PreviousPrice}
                   </Typography>
                 </Stack>
-                <Stack direction={"row"} justifyContent={"space-between"}>
+                {/* <Stack direction={"row"} justifyContent={"space-between"}>
                   <Typography
                     fontFamily={"Urbanist"}
                     fontWeight={"bold"}
@@ -86,7 +86,7 @@ const ProductDetailModal = ({ open, handleClose }) => {
                   <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
                     3
                   </Typography>
-                </Stack>
+                </Stack> */}
                 <Stack direction={"row"} justifyContent={"space-between"}>
                   <Typography
                     fontFamily={"Urbanist"}
@@ -96,12 +96,12 @@ const ProductDetailModal = ({ open, handleClose }) => {
                     Created Date
                   </Typography>
                   <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                    12.12.24
+                    {data?.createdDate}
                   </Typography>
                 </Stack>
               </Box>
             </Stack>
-            <Box mb={1}>
+            {/* <Box mb={1}>
               <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
                 Notification
               </Typography>
@@ -377,7 +377,7 @@ const ProductDetailModal = ({ open, handleClose }) => {
               >
                 Read more
               </Typography>
-            </Box>
+            </Box> */}
           </Box>
         </DialogContent>
         <DialogActions>

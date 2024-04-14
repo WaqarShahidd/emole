@@ -9,12 +9,13 @@ import Divider from "@mui/material/Divider";
 import Checkbox from "@mui/material/Checkbox";
 import { useNavigate } from "react-router-dom";
 import { colors } from "./../../theme/theme";
-import { useMediaQuery } from "@mui/material";
+import { Backdrop, CircularProgress, useMediaQuery } from "@mui/material";
 import { CustomInput, CustomPasswordInput } from "../../components/CustomInput";
 import CustomBtn from "../../components/CustomBtn";
 import SocialLoginBtn from "../../components/SocialLoginBtn";
 import axios from "axios";
 import { useState } from "react";
+import { BASE_URL } from "../../constants/config";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,10 +28,24 @@ const Login = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    HandleLogin(data.get("email"), data.get("password"));
+  };
+
+  const [loading, setloading] = useState(false);
+
+  const HandleLogin = async (email, password) => {
+    setloading(true);
+    try {
+      await axios.post(`${BASE_URL}/api/loginUser`, {
+        email: email,
+        password: password,
+      });
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setloading(false);
+    }
   };
 
   const smallScreen = useMediaQuery("(max-width:600px)");
@@ -42,6 +57,14 @@ const Login = () => {
       sx={{ height: "100vh", backgroundColor: "#fff", padding: "10px" }}
     >
       <CssBaseline />
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Grid
         item
         xs={false}

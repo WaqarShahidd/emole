@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SideDrawer from "../../components/SideDrawer";
 import Box from "@mui/material/Box";
 import Header from "../../components/Header";
@@ -9,6 +9,8 @@ import {
   prodRows,
 } from "../../assets/DummyData";
 import {
+  Backdrop,
+  CircularProgress,
   FormControl,
   Grid,
   IconButton,
@@ -23,14 +25,19 @@ import {
 import {
   ArrowDropDown,
   ArrowDropUp,
-  Schedule,
   Visibility,
   WatchLater,
 } from "@mui/icons-material";
 import ProductDetailModal from "../../components/ProductDetailModal";
+import FilterModal from "../../components/FilterModal";
+import { BASE_URL } from "../../constants/config";
+import axios from "axios";
+import dayjs from "dayjs";
+import moment from "moment";
 
 const Products = () => {
   const [open, setOpen] = React.useState(false);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -38,9 +45,22 @@ const Products = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  const latestUpdatesColumnsData = [
+
+  const [productDetails, setproductDetails] = useState({});
+
+  let currentDate = new Date().toLocaleDateString();
+
+  const [startDate, setstartDate] = useState(null);
+  const [endDate, setendDate] = useState(
+    dayjs(moment(currentDate).format("YYYY-MM-DD"))
+  );
+
+  const [prevPrice, setprevPrice] = useState(null);
+  const [currentPrice, setcurrentPrice] = useState(null);
+
+  const productsColumns = [
     {
-      field: "ItemName",
+      field: "productName",
       headerName: "Product name",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
@@ -58,14 +78,14 @@ const Products = () => {
           alignContent={"center"}
           height={"100%"}
         >
-          <Box className="items-center justify-center  flex py-3 pr-3 ">
+          {/* <Box className="items-center justify-center  flex py-3 pr-3 ">
             <img
               className="rounded-md"
               width={70}
               src={params?.row?.image}
               alt="new"
             />
-          </Box>
+          </Box> */}
           <Box className="flex-col flex w-full h-full  justify-center">
             <Typography
               fontFamily={"Urbanist"}
@@ -80,15 +100,18 @@ const Products = () => {
               fontWeight={"bold"}
               fontSize={13}
               className="underline text-blue-500 cursor-pointer"
+              onClick={() =>
+                window.open(`${params?.row?.website?.website_url}`, "_blank")
+              }
             >
-              Website Name
+              {params?.row?.website?.website_name}
             </Typography>
           </Box>
         </Stack>
       ),
     },
     {
-      field: "price",
+      field: "productPrice",
       headerName: "Price",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       headerAlign: "center",
@@ -110,26 +133,30 @@ const Products = () => {
               fontWeight={"bold"}
               fontSize={13}
             >
-              {params?.value}
+              {params?.row?.PreviousPrice}
             </Typography>
-            <Typography
-              fontFamily={"Urbanist"}
-              fontWeight={"bold"}
-              fontSize={13}
-              color={
-                params?.row?.priceChange === "increase"
-                  ? "green"
-                  : params?.row?.priceChange === "decrease"
-                  ? "red"
-                  : "gray"
-              }
-            >
-              {params?.row?.priceChangeValue}
-            </Typography>
-            {params?.row?.priceChange === "increase" ? (
-              <ArrowDropUp fontSize="small" color="success" />
-            ) : params?.row?.priceChange === "decrease" ? (
-              <ArrowDropDown fontSize="small" color="error" />
+            {params?.row?.productPrice ? (
+              <>
+                <Typography
+                  fontFamily={"Urbanist"}
+                  fontWeight={"bold"}
+                  fontSize={13}
+                  color={
+                    parseFloat(params?.row?.PreviousPrice) <
+                    parseFloat(params?.row?.productPrice)
+                      ? "green"
+                      : "red"
+                  }
+                >
+                  {params?.row?.productPrice}
+                </Typography>
+                {parseFloat(params?.row?.PreviousPrice) <
+                parseFloat(params?.row?.productPrice) ? (
+                  <ArrowDropUp fontSize="small" color="success" />
+                ) : (
+                  <ArrowDropDown fontSize="small" color="error" />
+                )}
+              </>
             ) : (
               <Typography
                 fontFamily={"Urbanist"}
@@ -145,7 +172,7 @@ const Products = () => {
       ),
     },
     {
-      field: "category",
+      field: "Category",
       headerName: "Category",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       headerAlign: "center",
@@ -166,14 +193,16 @@ const Products = () => {
           >
             {params?.value}
           </Typography>
-          <Typography
-            fontFamily={"Urbanist"}
-            fontWeight={"bold"}
-            fontSize={13}
-            className=" font-bold text-blue-500 cursor-pointer"
-          >
-            3 more
-          </Typography>
+          {params?.row?.category?.length > 1 && (
+            <Typography
+              fontFamily={"Urbanist"}
+              fontWeight={"bold"}
+              fontSize={13}
+              className=" font-bold text-blue-500 cursor-pointer"
+            >
+              {params?.row?.category?.length - 1} more
+            </Typography>
+          )}
         </Box>
       ),
     },
@@ -204,79 +233,81 @@ const Products = () => {
             fontWeight={"bold"}
             fontSize={13}
             className=" font-bold text-blue-500 cursor-pointer"
+            onClick={() =>
+              window.open(`${params?.row?.website?.website_url}`, "_blank")
+            }
           >
-            3 more
+            {params?.row?.website?.website_url}
           </Typography>
         </Box>
       ),
     },
+    // {
+    //   field: "Priority",
+    //   headerName: "Stock Status",
+    //   headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   minWidth: 140,
+    //   flex: 1,
+    //   renderHeader: (params) => (
+    //     <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
+    //       {params?.colDef?.headerName}
+    //     </Typography>
+    //   ),
+    //   renderCell: (params) => (
+    //     <Box
+    //       className="w-full h-full"
+    //       display={"flex"}
+    //       justifyContent={"center"}
+    //       alignItems={"center"}
+    //     >
+    //       <Typography
+    //         fontFamily={"Urbanist"}
+    //         fontSize={13}
+    //         px={1}
+    //         py={0.1}
+    //         style={{
+    //           textAlign: "center",
+    //           backgroundColor: getStatusBackgroundColor(params?.value),
+    //           color: getStatusTextColor(params?.value),
+    //           fontWeight: "bold",
+    //           borderRadius: "8px",
+    //         }}
+    //       >
+    //         {params?.value}
+    //       </Typography>
+    //     </Box>
+    //   ),
+    // },
+    // {
+    //   field: "Old_Value",
+    //   headerName: "Out of Stock",
+    //   headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
+    //   flex: 1,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderHeader: (params) => (
+    //     <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
+    //       {params?.colDef?.headerName}
+    //     </Typography>
+    //   ),
+    // },
+    // {
+    //   field: "New_Value",
+    //   headerName: "Notification",
+    //   headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
+    //   flex: 1,
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderHeader: (params) => (
+    //     <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
+    //       {params?.colDef?.headerName}
+    //     </Typography>
+    //   ),
+    // },
     {
-      field: "Priority",
-      headerName: "Stock Status",
-      headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
-      headerAlign: "center",
-      align: "center",
-      minWidth: 140,
-      flex: 1,
-      renderHeader: (params) => (
-        <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-          {params?.colDef?.headerName}
-        </Typography>
-      ),
-      renderCell: (params) => (
-        <Box
-          className="w-full h-full"
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
-          <Typography
-            fontFamily={"Urbanist"}
-            fontSize={13}
-            px={1}
-            py={0.1}
-            style={{
-              textAlign: "center",
-              backgroundColor: getStatusBackgroundColor(params?.value),
-              color: getStatusTextColor(params?.value),
-              fontWeight: "bold",
-              borderRadius: "8px",
-            }}
-          >
-            {params?.value}
-          </Typography>
-        </Box>
-      ),
-    },
-
-    {
-      field: "Old_Value",
-      headerName: "Out of Stock",
-      headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-      renderHeader: (params) => (
-        <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-          {params?.colDef?.headerName}
-        </Typography>
-      ),
-    },
-    {
-      field: "New_Value",
-      headerName: "Notification",
-      headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
-      flex: 1,
-      headerAlign: "center",
-      align: "center",
-      renderHeader: (params) => (
-        <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-          {params?.colDef?.headerName}
-        </Typography>
-      ),
-    },
-    {
-      field: "Date",
+      field: "CreatedDate",
       headerName: "Created Date",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
@@ -288,7 +319,6 @@ const Products = () => {
         </Typography>
       ),
     },
-
     {
       field: "View",
       headerName: "View",
@@ -314,6 +344,7 @@ const Products = () => {
           <IconButton
             onClick={() => {
               handleClickOpen();
+              setproductDetails(params.row);
             }}
           >
             <Visibility fontSize="small" />
@@ -497,9 +528,53 @@ const Products = () => {
     },
   ];
 
+  const [openFilters, setopenFilters] = useState(false);
+
+  const [loading, setloading] = useState(false);
+  const [productsData, setproductsData] = useState([]);
+
+  const FetchProducts = async () => {
+    setloading(true);
+    try {
+      const response = await axios.post(`${BASE_URL}/api/getProductsByPage`, {
+        page: 1,
+        pageSize: 10,
+        filters: {
+          productPrice: {
+            minPrice: 0,
+            maxPrice: 1000,
+          },
+          websites: ["1", "2"],
+          createdDate: {
+            startDate: "",
+            endDate: "",
+          },
+        },
+      });
+      const data = await response.data.products;
+      setproductsData(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setloading(false);
+    }
+  };
+
+  useEffect(() => {
+    FetchProducts();
+  }, []);
+
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
       <SideDrawer id={2} />
+      {loading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       <Box
         sx={{
           display: "flex",
@@ -510,8 +585,32 @@ const Products = () => {
           backgroundColor: "#F9F9FC",
         }}
       >
-        <Header title="Products" />
-        <ProductDetailModal handleClose={handleClose} open={open} />
+        <Header
+          title="Products"
+          filter
+          filterBtn={() => setopenFilters(!openFilters)}
+        />
+
+        <FilterModal
+          open={openFilters}
+          handleClose={() => setopenFilters(false)}
+          startDate={startDate}
+          setstartDate={setstartDate}
+          endDate={endDate}
+          setendDate={setendDate}
+          prevPrice={prevPrice}
+          setprevPrice={setprevPrice}
+          currentPrice={currentPrice}
+          setcurrentPrice={setcurrentPrice}
+          applyFilter={() => FetchProducts()}
+        />
+
+        <ProductDetailModal
+          handleClose={handleClose}
+          open={open}
+          data={productDetails}
+        />
+
         <Grid container p={2}>
           <Grid item xs={12}>
             <Box
@@ -532,8 +631,9 @@ const Products = () => {
                 disableRowSelectionOnClick
                 showColumnVerticalBorder={false}
                 showCellVerticalBorder={true}
-                rows={latestUpdatesRowsData}
-                columns={latestUpdatesColumnsData}
+                rows={productsData}
+                getRowId={(row) => row.productId}
+                columns={productsColumns}
                 hideFooter={true}
                 checkboxSelection
               />
