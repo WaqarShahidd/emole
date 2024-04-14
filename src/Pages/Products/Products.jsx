@@ -48,16 +48,6 @@ const Products = () => {
 
   const [productDetails, setproductDetails] = useState({});
 
-  let currentDate = new Date().toLocaleDateString();
-
-  const [startDate, setstartDate] = useState(null);
-  const [endDate, setendDate] = useState(
-    dayjs(moment(currentDate).format("YYYY-MM-DD"))
-  );
-
-  const [prevPrice, setprevPrice] = useState(null);
-  const [currentPrice, setcurrentPrice] = useState(null);
-
   const productsColumns = [
     {
       field: "productName",
@@ -318,6 +308,18 @@ const Products = () => {
           {params?.colDef?.headerName}
         </Typography>
       ),
+      renderCell: (params) => (
+        <Box className="flex-col flex w-full h-full  justify-center">
+          <Typography
+            fontFamily={"Urbanist"}
+            color={"gray"}
+            fontWeight={"bold"}
+            fontSize={13}
+          >
+            {moment(params?.value).format("DD-MM-YYYY")}
+          </Typography>
+        </Box>
+      ),
     },
     {
       field: "View",
@@ -533,6 +535,18 @@ const Products = () => {
   const [loading, setloading] = useState(false);
   const [productsData, setproductsData] = useState([]);
 
+  let currentDate = new Date().toLocaleDateString();
+
+  const [startDate, setstartDate] = useState(null);
+  const [endDate, setendDate] = useState(
+    dayjs(moment(currentDate).format("YYYY-MM-DD"))
+  );
+
+  const [prevPrice, setprevPrice] = useState(null);
+  const [currentPrice, setcurrentPrice] = useState(null);
+
+  const [selectedIds, setSelectedIds] = useState([]);
+
   const FetchProducts = async () => {
     setloading(true);
     try {
@@ -541,13 +555,13 @@ const Products = () => {
         pageSize: 10,
         filters: {
           productPrice: {
-            minPrice: 0,
-            maxPrice: 1000,
+            minPrice: parseFloat(prevPrice),
+            maxPrice: parseFloat(currentPrice),
           },
-          websites: ["1", "2"],
+          websites: selectedIds,
           createdDate: {
-            startDate: "",
-            endDate: "",
+            startDate: startDate,
+            endDate: endDate,
           },
         },
       });
@@ -602,6 +616,8 @@ const Products = () => {
           setprevPrice={setprevPrice}
           currentPrice={currentPrice}
           setcurrentPrice={setcurrentPrice}
+          setSelectedIds={setSelectedIds}
+          selectedIds={selectedIds}
           applyFilter={() => FetchProducts()}
         />
 
@@ -627,6 +643,7 @@ const Products = () => {
                     border: "none",
                     borderRight: "none",
                   },
+                  minHeight: 100,
                 }}
                 disableRowSelectionOnClick
                 showColumnVerticalBorder={false}

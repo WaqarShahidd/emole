@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import SideDrawer from "../../components/SideDrawer";
 import Header from "../../components/Header";
@@ -16,6 +16,8 @@ import {
   getStatusBackgroundColor,
   getStatusTextColor,
 } from "../../assets/DummyData";
+import axios from "axios";
+import { BASE_URL } from "../../constants/config";
 
 const latestUpdatesColumnsData = [
   {
@@ -1168,6 +1170,23 @@ const DashboardBox = ({ title, productCount, Icon, navigate }) => (
 
 const Dashboard = () => {
   const navigate = useNavigate();
+
+  const [allWebsites, setallWebsites] = useState([]);
+
+  const GetWebsites = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/getAllWebsites`);
+      const data = await response.data.websites;
+      setallWebsites(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    GetWebsites();
+  }, []);
+
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
       <SideDrawer id={1} />
@@ -1186,15 +1205,17 @@ const Dashboard = () => {
 
         {/* Boxes */}
         <Grid container spacing={2} sx={{ p: 2 }}>
-          <Grid item xs={12} sm={6} md={4} lg={2.4}>
-            <DashboardBox
-              title="Website 1"
-              productCount={50}
-              Icon={ShoppingCart}
-              navigate={navigate}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6} md={4} lg={2.4}>
+          {allWebsites?.map((website) => (
+            <Grid item xs={12} sm={6} md={4} lg={2.4}>
+              <DashboardBox
+                title={website.website_name}
+                productCount={0}
+                Icon={ShoppingCart}
+                navigate={navigate}
+              />
+            </Grid>
+          ))}
+          {/* <Grid item xs={12} sm={6} md={4} lg={2.4}>
             <DashboardBox
               title="Website 2"
               productCount={535}
@@ -1225,7 +1246,7 @@ const Dashboard = () => {
               Icon={DonutLarge}
               navigate={navigate}
             />
-          </Grid>
+          </Grid> */}
         </Grid>
 
         {/* Tables */}

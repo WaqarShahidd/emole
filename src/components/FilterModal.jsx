@@ -17,13 +17,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 import moment from "moment";
+import axios from "axios";
+import { BASE_URL } from "../constants/config";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -60,6 +62,8 @@ const FilterModal = ({
   setprevPrice,
   currentPrice,
   setcurrentPrice,
+  selectedIds,
+  setSelectedIds,
   applyFilter,
 }) => {
   const [personName, setPersonName] = React.useState([]);
@@ -68,11 +72,28 @@ const FilterModal = ({
     const {
       target: { value },
     } = event;
+    console.log(event, "e");
     setPersonName((prevPersonName) => {
       const newValue = typeof value === "string" ? value.split(",") : value;
       return newValue;
     });
   };
+
+  const [allWebsites, setallWebsites] = useState([]);
+
+  const GetWebsites = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/getAllWebsites`);
+      const data = await response.data.websites;
+      setallWebsites(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    GetWebsites();
+  }, []);
 
   return (
     <Dialog
@@ -105,6 +126,7 @@ const FilterModal = ({
               color: "#222",
               pb: 1,
             }}
+            onClick={() => console.log(selectedIds)}
           >
             Choose Website
           </Typography>
@@ -125,10 +147,30 @@ const FilterModal = ({
               MenuProps={MenuProps}
               inputProps={{ "aria-label": "Without label" }}
             >
-              {names.map((name) => (
-                <MenuItem key={name} value={name}>
-                  <Checkbox checked={personName.indexOf(name) > -1} />
-                  <ListItemText primary={name} />
+              {allWebsites?.map((name) => (
+                <MenuItem
+                  key={name.id}
+                  value={name.website_name}
+                  onClick={(e) => {
+                    setSelectedIds((prevSelectedIds) => {
+                      const selectedId = allWebsites.find(
+                        (website) => website.id === name.id
+                      )?.id;
+
+                      if (prevSelectedIds.includes(selectedId)) {
+                        return prevSelectedIds.filter(
+                          (id) => id !== selectedId
+                        );
+                      } else {
+                        return [...prevSelectedIds, selectedId];
+                      }
+                    });
+                  }}
+                >
+                  <Checkbox
+                    checked={personName.indexOf(name.website_name) > -1}
+                  />
+                  <ListItemText primary={name.website_name} />
                 </MenuItem>
               ))}
             </Select>
@@ -147,7 +189,6 @@ const FilterModal = ({
           >
             Choose Created Date Range
           </Typography>
-
           <Stack direction="row" justifyContent="space-between">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer
@@ -208,7 +249,12 @@ const FilterModal = ({
               placeholder="Max Price"
               sx={{ width: "47.5%" }}
               value={currentPrice}
-              onChange={(e) => setcurrentPrice(e.target.value)}
+              onChange={(e) => {
+                if (prevPrice === null) {
+                  setprevPrice(0);
+                }
+                setcurrentPrice(e.target.value);
+              }}
             />
           </Stack>
         </Box>
@@ -239,7 +285,10 @@ const FilterModal = ({
             }}
             variant="contained"
             fullWidth
-            onClick={handleClose}
+            onClick={() => {
+              handleClose();
+              applyFilter();
+            }}
             autoFocus
           >
             Apply
