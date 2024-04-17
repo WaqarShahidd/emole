@@ -18,6 +18,7 @@ import {
 } from "../../assets/DummyData";
 import axios from "axios";
 import { BASE_URL } from "../../constants/config";
+import GroupModal from "../../components/GroupModal";
 
 const latestUpdatesColumnsData = [
   {
@@ -1174,6 +1175,8 @@ const Dashboard = () => {
   const [allWebsites, setallWebsites] = useState([]);
 
   const GetWebsites = async () => {
+    const token = localStorage.getItem("token");
+    console.log(token);
     try {
       const response = await axios.get(`${BASE_URL}/api/getAllWebsites`);
       const data = await response.data.websites;

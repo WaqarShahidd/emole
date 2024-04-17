@@ -10,10 +10,14 @@ import Segments from "../Pages/Segments/Segments";
 import Notifications from "../Pages/Notifications/Notifications";
 import Account from "../Pages/Account/Account";
 import Terms from "../Pages/Account/Terms";
+import GroupModal from "../components/GroupModal";
+import WebsitesModal from "../components/WebsitesModal";
 
 export default function Router() {
   return (
     <BrowserRouter>
+      <GroupModal />
+      <WebsitesModal />
       <Routes>
         {/* auth router  */}
         <Route exact path="/register" element={<Register />} />

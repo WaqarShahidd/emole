@@ -9,13 +9,16 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import { useNavigate } from "react-router-dom";
 import {
   DonutLarge,
+  Language,
   Notifications,
+  PieChart,
   ShoppingCart,
   ThreeP,
 } from "@mui/icons-material";
 import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import { useEffect } from "react";
 import { colors } from "../theme/theme";
+import { useUser } from "../constants/context";
 
 const drawerWidth = 75;
 
@@ -32,11 +35,16 @@ const listRoutes = [
     icon: <ShoppingCart />,
     route: "/products",
   },
+  // {
+  //   id: 3,
+  //   name: "Segments",
+  //   icon: <DonutLarge />,
+  //   route: "/segments",
+  // },
   {
     id: 3,
-    name: "Segments",
-    icon: <DonutLarge />,
-    route: "/segments",
+    name: "Group",
+    icon: <PieChart />,
   },
   {
     id: 4,
@@ -46,6 +54,11 @@ const listRoutes = [
   },
   {
     id: 5,
+    name: "Websites",
+    icon: <Language />,
+  },
+  {
+    id: 6,
     name: "Account",
     icon: <ThreeP />,
     route: "/account",
@@ -60,6 +73,7 @@ const SideDrawer = ({ id }) => {
     setselected(id);
   }, [id]);
 
+  const { setgroupModalState, setwebsiteModalState } = useUser();
   return (
     <Box sx={{ display: "flex" }}>
       <Drawer
@@ -109,12 +123,19 @@ const SideDrawer = ({ id }) => {
             >
               <ListItemButton
                 onClick={() => {
-                  navigate(text.route);
+                  if (text.route) {
+                    navigate(text.route);
+                  } else if (text.name === "Group") {
+                    setgroupModalState(true);
+                  } else if (text.name === "Websites") {
+                    setwebsiteModalState(true);
+                  }
                 }}
                 sx={{
                   ":hover": {
-                    backgroundColor: "#F0F1F3",
+                    backgroundColor: "transparent",
                   },
+                  backgroundColor: "transparent",
                 }}
               >
                 <ListItemIcon

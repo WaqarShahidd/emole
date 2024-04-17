@@ -9,13 +9,94 @@ import Divider from "@mui/material/Divider";
 import Checkbox from "@mui/material/Checkbox";
 import { useNavigate } from "react-router-dom";
 import { colors } from "./../../theme/theme";
-import { Backdrop, CircularProgress, useMediaQuery } from "@mui/material";
-import { CustomInput, CustomPasswordInput } from "../../components/CustomInput";
+import {
+  Alert,
+  Backdrop,
+  CircularProgress,
+  FormControl,
+  Snackbar,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
+import { CustomPasswordInput } from "../../components/CustomInput";
 import CustomBtn from "../../components/CustomBtn";
 import SocialLoginBtn from "../../components/SocialLoginBtn";
 import axios from "axios";
 import { useState } from "react";
 import { BASE_URL } from "../../constants/config";
+
+const CustomInput = ({
+  label,
+  value,
+  setValue,
+  placeholder,
+  mB,
+  mT,
+  emailError,
+  setEmailError,
+}) => {
+  return (
+    <div
+      style={{
+        marginBottom: mB ? mB : "0px",
+        marginTop: mT ? mT : "0px",
+      }}
+    >
+      {label && (
+        <Typography
+          sx={{
+            fontWeight: "700",
+            fontSize: "14px",
+            color: "#222",
+            textAlign: "left",
+            lineHeight: "20px",
+            marginBottom: "2px",
+            fontFamily: "Urbanist",
+          }}
+        >
+          {label}
+        </Typography>
+      )}
+      <FormControl fullWidth variant="outlined" sx={{ elevation: 0 }}>
+        <TextField
+          placeholder={placeholder}
+          // sx={{
+          //   height: "40px",
+          //   borderRadius: "8px",
+          //   backgroundColor: "#fff",
+          //   border: "1px solid #E0E2E7",
+          //   elevation: 0,
+          //   fontFamily: "Urbanist",
+          //   fontSize: "14px",
+          //   fontWeight: "400",
+          // }}
+          inputProps={{
+            sx: {
+              height: 7,
+              fontFamily: "Urbanist",
+              fontSize: "14px",
+              fontWeight: "400",
+            },
+          }}
+          sx={{
+            backgroundColor: "#fff",
+            borderRadius: "8px",
+            border: "1px solid #E0E2E7",
+            textShadow: 1,
+          }}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          error={emailError}
+          helperText={emailError ? "Invalid Email" : ""}
+          onBlur={(e) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            setEmailError(!emailRegex.test(e.target.value));
+          }}
+        />
+      </FormControl>
+    </div>
+  );
+};
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,26 +106,41 @@ const Login = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    HandleLogin(data.get("email"), data.get("password"));
-  };
-
   const [loading, setloading] = useState(false);
 
-  const HandleLogin = async (email, password) => {
-    setloading(true);
-    try {
-      await axios.post(`${BASE_URL}/api/loginUser`, {
-        email: email,
-        password: password,
-      });
-      navigate("/");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setloading(false);
+  const [error, seterror] = useState(false);
+  const [errorMsg, seterrorMsg] = useState("");
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    seterror(false);
+  };
+
+  const HandleLogin = async () => {
+    if (email === "" || password === "") {
+      seterror(true);
+      seterrorMsg("Please fill all the fields!");
+      console.log(errorMsg);
+    } else {
+      setloading(true);
+      await axios
+        .post(`${BASE_URL}/api/loginUser`, {
+          email: email,
+          password: password,
+        })
+        .then((res) => {
+          navigate("/");
+          localStorage.setItem("token", res.data.token);
+          setloading(false);
+        })
+        .catch((e) => {
+          seterror(true);
+          seterrorMsg(e?.response?.data?.message);
+          setloading(false);
+        });
     }
   };
 
@@ -57,14 +153,24 @@ const Login = () => {
       sx={{ height: "100vh", backgroundColor: "#fff", padding: "10px" }}
     >
       <CssBaseline />
-      {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={loading}
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar open={error} autoHideDuration={6000} onClose={handleCloseError}>
+        <Alert
+          onClose={handleCloseError}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
         >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
+          {errorMsg}
+        </Alert>
+      </Snackbar>
+
       <Grid
         item
         xs={false}
@@ -148,13 +254,8 @@ const Login = () => {
           >
             Welcome back, please enter your details.
           </Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 3, width: "100%" }}
-          >
-            <SocialLoginBtn
+          <Box sx={{ mt: 3, width: "100%" }}>
+            {/* <SocialLoginBtn
               title="Login with Google"
               icon={require("../../assets/images/Google.png")}
               mT
@@ -186,7 +287,7 @@ const Login = () => {
                 or
               </Typography>
               <Divider style={{ flexGrow: 1, backgroundColor: "#E0E2E7" }} />
-            </div>
+            </div> */}
             <CustomInput
               label="Email Address"
               value={email}
@@ -232,25 +333,7 @@ const Login = () => {
                 justifyContent: "center",
               }}
             >
-              <CustomBtn
-                title="Login"
-                onClick={async () => {
-                  const result = await axios.post(
-                    "http://13.53.197.244:5000/api/loginUser",
-                    {
-                      email: email,
-                      password: email,
-                    }
-                  );
-                  console.log(result);
-                  if (result.status) {
-                    alert(result.status);
-                    navigate("/");
-                  } else {
-                    alert(result.status);
-                  }
-                }}
-              />
+              <CustomBtn title="Login" onClick={HandleLogin} />
             </Box>
             <Box
               sx={{

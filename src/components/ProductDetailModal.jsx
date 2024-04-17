@@ -37,16 +37,6 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
         <DialogContent>
           <Box px={2}>
             <Stack direction={"row"} spacing={2}>
-              {/* <Box>
-                <img
-                  className="rounded-md mr-6"
-                  width={120}
-                  src={
-                    "https://images.pexels.com/photos/20787/pexels-photo.jpg?auto=compress&cs=tinysrgb&h=350"
-                  }
-                  alt="new"
-                />
-              </Box> */}
               <Box width={"100%"} mb={1}>
                 <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
                   {data?.productName}

@@ -9,11 +9,93 @@ import Divider from "@mui/material/Divider";
 import Checkbox from "@mui/material/Checkbox";
 import { useNavigate } from "react-router-dom";
 import { colors } from "./../../theme/theme";
-import { useMediaQuery } from "@mui/material";
-import { CustomInput, CustomPasswordInput } from "../../components/CustomInput";
+import {
+  Alert,
+  Backdrop,
+  CircularProgress,
+  FormControl,
+  Snackbar,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
+import { CustomPasswordInput } from "../../components/CustomInput";
 import CustomBtn from "../../components/CustomBtn";
 import SocialLoginBtn from "../../components/SocialLoginBtn";
 import axios from "axios";
+import { BASE_URL } from "../../constants/config";
+
+const CustomInput = ({
+  label,
+  value,
+  setValue,
+  placeholder,
+  mB,
+  mT,
+  emailError,
+  setEmailError,
+}) => {
+  return (
+    <div
+      style={{
+        marginBottom: mB ? mB : "0px",
+        marginTop: mT ? mT : "0px",
+      }}
+    >
+      {label && (
+        <Typography
+          sx={{
+            fontWeight: "700",
+            fontSize: "14px",
+            color: "#222",
+            textAlign: "left",
+            lineHeight: "20px",
+            marginBottom: "2px",
+            fontFamily: "Urbanist",
+          }}
+        >
+          {label}
+        </Typography>
+      )}
+      <FormControl fullWidth variant="outlined" sx={{ elevation: 0 }}>
+        <TextField
+          placeholder={placeholder}
+          // sx={{
+          //   height: "40px",
+          //   borderRadius: "8px",
+          //   backgroundColor: "#fff",
+          //   border: "1px solid #E0E2E7",
+          //   elevation: 0,
+          //   fontFamily: "Urbanist",
+          //   fontSize: "14px",
+          //   fontWeight: "400",
+          // }}
+          inputProps={{
+            sx: {
+              height: 7,
+              fontFamily: "Urbanist",
+              fontSize: "14px",
+              fontWeight: "400",
+            },
+          }}
+          sx={{
+            backgroundColor: "#fff",
+            borderRadius: "8px",
+            border: "1px solid #E0E2E7",
+            textShadow: 1,
+          }}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          error={emailError}
+          helperText={emailError ? "Invalid Email" : ""}
+          onBlur={(e) => {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            setEmailError(!emailRegex.test(e.target.value));
+          }}
+        />
+      </FormControl>
+    </div>
+  );
+};
 
 const Register = () => {
   const navigate = useNavigate();
@@ -37,7 +119,61 @@ const Register = () => {
     });
   };
 
+  const [error, seterror] = useState(false);
+  const [errorMsg, seterrorMsg] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const handleCloseError = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    seterror(false);
+  };
+
   const smallScreen = useMediaQuery("(max-width:600px)");
+  const [loading, setloading] = useState(false);
+
+  const OnRegister = async () => {
+    if (email === "" || password === "") {
+      seterror(true);
+      seterrorMsg("Please fill all the fields!");
+    } else if (!checked) {
+      seterror(true);
+      seterrorMsg("Please agree to the terms and conditions!");
+    } else if (!emailError && !passwordError) {
+      setloading(true);
+      await axios
+        .post(`${BASE_URL}/api/addUser`, {
+          user: {
+            name: "",
+            email: email,
+            password: password,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          setTimeout(() => {
+            navigate("/login");
+          }, 4000);
+          setOpen(true);
+          setloading(false);
+        })
+        .catch((e) => {
+          seterror(true);
+          seterrorMsg(e?.response?.data?.message);
+          setloading(false);
+        });
+    }
+  };
 
   return (
     <Grid
@@ -46,6 +182,37 @@ const Register = () => {
       sx={{ height: "100vh", backgroundColor: "#F7F8FA", padding: "10px" }}
     >
       <CssBaseline />
+
+      <Backdrop
+        sx={{
+          color: "#fff",
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+      <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          User Registered Successfully!
+        </Alert>
+      </Snackbar>
+      <Snackbar open={error} autoHideDuration={6000} onClose={handleCloseError}>
+        <Alert
+          onClose={handleCloseError}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {errorMsg}
+        </Alert>
+      </Snackbar>
+
       <Grid
         item
         xs={false}
@@ -135,7 +302,7 @@ const Register = () => {
             onSubmit={handleSubmit}
             sx={{ mt: 3, width: "100%" }}
           >
-            <SocialLoginBtn
+            {/* <SocialLoginBtn
               title="Register with Google"
               icon={require("../../assets/images/Google.png")}
               mB
@@ -145,9 +312,9 @@ const Register = () => {
               title="Register with Facebook"
               icon={require("../../assets/images/Facebook.png")}
               mB
-            />
+            /> */}
 
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -167,7 +334,7 @@ const Register = () => {
                 or
               </Typography>
               <Divider style={{ flexGrow: 1, backgroundColor: "#E0E2E7" }} />
-            </div>
+            </div> */}
             <CustomInput
               label="Email Address"
               value={email}
@@ -199,13 +366,13 @@ const Register = () => {
                   "& .MuiSvgIcon-root": {
                     width: "20px",
                     height: "20px",
-                    borderRadius: "6px", // Adjust border radius for the checkbox icon
+                    borderRadius: "6px",
                   },
                   "&:hover, &.Mui-checked:hover": {
-                    backgroundColor: "transparent", // Remove hover background color
+                    backgroundColor: "transparent",
                   },
                   "& .MuiCheckbox-indeterminate": {
-                    backgroundColor: "transparent", // Remove indeterminate background color
+                    backgroundColor: "transparent",
                   },
                   "& .MuiIconButton-label": {
                     borderRadius: "8px",
@@ -246,30 +413,7 @@ const Register = () => {
                 justifyContent: "center",
               }}
             >
-              <CustomBtn
-                title="Register"
-                onClick={async () => {
-                  const result = await axios.post(
-                    "http://13.53.197.244:5000/api/addUser",
-                    {
-                      user: {
-                        name: "no name",
-                        email: email,
-                        password: password,
-                      },
-                    }
-                  );
-                  console.log(result);
-                  if (result.status) {
-                    alert(result.status);
-                    navigate("/");
-                  } else {
-                    alert(result.status);
-                  }
-
-                  navigate("/");
-                }}
-              />
+              <CustomBtn title="Register" onClick={OnRegister} />
             </Box>
             <Box
               sx={{

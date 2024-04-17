@@ -66,6 +66,7 @@ export const CustomInput = ({
             borderRadius: "8px",
             border: "1px solid #E0E2E7",
             textShadow: 1,
+            height: "40px",
           }}
           value={value}
           onChange={(e) => setValue(e.target.value)}
