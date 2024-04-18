@@ -80,10 +80,7 @@ const FilterModal = ({
     }
   };
 
-  const statuses = [
-    { id: 1, text: "In Stock" },
-    { id: 2, text: "Out of Stock" },
-  ];
+  let currentDate = new Date().toLocaleDateString();
 
   useEffect(() => {
     GetWebsites();
@@ -188,11 +185,11 @@ const FilterModal = ({
               value={stockStatusFilter}
               onChange={(e) => setstockStatusFilter(e.target.value)}
               renderValue={(selected) => {
-                if (!selected) {
+                if (selected === null) {
                   return <>Stock Status</>;
                 }
 
-                return selected;
+                return selected ? "In Stock" : "Out of Stock";
               }}
               MenuProps={MenuProps}
               inputProps={{ "aria-label": "Without label" }}
@@ -298,9 +295,17 @@ const FilterModal = ({
             }}
             variant="contained"
             fullWidth
-            onClick={handleClose}
+            onClick={() => {
+              handleClose();
+              setstockStatusFilter(null);
+              setstartDate(null);
+              setendDate(dayjs(moment(currentDate).format("YYYY-MM-DD")));
+              setprevPrice(null);
+              setcurrentPrice(null);
+              applyFilter();
+            }}
           >
-            Close
+            Reset Filters
           </Button>
           <Button
             style={{
