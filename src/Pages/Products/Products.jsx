@@ -34,6 +34,7 @@ import { BASE_URL } from "../../constants/config";
 import axios from "axios";
 import dayjs from "dayjs";
 import moment from "moment";
+import DeleteModal from "../../components/DeleteModal";
 
 const Products = () => {
   const [open, setOpen] = React.useState(false);
@@ -68,14 +69,20 @@ const Products = () => {
           alignContent={"center"}
           height={"100%"}
         >
-          {/* <Box className="items-center justify-center  flex py-3 pr-3 ">
+          <Box
+            className="items-center justify-center  flex py-3 pr-3 "
+            sx={{
+              py: 3,
+            }}
+          >
             <img
               className="rounded-md"
               width={70}
-              src={params?.row?.image}
+              src={params?.row?.Product?.Images}
               alt="new"
+              style={{ padding: "10px" }}
             />
-          </Box> */}
+          </Box>
           <Box className="flex-col flex w-full h-full  justify-center">
             <Typography
               fontFamily={"Urbanist"}
@@ -83,7 +90,7 @@ const Products = () => {
               fontWeight={"bold"}
               fontSize={13}
             >
-              {params?.value}
+              {params?.row?.Product?.Name}
             </Typography>
             <Typography
               fontFamily={"Urbanist"}
@@ -91,10 +98,13 @@ const Products = () => {
               fontSize={13}
               className="underline text-blue-500 cursor-pointer"
               onClick={() =>
-                window.open(`${params?.row?.website?.website_url}`, "_blank")
+                window.open(
+                  `${params?.row?.Product?.Page?.Website?.URL}`,
+                  "_blank"
+                )
               }
             >
-              {params?.row?.website?.website_name}
+              {params?.row?.Product?.Page?.Website?.Name}
             </Typography>
           </Box>
         </Stack>
@@ -123,25 +133,25 @@ const Products = () => {
               fontWeight={"bold"}
               fontSize={13}
             >
-              {params?.row?.PreviousPrice}
+              {params?.row?.Product?.LastPrice}
             </Typography>
-            {params?.row?.productPrice ? (
+            {params?.row?.Product?.Price ? (
               <>
                 <Typography
                   fontFamily={"Urbanist"}
                   fontWeight={"bold"}
                   fontSize={13}
                   color={
-                    parseFloat(params?.row?.PreviousPrice) <
-                    parseFloat(params?.row?.productPrice)
+                    parseFloat(params?.row?.Product?.LastPrice) <
+                    parseFloat(params?.row?.Product?.Price)
                       ? "green"
                       : "red"
                   }
                 >
-                  {params?.row?.productPrice}
+                  {params?.row?.Product?.Price}
                 </Typography>
-                {parseFloat(params?.row?.PreviousPrice) <
-                parseFloat(params?.row?.productPrice) ? (
+                {parseFloat(params?.row?.Product?.LastPrice) <
+                parseFloat(params?.row?.Product?.Price) ? (
                   <ArrowDropUp fontSize="small" color="success" />
                 ) : (
                   <ArrowDropDown fontSize="small" color="error" />
@@ -181,7 +191,7 @@ const Products = () => {
             fontWeight={"bold"}
             fontSize={13}
           >
-            {params?.value}
+            {params?.row?.Product?.Category}
           </Typography>
           {params?.row?.category?.length > 1 && (
             <Typography
@@ -196,13 +206,90 @@ const Products = () => {
         </Box>
       ),
     },
+    // {
+    //   field: "linked_website",
+    //   headerName: "Linked Website",
+    //   headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
+    //   headerAlign: "center",
+    //   minWidth: 160,
+    //   flex: 1,
+    //   renderHeader: (params) => (
+    //     <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
+    //       {params?.colDef?.headerName}
+    //     </Typography>
+    //   ),
+    //   renderCell: (params) => (
+    //     <Box className="flex-col flex w-full h-full  justify-center">
+    //       <Typography
+    //         fontFamily={"Urbanist"}
+    //         color={"gray"}
+    //         fontWeight={"bold"}
+    //         fontSize={13}
+    //       >
+    //         {params?.row?.Product?.Page?.Website?.URL}
+    //       </Typography>
+    //       <Typography
+    //         fontFamily={"Urbanist"}
+    //         fontWeight={"bold"}
+    //         fontSize={13}
+    //         className=" font-bold text-blue-500 cursor-pointer"
+    //         onClick={() =>
+    //           window.open(`${params?.row?.website?.website_url}`, "_blank")
+    //         }
+    //       >
+    //         {params?.row?.website?.website_url}
+    //       </Typography>
+    //     </Box>
+    //   ),
+    // },
     {
-      field: "linked_website",
-      headerName: "Linked Website",
+      field: "Priority",
+      headerName: "Stock Status",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       headerAlign: "center",
-      minWidth: 160,
+      align: "center",
+      minWidth: 140,
       flex: 1,
+      renderHeader: (params) => (
+        <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            fontFamily={"Urbanist"}
+            fontSize={13}
+            px={1}
+            py={0.1}
+            style={{
+              textAlign: "center",
+              backgroundColor: getStatusBackgroundColor(
+                params?.row?.Product?.StockStatus ? "In Stock" : "Out of stock"
+              ),
+              color: getStatusTextColor(
+                params?.row?.Product?.StockStatus ? "In Stock" : "Out of stock"
+              ),
+              fontWeight: "bold",
+              borderRadius: "8px",
+            }}
+          >
+            {params?.row?.Product?.StockStatus ? "In Stock" : "Out of Stock"}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "noOfStock",
+      headerName: "Total no stock",
+      headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
+      flex: 1,
+      headerAlign: "center",
       renderHeader: (params) => (
         <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
           {params?.colDef?.headerName}
@@ -216,73 +303,11 @@ const Products = () => {
             fontWeight={"bold"}
             fontSize={13}
           >
-            {params?.value}
-          </Typography>
-          <Typography
-            fontFamily={"Urbanist"}
-            fontWeight={"bold"}
-            fontSize={13}
-            className=" font-bold text-blue-500 cursor-pointer"
-            onClick={() =>
-              window.open(`${params?.row?.website?.website_url}`, "_blank")
-            }
-          >
-            {params?.row?.website?.website_url}
+            {params?.row?.Product?.OutOfStockCount}
           </Typography>
         </Box>
       ),
     },
-    // {
-    //   field: "Priority",
-    //   headerName: "Stock Status",
-    //   headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
-    //   headerAlign: "center",
-    //   align: "center",
-    //   minWidth: 140,
-    //   flex: 1,
-    //   renderHeader: (params) => (
-    //     <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-    //       {params?.colDef?.headerName}
-    //     </Typography>
-    //   ),
-    //   renderCell: (params) => (
-    //     <Box
-    //       className="w-full h-full"
-    //       display={"flex"}
-    //       justifyContent={"center"}
-    //       alignItems={"center"}
-    //     >
-    //       <Typography
-    //         fontFamily={"Urbanist"}
-    //         fontSize={13}
-    //         px={1}
-    //         py={0.1}
-    //         style={{
-    //           textAlign: "center",
-    //           backgroundColor: getStatusBackgroundColor(params?.value),
-    //           color: getStatusTextColor(params?.value),
-    //           fontWeight: "bold",
-    //           borderRadius: "8px",
-    //         }}
-    //       >
-    //         {params?.value}
-    //       </Typography>
-    //     </Box>
-    //   ),
-    // },
-    // {
-    //   field: "Old_Value",
-    //   headerName: "Out of Stock",
-    //   headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
-    //   flex: 1,
-    //   headerAlign: "center",
-    //   align: "center",
-    //   renderHeader: (params) => (
-    //     <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-    //       {params?.colDef?.headerName}
-    //     </Typography>
-    //   ),
-    // },
     // {
     //   field: "New_Value",
     //   headerName: "Notification",
@@ -316,7 +341,7 @@ const Products = () => {
             fontWeight={"bold"}
             fontSize={13}
           >
-            {moment(params?.value).format("DD-MM-YYYY")}
+            {moment(params?.row?.Product?.createdAt).format("DD-MM-YYYY")}
           </Typography>
         </Box>
       ),
@@ -547,25 +572,48 @@ const Products = () => {
 
   const [selectedIds, setSelectedIds] = useState([]);
 
+  const [totalPages, settotalPages] = useState(1);
+  const [currentPage, setcurrentPage] = useState(1);
+  const [numOfProductPerPage, setnumOfProductPerPage] = useState(10);
+
+  const [stockStatusFilter, setstockStatusFilter] = useState(null);
+  const [deleteProducts, setdeleteProducts] = useState(false);
+
+  const handleChangeProductPerPage = (event) => {
+    setnumOfProductPerPage(event.target.value);
+  };
+
   const FetchProducts = async () => {
     setloading(true);
+    const token = localStorage.getItem("token");
     try {
-      const response = await axios.post(`${BASE_URL}/api/getProductsByPage`, {
-        page: 1,
-        pageSize: 10,
-        filters: {
-          productPrice: {
-            minPrice: parseFloat(prevPrice),
-            maxPrice: parseFloat(currentPrice),
-          },
-          websites: selectedIds,
-          createdDate: {
-            startDate: startDate,
-            endDate: endDate,
+      const response = await axios.post(
+        `${BASE_URL}/api/getProductsByUserId`,
+        {
+          page: currentPage,
+          pageSize: numOfProductPerPage,
+          filters: {
+            StockStatus: stockStatusFilter,
+            category: [],
+            productPrice: {
+              minPrice: parseFloat(prevPrice),
+              maxPrice: parseFloat(currentPrice),
+            },
+            websites: selectedIds,
+            createdDate: {
+              startDate: startDate,
+              endDate: endDate,
+            },
           },
         },
-      });
-      const data = await response.data.products;
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.data.products.products;
+      settotalPages(response.data.products.totalPages);
       setproductsData(data);
     } catch (error) {
       console.error(error);
@@ -576,7 +624,7 @@ const Products = () => {
 
   useEffect(() => {
     FetchProducts();
-  }, []);
+  }, [numOfProductPerPage, currentPage]);
 
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
@@ -603,8 +651,17 @@ const Products = () => {
           title="Products"
           filter
           filterBtn={() => setopenFilters(!openFilters)}
+          actionBtn
+          actionBtnFunc={() => setdeleteProducts(true)}
         />
-
+        <DeleteModal
+          open={deleteProducts}
+          onClose={() => setdeleteProducts(false)}
+          onClick={() => console.log("Delete")}
+          title="Delete Products"
+          mainText="Are you sure you want to delete these products?"
+          subText="Do you want to delete this leads? This action can’t be undone"
+        />
         <FilterModal
           open={openFilters}
           handleClose={() => setopenFilters(false)}
@@ -619,6 +676,8 @@ const Products = () => {
           setSelectedIds={setSelectedIds}
           selectedIds={selectedIds}
           applyFilter={() => FetchProducts()}
+          setstockStatusFilter={setstockStatusFilter}
+          stockStatusFilter={stockStatusFilter}
         />
 
         <ProductDetailModal
@@ -649,15 +708,28 @@ const Products = () => {
                 showColumnVerticalBorder={false}
                 showCellVerticalBorder={true}
                 rows={productsData}
-                getRowId={(row) => row.productId}
+                getRowId={(row) => row?.UserProductID}
                 columns={productsColumns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { pageSize: numOfProductPerPage },
+                  },
+                }}
                 hideFooter={true}
                 checkboxSelection
               />
             </Box>
             <Box className="mt-4 mx-4">
               <Stack direction={"row-reverse"}>
-                <Pagination count={10} variant="outlined" shape="rounded" />
+                <Pagination
+                  count={totalPages}
+                  variant="outlined"
+                  shape="rounded"
+                  onChange={(event, value) => {
+                    setcurrentPage(value);
+                    console.log(value);
+                  }}
+                />
                 <Box mx={2} width={200} height={20}>
                   <FormControl
                     variant="outlined"
@@ -681,11 +753,10 @@ const Products = () => {
                       // value={num}
 
                       style={{ height: 32 }}
-                      // onChange={handleChange}
+                      onChange={handleChangeProductPerPage}
                     >
+                      <MenuItem value={5}>Five</MenuItem>
                       <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
                     </Select>
                   </FormControl>
                 </Box>

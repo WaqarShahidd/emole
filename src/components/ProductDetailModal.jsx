@@ -12,6 +12,8 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { colors } from "../theme/theme";
+import moment from "moment";
 
 const ProductDetailModal = ({ open, handleClose, data }) => {
   return (
@@ -38,341 +40,785 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
           <Box px={2}>
             <Stack direction={"row"} spacing={2}>
               <Box width={"100%"} mb={1}>
-                <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                  {data?.productName}
-                </Typography>
-                <Stack direction={"row"} justifyContent={"space-between"}>
-                  <Typography
-                    fontFamily={"Urbanist"}
-                    fontWeight={"bold"}
-                    color={"gray"}
+                <Stack direction="row">
+                  <img
+                    className="rounded-md"
+                    src={data?.Product?.Images}
+                    alt="new"
+                    style={{ width: "200px", height: "200px" }}
+                  />
+                  <Box
+                    sx={{
+                      width: "100%",
+                      ml: 2,
+                    }}
                   >
-                    Product Price
-                  </Typography>
-                  <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                    {data?.productPrice}
-                  </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.darkText,
+                        fontFamily: "Urbanist-bolder",
+                        fontSize: "18px",
+                        mb: 1,
+                      }}
+                    >
+                      {data?.Product?.Name}
+                    </Typography>
+
+                    <Stack
+                      direction={"row"}
+                      justifyContent={"space-between"}
+                      mb={1}
+                    >
+                      <Typography
+                        fontFamily={"Urbanist"}
+                        fontWeight={"bold"}
+                        sx={{
+                          color: colors.subText,
+                          fontSize: "14px",
+                        }}
+                      >
+                        Product Price
+                      </Typography>
+                      <Typography
+                        fontFamily={"Urbanist-bold"}
+                        fontSize={"14px"}
+                      >
+                        ${data?.Product?.Price}
+                      </Typography>
+                    </Stack>
+                    <Stack
+                      direction={"row"}
+                      justifyContent={"space-between"}
+                      mb={1}
+                    >
+                      <Typography
+                        fontFamily={"Urbanist"}
+                        fontWeight={"bold"}
+                        sx={{
+                          color: colors.subText,
+                          fontSize: "14px",
+                        }}
+                      >
+                        Last Price
+                      </Typography>
+                      <Typography
+                        fontFamily={"Urbanist-bold"}
+                        fontSize={"14px"}
+                      >
+                        ${data?.Product?.LastPrice}
+                      </Typography>
+                    </Stack>
+                    <Stack
+                      direction={"row"}
+                      justifyContent={"space-between"}
+                      mb={1}
+                    >
+                      <Typography
+                        fontFamily={"Urbanist"}
+                        fontWeight={"bold"}
+                        sx={{
+                          color: colors.subText,
+                          fontSize: "14px",
+                        }}
+                      >
+                        Website Name
+                      </Typography>
+                      <Typography
+                        fontFamily={"Urbanist-bold"}
+                        fontSize={"14px"}
+                      >
+                        {data?.Product?.Page?.Website?.Name}
+                      </Typography>
+                    </Stack>
+                    <Stack
+                      direction={"row"}
+                      justifyContent={"space-between"}
+                      mb={1}
+                    >
+                      <Typography
+                        fontFamily={"Urbanist"}
+                        fontWeight={"bold"}
+                        sx={{
+                          color: colors.subText,
+                          fontSize: "14px",
+                        }}
+                      >
+                        Created Date
+                      </Typography>
+                      <Typography
+                        fontFamily={"Urbanist-bold"}
+                        fontSize={"14px"}
+                      >
+                        {moment(data?.Product?.createdAt).format("DD-MM-YYYY")}
+                      </Typography>
+                    </Stack>
+                  </Box>
                 </Stack>
-                <Stack direction={"row"} justifyContent={"space-between"}>
+
+                {/* Notifications */}
+                {/* <Box
+                  my={2}
+                  p={2}
+                  sx={{
+                    backgroundColor: "#fff",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Typography
+                      fontFamily={"Urbanist-bolder"}
+                      fontWeight={"bold"}
+                      fontSize={16}
+                      color={colors.darkText}
+                    >
+                      Notifications{" "}
+                    </Typography>
+                  </Stack>
+                  <Divider
+                    sx={{
+                      border: 0,
+                      borderTop: "1px dashed #AEB7C9",
+                      my: 2,
+                    }}
+                  />
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Grid
+                      container
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "45%",
+                      }}
+                    >
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Total Alerts{" "}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: colors.blueText,
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                              textDecorationLine: "underline",
+                            }}
+                          >
+                            12
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Total Price Alerts
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: colors.blueText,
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                              textDecorationLine: "underline",
+                            }}
+                          >
+                            12{" "}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Total stock alert
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: colors.blueText,
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                              textDecorationLine: "underline",
+                            }}
+                          >
+                            52{" "}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      container
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "45%",
+                      }}
+                    >
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Last alert date{" "}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: "#222",
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                            }}
+                          >
+                            12.12.24{" "}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Last price alert{" "}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: "#222",
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                            }}
+                          >
+                            12.12.24{" "}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Last stock alert{" "}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: "#222",
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                            }}
+                          >
+                            12.12.24{" "}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                    </Grid>
+                  </Stack>
+                </Box> */}
+
+                {/* Stock */}
+                <Box
+                  my={2}
+                  p={2}
+                  sx={{
+                    backgroundColor: "#fff",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Typography
+                      fontFamily={"Urbanist-bolder"}
+                      fontWeight={"bold"}
+                      fontSize={16}
+                      color={colors.darkText}
+                    >
+                      Stock
+                    </Typography>
+                  </Stack>
+                  <Divider
+                    sx={{
+                      border: 0,
+                      borderTop: "1px dashed #AEB7C9",
+                      my: 2,
+                    }}
+                  />
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Grid
+                      container
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "45%",
+                      }}
+                    >
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Stock status
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: "#222",
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                            }}
+                          >
+                            {data?.Product?.StockStatus
+                              ? "In Stock"
+                              : "Out of stock"}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Times Out of Stock
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: colors.blueText,
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                              textDecorationLine: "underline",
+                            }}
+                          >
+                            {data?.Product?.OutOfStockCount}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Total stock alert
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: "#222",
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                            }}
+                          >
+                            N/A
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      container
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "45%",
+                        alignSelf: "flex-start",
+                      }}
+                    >
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Last time out of stock
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: "#222",
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                            }}
+                          >
+                            12.12.24{" "}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Stack
+                          direction="row"
+                          alignItems="center"
+                          justifyContent="space-between"
+                          sx={{
+                            borderBottom: "1px solid #E0E2E7",
+                            mb: 1,
+                            pb: 1,
+                          }}
+                        >
+                          <Typography
+                            fontFamily={"Urbanist"}
+                            fontWeight={"bold"}
+                            fontSize={14}
+                            color={colors.subText}
+                          >
+                            Last time restocked
+                          </Typography>
+                          <Typography
+                            sx={{
+                              color: "#222",
+                              fontFamily: "PublicSans",
+                              fontSize: 12,
+                            }}
+                          >
+                            12.12.24{" "}
+                          </Typography>
+                        </Stack>
+                      </Grid>
+                    </Grid>
+                  </Stack>
+                </Box>
+
+                {/* Meta */}
+                <Box
+                  my={2}
+                  p={2}
+                  sx={{
+                    backgroundColor: "#fff",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Typography
+                      fontFamily={"Urbanist-bolder"}
+                      fontWeight={"bold"}
+                      fontSize={16}
+                      color={colors.darkText}
+                    >
+                      Product Meta
+                    </Typography>
+                  </Stack>
+                  <Divider
+                    sx={{
+                      border: 0,
+                      borderTop: "1px dashed #AEB7C9",
+                      my: 2,
+                    }}
+                  />
+
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    sx={{
+                      borderBottom: "1px solid #F0F1F3",
+                      mb: 1,
+                      pb: 1,
+                    }}
+                  >
+                    <Typography
+                      fontFamily={"Urbanist"}
+                      fontWeight={"bold"}
+                      fontSize={14}
+                      color={colors.subText}
+                    >
+                      Groups
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "PublicSans",
+                        fontSize: 12,
+                        textDecorationLine: "underline",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      Group name, Group name, Seg... 4 more{" "}
+                    </Typography>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    sx={{
+                      borderBottom: "1px solid #F0F1F3",
+                      mb: 1,
+                      pb: 1,
+                    }}
+                  >
+                    <Typography
+                      fontFamily={"Urbanist"}
+                      fontWeight={"bold"}
+                      fontSize={14}
+                      color={colors.subText}
+                    >
+                      Categories{" "}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "PublicSans",
+                        fontSize: 12,
+                        textDecorationLine: "underline",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {data?.Product?.Category}
+                    </Typography>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    sx={{
+                      borderBottom: "1px solid #F0F1F3",
+                      mb: 1,
+                      pb: 1,
+                    }}
+                  >
+                    <Typography
+                      fontFamily={"Urbanist"}
+                      fontWeight={"bold"}
+                      fontSize={14}
+                      color={colors.subText}
+                    >
+                      Tags{" "}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "PublicSans",
+                        fontSize: 12,
+                        textDecorationLine: "underline",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {data?.Product?.Tags}
+                    </Typography>
+                  </Stack>
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    sx={{
+                      borderBottom: "1px solid #F0F1F3",
+                      mb: 1,
+                      pb: 1,
+                    }}
+                  >
+                    <Typography
+                      fontFamily={"Urbanist"}
+                      fontWeight={"bold"}
+                      fontSize={14}
+                      color={colors.subText}
+                    >
+                      Images{" "}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "PublicSans",
+                        fontSize: 12,
+                        textDecorationLine: "underline",
+                        fontWeight: "bold",
+                        maxWidth: "50%",
+                        overflow: "hidden",
+                      }}
+                      ellipsis
+                    >
+                      {data?.Product?.Images}
+                    </Typography>
+                  </Stack>
+                </Box>
+
+                {/* Content */}
+                <Box
+                  my={2}
+                  p={2}
+                  sx={{
+                    backgroundColor: "#fff",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                  >
+                    <Typography
+                      fontFamily={"Urbanist-bolder"}
+                      fontWeight={"bold"}
+                      fontSize={16}
+                      color={colors.darkText}
+                    >
+                      Content
+                    </Typography>
+                  </Stack>
+                  <Divider
+                    sx={{
+                      border: 0,
+                      borderTop: "1px dashed #AEB7C9",
+                      my: 2,
+                    }}
+                  />
+
                   <Typography
                     fontFamily={"Urbanist"}
                     fontWeight={"bold"}
-                    color={"gray"}
+                    fontSize={14}
+                    color={colors.subText}
                   >
-                    Last Price
+                    Description
                   </Typography>
-                  <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                    {data?.PreviousPrice}
-                  </Typography>
-                </Stack>
-                {/* <Stack direction={"row"} justifyContent={"space-between"}>
                   <Typography
-                    fontFamily={"Urbanist"}
-                    fontWeight={"bold"}
-                    color={"gray"}
+                    sx={{
+                      color: colors.darkText,
+                      fontFamily: "Urbanist",
+                      fontSize: 12,
+                      fontWeight: "bold",
+                      mt: 1,
+                    }}
                   >
-                    Wholesale Price
+                    {data?.Product?.Description}
                   </Typography>
-                  <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                    3
-                  </Typography>
-                </Stack> */}
-                <Stack direction={"row"} justifyContent={"space-between"}>
-                  <Typography
-                    fontFamily={"Urbanist"}
-                    fontWeight={"bold"}
-                    color={"gray"}
-                  >
-                    Created Date
-                  </Typography>
-                  <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                    {data?.createdDate}
-                  </Typography>
-                </Stack>
+                </Box>
               </Box>
             </Stack>
-            {/* <Box mb={1}>
-              <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                Notification
-              </Typography>
-              <Divider sx={{ my: 1 }} />
-              <Grid container spacing={4}>
-                <Grid item xs={12} md={6}>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    mb={1}
-                  >
-                    <Typography
-                      fontFamily={"Urbanist"}
-                      fontWeight={"bold"}
-                      color={"gray"}
-                    >
-                      Total Notification
-                    </Typography>
-                    <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                      323
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    mb={1}
-                  >
-                    <Typography
-                      fontFamily={"Urbanist"}
-                      fontWeight={"bold"}
-                      color={"gray"}
-                    >
-                      Total Price Notification
-                    </Typography>
-                    <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                      323
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    mb={1}
-                  >
-                    <Typography
-                      fontFamily={"Urbanist"}
-                      fontWeight={"bold"}
-                      color={"gray"}
-                    >
-                      Total Stock Notification
-                    </Typography>
-                    <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                      323
-                    </Typography>
-                  </Stack>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    mb={1}
-                  >
-                    <Typography
-                      fontFamily={"Urbanist"}
-                      fontWeight={"bold"}
-                      color={"gray"}
-                    >
-                      Last Notification Date
-                    </Typography>
-                    <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                      12.12.24
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    mb={1}
-                  >
-                    <Typography
-                      fontFamily={"Urbanist"}
-                      fontWeight={"bold"}
-                      color={"gray"}
-                    >
-                      Last Notification Price
-                    </Typography>
-                    <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                      12.12.24
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    mb={1}
-                  >
-                    <Typography
-                      fontFamily={"Urbanist"}
-                      fontWeight={"bold"}
-                      color={"gray"}
-                    >
-                      Last Stock Notification
-                    </Typography>
-                    <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                      12.12.24
-                    </Typography>
-                  </Stack>
-                </Grid>
-              </Grid>
-            </Box>
-            <Box mb={1}>
-              <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                Stock
-              </Typography>
-              <Divider sx={{ my: 1 }} />
-              <Grid container spacing={4}>
-                <Grid item xs={12} md={6}>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    mb={1}
-                  >
-                    <Typography
-                      fontFamily={"Urbanist"}
-                      fontWeight={"bold"}
-                      color={"gray"}
-                    >
-                      Total Notification
-                    </Typography>
-                    <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                      323
-                    </Typography>
-                  </Stack>
-
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    mb={1}
-                  >
-                    <Typography
-                      fontFamily={"Urbanist"}
-                      fontWeight={"bold"}
-                      color={"gray"}
-                    >
-                      Total Stock Notification
-                    </Typography>
-                    <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                      323
-                    </Typography>
-                  </Stack>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    mb={1}
-                  >
-                    <Typography
-                      fontFamily={"Urbanist"}
-                      fontWeight={"bold"}
-                      color={"gray"}
-                    >
-                      Last Notification Price
-                    </Typography>
-                    <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                      12.12.24
-                    </Typography>
-                  </Stack>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"space-between"}
-                    mb={1}
-                  >
-                    <Typography
-                      fontFamily={"Urbanist"}
-                      fontWeight={"bold"}
-                      color={"gray"}
-                    >
-                      Last Stock Notification
-                    </Typography>
-                    <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                      12.12.24
-                    </Typography>
-                  </Stack>
-                </Grid>
-              </Grid>
-            </Box>
-            <Box mb={1}>
-              <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                Content
-              </Typography>
-              <Divider sx={{ my: 1 }} />
-              <Box mb={1}>
-                <Stack direction={"row"} justifyContent={"space-between"}>
-                  <Typography
-                    fontFamily={"Urbanist"}
-                    fontWeight={"bold"}
-                    color={"gray"}
-                  >
-                    Total Categories
-                  </Typography>
-                  <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                    3
-                  </Typography>
-                </Stack>
-                <Typography
-                  fontFamily={"Urbanist"}
-                  fontWeight={"bold"}
-                  className="underline cursor-pointer text-[#3d4ecdeb]"
-                >
-                  Category Name Category Name Category Name Category Name
-                </Typography>
-              </Box>
-              <Box mb={1}>
-                <Stack direction={"row"} justifyContent={"space-between"}>
-                  <Typography
-                    fontFamily={"Urbanist"}
-                    fontWeight={"bold"}
-                    color={"gray"}
-                  >
-                    Total Tags
-                  </Typography>
-                  <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                    4
-                  </Typography>
-                </Stack>
-                <Typography
-                  fontFamily={"Urbanist"}
-                  fontWeight={"bold"}
-                  className="underline cursor-pointer text-[#3d4ecdeb]"
-                >
-                  Tag Name Tag Name Tag Name Tag Name
-                </Typography>
-              </Box>
-              <Box>
-                <Stack direction={"row"} justifyContent={"space-between"}>
-                  <Typography
-                    fontFamily={"Urbanist"}
-                    fontWeight={"bold"}
-                    color={"gray"}
-                  >
-                    Total Images
-                  </Typography>
-                  <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                    10
-                  </Typography>
-                </Stack>
-                <Typography
-                  fontFamily={"Urbanist"}
-                  fontWeight={"bold"}
-                  className="underline cursor-pointer text-[#3d4ecdeb]"
-                >
-                  Image Name Image Name Image Name Image Name
-                </Typography>
-              </Box>
-            </Box>
-            <Box mb={1}>
-              <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-                Description
-              </Typography>
-
-              <Typography
-                fontFamily={"Urbanist"}
-                fontWeight={"bold"}
-                color={"gray"}
-              >
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy
-                text ever since the 1500s, when an unknown printer took a galley
-                of type and scrambled it to make a type specimen book.
-              </Typography>
-              <Typography
-                fontFamily={"Urbanist"}
-                fontWeight={"bold"}
-                className="underline cursor-pointer text-[#3d4ecdeb]"
-              >
-                Read more
-              </Typography>
-            </Box> */}
           </Box>
         </DialogContent>
         <DialogActions>
           <Stack direction={"row"} spacing={2} width={"100%"}>
             <Button
+              disableElevation
               style={{
                 background: "#f1f1f1",
                 color: "black",
@@ -387,8 +833,9 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
               Close
             </Button>
             <Button
+              disableElevation
               style={{
-                background: "linear-gradient(180deg, #2D60FF 0%, #2F33A1 100%)",
+                background: colors.blueText,
                 fontFamily: "Urbanist",
                 textTransform: "none",
                 fontWeight: "bold",
@@ -398,7 +845,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
               onClick={handleClose}
               autoFocus
             >
-              Show Product
+              Share Products
             </Button>
           </Stack>
         </DialogActions>

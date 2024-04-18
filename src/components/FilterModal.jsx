@@ -52,6 +52,8 @@ const FilterModal = ({
   selectedIds,
   setSelectedIds,
   applyFilter,
+  setstockStatusFilter,
+  stockStatusFilter,
 }) => {
   const [personName, setPersonName] = React.useState([]);
 
@@ -77,6 +79,11 @@ const FilterModal = ({
       console.error(error);
     }
   };
+
+  const statuses = [
+    { id: 1, text: "In Stock" },
+    { id: 2, text: "Out of Stock" },
+  ];
 
   useEffect(() => {
     GetWebsites();
@@ -105,7 +112,7 @@ const FilterModal = ({
       <DialogContent>
         <Box py={2}>
           {/* Website Dropdown */}
-          <Typography
+          {/* <Typography
             sx={{
               fontSize: "16px",
               fontWeight: "700",
@@ -160,6 +167,38 @@ const FilterModal = ({
                   <ListItemText primary={name.website_name} />
                 </MenuItem>
               ))}
+            </Select>
+          </FormControl> */}
+
+          {/* Stock Status Dropdown */}
+          <Typography
+            sx={{
+              fontSize: "16px",
+              fontWeight: "700",
+              fontFamily: "Urbanist-bold",
+              color: "#222",
+              pb: 1,
+            }}
+          >
+            Stock Status
+          </Typography>
+          <FormControl fullWidth>
+            <Select
+              displayEmpty
+              value={stockStatusFilter}
+              onChange={(e) => setstockStatusFilter(e.target.value)}
+              renderValue={(selected) => {
+                if (!selected) {
+                  return <>Stock Status</>;
+                }
+
+                return selected;
+              }}
+              MenuProps={MenuProps}
+              inputProps={{ "aria-label": "Without label" }}
+            >
+              <MenuItem value={true}>In Stock</MenuItem>
+              <MenuItem value={false}>Out of Stock</MenuItem>
             </Select>
           </FormControl>
 
