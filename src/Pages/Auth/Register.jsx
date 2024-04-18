@@ -154,9 +154,9 @@ const Register = () => {
       await axios
         .post(`${BASE_URL}/api/addUser`, {
           user: {
-            name: "",
-            email: email,
-            password: password,
+            Username: "",
+            Email: email,
+            Password: password,
           },
         })
         .then((res) => {

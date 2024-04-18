@@ -128,8 +128,8 @@ const Login = () => {
       setloading(true);
       await axios
         .post(`${BASE_URL}/api/loginUser`, {
-          email: email,
-          password: password,
+          Email: email,
+          Password: password,
         })
         .then((res) => {
           navigate("/");

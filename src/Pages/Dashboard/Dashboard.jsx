@@ -3,14 +3,10 @@ import Box from "@mui/material/Box";
 import SideDrawer from "../../components/SideDrawer";
 import Header from "../../components/Header";
 import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
-import BadgeDashboard from "./components/BadgeDashboard";
 import { Visibility } from "@mui/icons-material";
-import BadgeData from "./DummyData/BadgeData";
 import { DataGrid } from "@mui/x-data-grid";
 import { colors } from "../../theme/theme";
-import { DonutLarge, Notifications, ShoppingCart } from "@mui/icons-material";
-import LocalOfferRoundedIcon from "@mui/icons-material/LocalOfferRounded";
-import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
+import { ShoppingCart } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import {
   getStatusBackgroundColor,
@@ -18,7 +14,6 @@ import {
 } from "../../assets/DummyData";
 import axios from "axios";
 import { BASE_URL } from "../../constants/config";
-import GroupModal from "../../components/GroupModal";
 
 const latestUpdatesColumnsData = [
   {

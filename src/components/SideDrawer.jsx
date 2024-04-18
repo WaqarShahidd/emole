@@ -12,6 +12,8 @@ import {
   Language,
   Notifications,
   PieChart,
+  QuizOutlined,
+  QuizRounded,
   ShoppingCart,
   ThreeP,
 } from "@mui/icons-material";
@@ -61,7 +63,11 @@ const listRoutes = [
     id: 6,
     name: "Account",
     icon: <ThreeP />,
-    route: "/account",
+  },
+  {
+    id: 7,
+    name: "Tutorial",
+    icon: <QuizRounded />,
   },
 ];
 
@@ -73,7 +79,12 @@ const SideDrawer = ({ id }) => {
     setselected(id);
   }, [id]);
 
-  const { setgroupModalState, setwebsiteModalState } = useUser();
+  const {
+    setgroupModalState,
+    setwebsiteModalState,
+    setaccountBillingModal,
+    setsupportTutorialModal,
+  } = useUser();
   return (
     <Box sx={{ display: "flex" }}>
       <Drawer
@@ -108,7 +119,6 @@ const SideDrawer = ({ id }) => {
           sx={{
             p: 0,
             m: 0,
-            mt: 1,
           }}
         >
           {listRoutes.map((text, index) => (
@@ -129,6 +139,10 @@ const SideDrawer = ({ id }) => {
                     setgroupModalState(true);
                   } else if (text.name === "Websites") {
                     setwebsiteModalState(true);
+                  } else if (text.name === "Account") {
+                    setaccountBillingModal(true);
+                  } else if (text.name === "Tutorial") {
+                    setsupportTutorialModal(true);
                   }
                 }}
                 sx={{

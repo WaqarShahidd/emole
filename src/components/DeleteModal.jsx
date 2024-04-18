@@ -13,15 +13,7 @@ import {
 } from "@mui/material";
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import { colors } from "../theme/theme";
-
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: "24px 48px 24px 48px",
-  },
-  "& .MuiDialogActions-root": {
-    padding: "10px 24px",
-  },
-}));
+import { DeleteForeverRounded } from "@mui/icons-material";
 
 const DeleteModal = ({
   open,
@@ -34,10 +26,14 @@ const DeleteModal = ({
   req,
 }) => {
   return (
-    <BootstrapDialog
+    <Dialog
       onClose={onClose}
-      aria-labelledby="customized-dialog-title"
       open={open}
+      PaperProps={{
+        sx: {
+          padding: "12px",
+        },
+      }}
     >
       <IconButton
         aria-label="close"
@@ -72,9 +68,7 @@ const DeleteModal = ({
             marginBottom: "20px",
           }}
         >
-          <DeleteForeverRoundedIcon
-            sx={{ fontSize: "40px", color: "#EB3D4D" }}
-          />
+          <DeleteForeverRounded sx={{ fontSize: "40px", color: "#EB3D4D" }} />
         </Box>
         <Typography
           sx={{
@@ -105,7 +99,6 @@ const DeleteModal = ({
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: 2,
         }}
       >
         <Button
@@ -124,12 +117,11 @@ const DeleteModal = ({
             "&:hover": {
               backgroundColor: "#FAFAFA",
             },
-            px: 2.5,
           }}
           autoFocus
           onClick={onClose}
         >
-          No
+          Cancel
         </Button>
 
         <Button
@@ -148,7 +140,6 @@ const DeleteModal = ({
             "&:hover": {
               backgroundColor: "#EB3D4D",
             },
-            px: 2.5,
           }}
           autoFocus
           onClick={() => {
@@ -159,7 +150,7 @@ const DeleteModal = ({
           Yes
         </Button>
       </DialogActions>
-    </BootstrapDialog>
+    </Dialog>
   );
 };
 

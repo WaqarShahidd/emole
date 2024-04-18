@@ -13,11 +13,11 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { useUser } from "../constants/context";
-import { colors } from "../theme/theme";
-import { CustomInput } from "./CustomInput";
+import { useUser } from "../../constants/context";
+import { colors } from "../../theme/theme";
+import { CustomInput } from "../../components/CustomInput";
 import { DataGrid } from "@mui/x-data-grid";
-import { billingRows } from "../assets/DummyData";
+import { billingRows } from "../../assets/DummyData";
 import {
   Delete,
   NotificationAdd,
@@ -27,7 +27,7 @@ import {
   Visibility,
 } from "@mui/icons-material";
 
-const WebsiteModalComp = () => (
+const WebsiteModalComp = ({ setwebsiteDetail }) => (
   <Box
     my={2}
     p={2}
@@ -69,6 +69,7 @@ const WebsiteModalComp = () => (
         sx={{
           alignContent: "flex-start",
         }}
+        onClick={() => setwebsiteDetail(true)}
       >
         <Visibility />
       </IconButton>
@@ -174,7 +175,8 @@ const WebsiteModalComp = () => (
 );
 
 const WebsitesModal = () => {
-  const { websiteModalState, setwebsiteModalState } = useUser();
+  const { websiteModalState, setwebsiteModalState, setwebsiteDetail } =
+    useUser();
   return (
     <Box
       sx={{
@@ -204,7 +206,7 @@ const WebsitesModal = () => {
         >
           <Typography
             mb={1}
-            fontFamily={"Urbanist-bold"}
+            fontFamily={"Urbanist-bolder"}
             fontWeight={"bold"}
             fontSize={22}
             border={"none"}
@@ -216,7 +218,7 @@ const WebsitesModal = () => {
           {Array(4)
             .fill()
             .map((i) => (
-              <WebsiteModalComp />
+              <WebsiteModalComp setwebsiteDetail={setwebsiteDetail} />
             ))}
         </DialogContent>
         <DialogActions sx={{ bgcolor: "#fff" }}>
