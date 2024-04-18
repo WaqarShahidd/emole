@@ -17,12 +17,17 @@ const Header = ({ title, filter, filterBtn, actionBtn, actionBtnFunc }) => {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorAction, setanchorAction] = useState(null);
+  const [createGroupAchor, setcreateGroupAchor] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClickAction = (event) => {
+    setanchorAction(event.currentTarget);
+  };
+
+  const handleClickCreateGroup = (event) => {
     setanchorAction(event.currentTarget);
   };
 
@@ -174,23 +179,60 @@ const Header = ({ title, filter, filterBtn, actionBtn, actionBtnFunc }) => {
         </Box>
       </Stack>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        {/* <MenuItem
-          sx={{ borderBottom: "1px solid #EBEFF5" }}
-          onClick={handleClose}
-        >
-          Profile
-        </MenuItem> */}
         <MenuItem
           onClick={() => {
             handleClose();
             localStorage.removeItem("token");
-            // navigate("/login");
             window.location.reload();
           }}
         >
           Logout
         </MenuItem>
       </Menu>
+      <Menu
+        anchorEl={anchorAction}
+        open={Boolean(anchorAction)}
+        onClose={() => setanchorAction(false)}
+      >
+        <MenuItem
+          sx={{
+            borderBottom: "1px solid #EBEFF5",
+            fontFamily: "Urbanist-bold",
+            fontSize: "14px",
+            pb: 1,
+          }}
+          onClick={() => {
+            handleClose();
+            handleClickCreateGroup();
+          }}
+        >
+          <PieChart
+            sx={{
+              color: colors.subText,
+              fontSize: "19px",
+              width: "22px",
+              mr: 2,
+            }}
+          />{" "}
+          Group Selected
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            actionBtnFunc();
+            setanchorAction(false);
+          }}
+          sx={{
+            fontFamily: "Urbanist-bold",
+            fontSize: "14px",
+          }}
+        >
+          <DeleteForeverOutlined
+            sx={{ color: colors.subText, mr: 2, width: "22px" }}
+          />{" "}
+          Delete Selected
+        </MenuItem>
+      </Menu>
+
       <Menu
         anchorEl={anchorAction}
         open={Boolean(anchorAction)}
