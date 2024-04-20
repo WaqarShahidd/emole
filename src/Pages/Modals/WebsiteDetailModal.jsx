@@ -12,9 +12,17 @@ import {
 } from "@mui/material";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
+import { useNavigate } from "react-router-dom";
 
 export const WebsiteDetailModal = () => {
-  const { websiteDetail, setwebsiteDetail } = useUser();
+  const navigate = useNavigate();
+  const {
+    websiteDetail,
+    setwebsiteDetail,
+    websiteDetailData,
+    setwebsiteDetailData,
+    setwebsiteViewProductsData,
+  } = useUser();
   return (
     <Box
       sx={{
@@ -24,7 +32,10 @@ export const WebsiteDetailModal = () => {
       <Dialog
         fullWidth
         open={websiteDetail}
-        onClose={() => setwebsiteDetail(false)}
+        onClose={() => {
+          setwebsiteDetail(false);
+          setwebsiteDetailData({});
+        }}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         PaperProps={{
@@ -49,7 +60,7 @@ export const WebsiteDetailModal = () => {
             fontSize={22}
             border={"none"}
           >
-            Website{" "}
+            Website Details
           </Typography>
         </DialogTitle>
         <DialogContent>
@@ -73,7 +84,7 @@ export const WebsiteDetailModal = () => {
                 fontSize={16}
                 color={colors.darkText}
               >
-                Website Name
+                {websiteDetailData?.Name}
               </Typography>
               <Typography
                 sx={{
@@ -81,9 +92,11 @@ export const WebsiteDetailModal = () => {
                   fontFamily: "Urbanist-bold",
                   fontSize: 12,
                   textDecorationLine: "underline",
+                  cursor: "pointer",
                 }}
+                onClick={() => window.open(websiteDetailData?.URL)}
               >
-                www.example.com
+                {websiteDetailData?.URL}
               </Typography>
             </Stack>
             <Divider
@@ -93,7 +106,9 @@ export const WebsiteDetailModal = () => {
                 my: 2,
               }}
             />
-            <Stack
+
+            {/* Website Added Date */}
+            {/* <Stack
               direction="row"
               alignItems="center"
               justifyContent="space-between"
@@ -116,7 +131,9 @@ export const WebsiteDetailModal = () => {
               >
                 12.12.24{" "}
               </Typography>
-            </Stack>
+            </Stack> */}
+
+            {/* Total Products */}
             <Stack
               direction="row"
               alignItems="center"
@@ -139,7 +156,7 @@ export const WebsiteDetailModal = () => {
                   textDecorationLine: "underline",
                 }}
               >
-                52{" "}
+                {websiteDetail ? websiteDetailData?.products?.length : 0}
               </Typography>
             </Stack>
             <Stack
@@ -170,7 +187,7 @@ export const WebsiteDetailModal = () => {
           </Box>
 
           {/* Alerts */}
-          <Box
+          {/* <Box
             my={2}
             p={2}
             sx={{
@@ -406,7 +423,7 @@ export const WebsiteDetailModal = () => {
                 </Grid>
               </Grid>
             </Stack>
-          </Box>
+          </Box> */}
 
           {/* Content */}
           <Box
@@ -439,7 +456,27 @@ export const WebsiteDetailModal = () => {
               }}
             />
 
-            <Stack
+            <Typography
+              fontFamily={"Urbanist"}
+              fontWeight={"bold"}
+              fontSize={14}
+              color={colors.subText}
+            >
+              Description
+            </Typography>
+            <Typography
+              sx={{
+                color: colors.darkText,
+                fontFamily: "Urbanist",
+                fontSize: 12,
+                fontWeight: "bold",
+                mt: 1,
+              }}
+            >
+              {websiteDetailData?.Description}
+            </Typography>
+
+            {/* <Stack
               direction="row"
               alignItems="center"
               justifyContent="space-between"
@@ -528,7 +565,7 @@ export const WebsiteDetailModal = () => {
               >
                 Tag name, Tag name, Tag name, Tag n... 4 more{" "}
               </Typography>
-            </Stack>
+            </Stack> */}
           </Box>
         </DialogContent>
         <DialogActions sx={{ bgcolor: "#fff" }}>
@@ -558,7 +595,11 @@ export const WebsiteDetailModal = () => {
               }}
               variant="contained"
               fullWidth
-              onClick={() => setwebsiteDetail(false)}
+              onClick={() => {
+                setwebsiteDetail(false);
+                setwebsiteViewProductsData(websiteDetailData);
+                navigate("/website/view-products");
+              }}
               autoFocus
             >
               See Products

@@ -12,7 +12,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
 import { CustomInput } from "../../components/CustomInput";
@@ -24,10 +24,19 @@ import {
   Notifications,
   PieChart,
   Save,
+  ShoppingCart,
   Visibility,
 } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
-const WebsiteModalComp = ({ setwebsiteDetail }) => (
+const WebsiteModalComp = ({
+  setwebsiteDetail,
+  data,
+  setwebsiteDetailData,
+  websiteViewProductsData,
+  navigate,
+  setwebsiteModalState,
+}) => (
   <Box
     my={2}
     p={2}
@@ -49,7 +58,7 @@ const WebsiteModalComp = ({ setwebsiteDetail }) => (
           color={colors.darkText}
           mb={1}
         >
-          Website Name
+          {data?.Name}
         </Typography>
         <Typography
           sx={{
@@ -60,16 +69,21 @@ const WebsiteModalComp = ({ setwebsiteDetail }) => (
             color: colors.blueText,
             fontFamily: "Urbanist-bold",
             fontSize: 12,
+            cursor: "pointer",
           }}
+          onClick={() => window.open(data?.URL)}
         >
-          www.example.com
+          {data?.URL}
         </Typography>
       </Box>
       <IconButton
         sx={{
           alignContent: "flex-start",
         }}
-        onClick={() => setwebsiteDetail(true)}
+        onClick={() => {
+          setwebsiteDetailData(data);
+          setwebsiteDetail(true);
+        }}
       >
         <Visibility />
       </IconButton>
@@ -95,7 +109,7 @@ const WebsiteModalComp = ({ setwebsiteDetail }) => (
         }}
       >
         <Stack direction={"row"} alignItems={"center"}>
-          <Delete sx={{ color: "#858d9D" }} />
+          <ShoppingCart sx={{ color: "#858d9D" }} />
           <Typography
             sx={{
               fontFamily: "Urbanist-bold",
@@ -104,7 +118,7 @@ const WebsiteModalComp = ({ setwebsiteDetail }) => (
               ml: 1,
             }}
           >
-            125
+            {data?.products?.length}
           </Typography>
         </Stack>
         <Stack direction={"row"} alignItems={"center"}>
@@ -167,6 +181,11 @@ const WebsiteModalComp = ({ setwebsiteDetail }) => (
         }}
         variant="contained"
         autoFocus
+        onClick={() => {
+          websiteViewProductsData(data);
+          navigate("/website/view-products");
+          setwebsiteModalState(false);
+        }}
       >
         View Products
       </Button>
@@ -175,8 +194,22 @@ const WebsiteModalComp = ({ setwebsiteDetail }) => (
 );
 
 const WebsitesModal = () => {
-  const { websiteModalState, setwebsiteModalState, setwebsiteDetail } =
-    useUser();
+  const navigate = useNavigate();
+
+  const {
+    websiteModalState,
+    setwebsiteModalState,
+    setwebsiteDetail,
+    setwebsiteDetailData,
+    GetWebsites,
+    allWebsites,
+    setwebsiteViewProductsData,
+  } = useUser();
+
+  useEffect(() => {
+    GetWebsites();
+  }, []);
+
   return (
     <Box
       sx={{
@@ -215,11 +248,16 @@ const WebsitesModal = () => {
           </Typography>
         </DialogTitle>
         <DialogContent>
-          {Array(4)
-            .fill()
-            .map((i) => (
-              <WebsiteModalComp setwebsiteDetail={setwebsiteDetail} />
-            ))}
+          {allWebsites.map((website) => (
+            <WebsiteModalComp
+              setwebsiteDetail={setwebsiteDetail}
+              setwebsiteModalState={setwebsiteModalState}
+              data={website}
+              setwebsiteDetailData={setwebsiteDetailData}
+              websiteViewProductsData={setwebsiteViewProductsData}
+              navigate={navigate}
+            />
+          ))}
         </DialogContent>
         <DialogActions sx={{ bgcolor: "#fff" }}>
           <Stack direction={"row"} spacing={2} width={"100%"}>

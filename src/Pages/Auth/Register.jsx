@@ -152,7 +152,7 @@ const Register = () => {
     } else if (!emailError && !passwordError) {
       setloading(true);
       await axios
-        .post(`${BASE_URL}/api/addUser`, {
+        .post(`${BASE_URL}/addUser`, {
           user: {
             Username: "",
             Email: email,

@@ -1,6 +1,9 @@
 import {
+  Alert,
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -8,10 +11,12 @@ import {
   DialogTitle,
   Divider,
   Grid,
+  IconButton,
+  Snackbar,
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
 import { CustomInput } from "../../components/CustomInput";
@@ -19,15 +24,29 @@ import { DataGrid } from "@mui/x-data-grid";
 import { billingRows } from "../../assets/DummyData";
 import { Delete, Visibility } from "@mui/icons-material";
 import DeleteModal from "../../components/DeleteModal";
+import axios from "axios";
+import { BASE_URL } from "../../constants/config";
+import { useNavigate } from "react-router-dom";
 
 const GroupModal = ({ open, handleClose, data }) => {
-  const { groupModalState, setgroupModalState } = useUser();
+  const navigate = useNavigate();
+  const {
+    groupModalState,
+    setgroupModalState,
+    allGroups,
+    GetGroups,
+    setviewProductsData,
+  } = useUser();
   const [deleteState, setdeleteState] = useState(false);
-  const billingColumns = [
+
+  const [deleteGroupId, setdeleteGroupId] = useState("");
+
+  const groupColumns = [
     {
       field: "name",
       headerName: "Group Name",
-      width: 125,
+      // width: 125,
+      flex: 1,
       renderHeader: (params) => (
         <Typography
           fontSize={13}
@@ -46,7 +65,7 @@ const GroupModal = ({ open, handleClose, data }) => {
             fontFamily: "Urbanist",
           }}
         >
-          {params.value}
+          {params?.row?.segment?.GroupName}
         </div>
       ),
     },
@@ -74,71 +93,70 @@ const GroupModal = ({ open, handleClose, data }) => {
             fontFamily: "Urbanist",
           }}
         >
-          {params.value}
+          {params?.row?.segment?.Segment_Products?.length}
         </div>
       ),
     },
-    {
-      field: "status",
-      headerName: "Status",
-      headerAlign: "center",
-      align: "center",
-      renderHeader: (params) => (
-        <Typography
-          fontSize={13}
-          fontFamily={"Urbanist-bolder"}
-          fontWeight={"900"}
-        >
-          {params?.colDef?.headerName}
-        </Typography>
-      ),
-      renderCell: (params) => (
-        <div
-          style={{
-            fontWeight: "400",
-            fontSize: "14px",
-            color: colors.subText,
-            fontFamily: "Urbanist",
-          }}
-        >
-          {params.value}
-        </div>
-      ),
-      width: 100,
-    },
-    {
-      field: "alerts",
-      headerName: "Alerts",
-      headerAlign: "center",
-      align: "center",
-      renderHeader: (params) => (
-        <Typography
-          fontSize={13}
-          fontFamily={"Urbanist-bolder"}
-          fontWeight={"900"}
-        >
-          {params?.colDef?.headerName}
-        </Typography>
-      ),
-      renderCell: (params) => (
-        <div
-          style={{
-            fontWeight: "400",
-            fontSize: "14px",
-            color: colors.subText,
-            fontFamily: "Urbanist",
-          }}
-        >
-          {params.value}
-        </div>
-      ),
-      width: 60,
-    },
-
+    // {
+    //   field: "status",
+    //   headerName: "Status",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderHeader: (params) => (
+    //     <Typography
+    //       fontSize={13}
+    //       fontFamily={"Urbanist-bolder"}
+    //       fontWeight={"900"}
+    //     >
+    //       {params?.colDef?.headerName}
+    //     </Typography>
+    //   ),
+    //   renderCell: (params) => (
+    //     <div
+    //       style={{
+    //         fontWeight: "400",
+    //         fontSize: "14px",
+    //         color: colors.subText,
+    //         fontFamily: "Urbanist",
+    //       }}
+    //     >
+    //       {params.value}
+    //     </div>
+    //   ),
+    //   width: 100,
+    // },
+    // {
+    //   field: "alerts",
+    //   headerName: "Alerts",
+    //   headerAlign: "center",
+    //   align: "center",
+    //   renderHeader: (params) => (
+    //     <Typography
+    //       fontSize={13}
+    //       fontFamily={"Urbanist-bolder"}
+    //       fontWeight={"900"}
+    //     >
+    //       {params?.colDef?.headerName}
+    //     </Typography>
+    //   ),
+    //   renderCell: (params) => (
+    //     <div
+    //       style={{
+    //         fontWeight: "400",
+    //         fontSize: "14px",
+    //         color: colors.subText,
+    //         fontFamily: "Urbanist",
+    //       }}
+    //     >
+    //       {params.value}
+    //     </div>
+    //   ),
+    //   width: 60,
+    // },
     {
       field: "view",
       headerName: "View",
-      width: 60,
+      width: 90,
       headerAlign: "center",
       align: "center",
       renderHeader: (params) => (
@@ -151,40 +169,123 @@ const GroupModal = ({ open, handleClose, data }) => {
         </Typography>
       ),
       renderCell: (params) => (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+        <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          sx={{
+            height: "100%",
           }}
         >
-          <div style={{ cursor: "pointer" }}>
+          <IconButton
+            sx={{ cursor: "pointer" }}
+            onClick={() => {
+              setviewProductsData(params?.row?.segment?.Segment_Products);
+              navigate("/group/view-products");
+              setgroupModalState(false);
+            }}
+          >
             <Visibility sx={{ color: "#858D9D", fontSize: "18px" }} />
-          </div>
-          <div
-            style={{ cursor: "pointer" }}
-            onClick={() => setdeleteState(true)}
+          </IconButton>
+          <IconButton
+            sx={{ cursor: "pointer" }}
+            onClick={() => {
+              setdeleteState(true);
+              setdeleteGroupId(params?.row?.segment?.GroupID);
+            }}
           >
             <Delete sx={{ color: "#858D9D", fontSize: "18px" }} />
-          </div>
-        </div>
+          </IconButton>
+        </Stack>
       ),
     },
   ];
+
+  const [groupNameSearch, setgroupNameSearch] = useState("");
+
+  const [loading, setloading] = useState(false);
+  const [deleteConfirm, setdeleteConfirm] = useState(false);
+
+  const DeleteGroup = async () => {
+    const token = localStorage.getItem("token");
+    setloading(true);
+
+    await axios
+      .post(
+        `${BASE_URL}/deleteSegment`,
+        {
+          GroupID: deleteGroupId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setloading(false);
+        setdeleteConfirm(true);
+        GetGroups();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setdeleteConfirm(false);
+  };
+
+  useEffect(() => {
+    GetGroups();
+  }, []);
+
+  const filteredGroup = allGroups?.filter((i) =>
+    i?.segment?.GroupName?.toLocaleLowerCase()?.includes(
+      groupNameSearch?.toLocaleLowerCase()
+    )
+  );
+
   return (
     <Box
       sx={{
         backgroundColor: "#F9F9FC",
       }}
     >
+      <Snackbar
+        open={deleteConfirm}
+        autoHideDuration={4000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Product Group Deleted
+        </Alert>
+      </Snackbar>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
       <DeleteModal
         open={deleteState}
         onClose={() => setdeleteState(false)}
-        onClick={() => console.log("Delete")}
+        onClick={DeleteGroup}
         title="Delete Group"
         mainText="Are you sure you want to delete this group?"
-        subText="Do you want to delete this leads? This action can’t be undone"
+        subText="Do you want to delete this group? This action can’t be undone"
       />
+
       <Dialog
         fullWidth
         open={groupModalState}
@@ -228,10 +329,15 @@ const GroupModal = ({ open, handleClose, data }) => {
               justifyContent: "space-between",
             }}
           >
-            <Box sx={{ width: "72.5%" }}>
-              <CustomInput label={"Create New Group"} />
+            <Box sx={{ width: "100%" }}>
+              <CustomInput
+                label={"Search Group"}
+                value={groupNameSearch}
+                setValue={setgroupNameSearch}
+                placeholder="Search group by name..."
+              />
             </Box>
-            <Box sx={{ alignContent: "flex-end", width: "25%" }}>
+            {/* <Box sx={{ alignContent: "flex-end", width: "25%" }}>
               <Button
                 disableElevation
                 style={{
@@ -252,7 +358,7 @@ const GroupModal = ({ open, handleClose, data }) => {
               >
                 Search Products
               </Button>
-            </Box>
+            </Box> */}
           </Box>
           <Box
             my={2}
@@ -276,14 +382,13 @@ const GroupModal = ({ open, handleClose, data }) => {
               All Groups
             </Typography>
             <DataGrid
-              rows={billingRows}
-              columns={billingColumns}
+              rows={filteredGroup}
+              columns={groupColumns}
               sx={{
                 borderRadius: "12px",
                 border: "none",
-                height: "358px",
               }}
-              checkboxSelection
+              getRowId={(row) => row?.segment?.GroupID}
               hideFooter={true}
             />
           </Box>

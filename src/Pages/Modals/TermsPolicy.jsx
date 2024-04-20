@@ -1,8 +1,11 @@
 import {
   Box,
+  Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
+  Stack,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -158,6 +161,24 @@ const TermsPolicy = () => {
             </Typography>
           </Box>
         </DialogContent>
+        <DialogActions sx={{ bgcolor: "#fff" }}>
+          <Stack direction={"row"} spacing={2} width={"100%"}>
+            <Button
+              style={{
+                background: "#f1f1f1",
+                color: "black",
+                textTransform: "none",
+                fontFamily: "Urbanist",
+                fontWeight: "bold",
+              }}
+              variant="contained"
+              fullWidth
+              onClick={() => settermsPolicyModal(false)}
+            >
+              Close
+            </Button>
+          </Stack>
+        </DialogActions>
       </Dialog>
     </Box>
   );

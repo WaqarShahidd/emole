@@ -19,6 +19,8 @@ import PrivateRoute from "./PrivateRoute";
 import TermsPolicy from "../Pages/Modals/TermsPolicy";
 import SupportTutorialModal from "../Pages/Modals/SupportTutorialModal";
 import TutorialModal from "../Pages/Modals/TutorialModal";
+import ViewProducts from "../Pages/Products/ViewProducts";
+import ViewProductsWebsite from "../Pages/Products/ViewProductsWebsite";
 
 export default function Router() {
   return (
@@ -43,6 +45,12 @@ export default function Router() {
         <Route element={<PrivateRoute />}>
           <Route exact path="/" element={<Dashboard />} />
           <Route exact path="/products" element={<Products />} />
+          <Route exact path="/group/view-products" element={<ViewProducts />} />
+          <Route
+            exact
+            path="/website/view-products"
+            element={<ViewProductsWebsite />}
+          />
           <Route exact path="/segments" element={<Segments />} />
           <Route exact path="/notifications" element={<Notifications />} />
           <Route exact path="/account" element={<Account />} />

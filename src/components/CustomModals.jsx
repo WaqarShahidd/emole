@@ -125,7 +125,14 @@ export const DeleteModal = ({ open, onClose, onDelete }) => {
   );
 };
 
-export const ConfirmModal = ({ open, onClose, title, btnText, onClick }) => {
+export const ConfirmModal = ({
+  open,
+  onClose,
+  title,
+  btnText,
+  onClick,
+  subText,
+}) => {
   return (
     <Dialog open={open} onClose={onClose} sx={{ p: 5 }}>
       <Box
@@ -149,6 +156,8 @@ export const ConfirmModal = ({ open, onClose, title, btnText, onClick }) => {
           justifyContent: "center",
           p: 2,
           maxWidth: "400px",
+          width: subText ? "100%" : "400px",
+          mb: subText ? "0px" : 3,
         }}
       >
         <Box
@@ -186,8 +195,7 @@ export const ConfirmModal = ({ open, onClose, title, btnText, onClick }) => {
             textAlign: "center",
           }}
         >
-          Do you really want to delete this record? This process cannot be
-          undone.
+          {subText}
         </Typography>
       </DialogContent>
       <DialogActions>

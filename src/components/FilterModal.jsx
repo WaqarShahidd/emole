@@ -72,7 +72,7 @@ const FilterModal = ({
 
   const GetWebsites = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/getAllWebsites`);
+      const response = await axios.get(`${BASE_URL}/getAllWebsites`);
       const data = await response.data.websites;
       setallWebsites(data);
     } catch (error) {

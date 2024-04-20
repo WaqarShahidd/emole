@@ -1,8 +1,11 @@
 import {
   Box,
+  Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
+  Stack,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -14,7 +17,7 @@ import { colors } from "../../theme/theme";
 const TutorialModal = () => {
   const { tutorialModal, settutorialModal } = useUser();
 
-  const [alignment, setAlignment] = React.useState("Terms of use");
+  const [alignment, setAlignment] = React.useState("Products");
 
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
@@ -166,6 +169,24 @@ const TutorialModal = () => {
             </Typography>
           </Box>
         </DialogContent>
+        <DialogActions sx={{ bgcolor: "#fff" }}>
+          <Stack direction={"row"} spacing={2} width={"100%"}>
+            <Button
+              style={{
+                background: "#f1f1f1",
+                color: "black",
+                textTransform: "none",
+                fontFamily: "Urbanist",
+                fontWeight: "bold",
+              }}
+              variant="contained"
+              fullWidth
+              onClick={() => settutorialModal(false)}
+            >
+              Close
+            </Button>
+          </Stack>
+        </DialogActions>
       </Dialog>
     </Box>
   );

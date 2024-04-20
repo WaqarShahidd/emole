@@ -39,7 +39,7 @@ import moment from "moment";
 import DeleteModal from "../../components/DeleteModal";
 import { useUser } from "../../constants/context";
 
-const Products = () => {
+const ViewProducts = () => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -209,42 +209,7 @@ const Products = () => {
         </Box>
       ),
     },
-    // {
-    //   field: "linked_website",
-    //   headerName: "Linked Website",
-    //   headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
-    //   headerAlign: "center",
-    //   minWidth: 160,
-    //   flex: 1,
-    //   renderHeader: (params) => (
-    //     <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-    //       {params?.colDef?.headerName}
-    //     </Typography>
-    //   ),
-    //   renderCell: (params) => (
-    //     <Box className="flex-col flex w-full h-full  justify-center">
-    //       <Typography
-    //         fontFamily={"Urbanist"}
-    //         color={"gray"}
-    //         fontWeight={"bold"}
-    //         fontSize={13}
-    //       >
-    //         {params?.row?.Product?.Page?.Website?.URL}
-    //       </Typography>
-    //       <Typography
-    //         fontFamily={"Urbanist"}
-    //         fontWeight={"bold"}
-    //         fontSize={13}
-    //         className=" font-bold text-blue-500 cursor-pointer"
-    //         onClick={() =>
-    //           window.open(`${params?.row?.website?.website_url}`, "_blank")
-    //         }
-    //       >
-    //         {params?.row?.website?.website_url}
-    //       </Typography>
-    //     </Box>
-    //   ),
-    // },
+
     {
       field: "Priority",
       headerName: "Stock Status",
@@ -311,19 +276,6 @@ const Products = () => {
         </Box>
       ),
     },
-    // {
-    //   field: "New_Value",
-    //   headerName: "Notification",
-    //   headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
-    //   flex: 1,
-    //   headerAlign: "center",
-    //   align: "center",
-    //   renderHeader: (params) => (
-    //     <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-    //       {params?.colDef?.headerName}
-    //     </Typography>
-    //   ),
-    // },
     {
       field: "CreatedDate",
       headerName: "Created Date",
@@ -384,82 +336,23 @@ const Products = () => {
     },
   ];
 
-  const [openFilters, setopenFilters] = useState(false);
-
   const [loading, setloading] = useState(false);
-  const [productsData, setproductsData] = useState([]);
-
-  let currentDate = new Date().toLocaleDateString();
-
-  const [startDate, setstartDate] = useState(null);
-  const [endDate, setendDate] = useState(
-    dayjs(moment(currentDate).format("YYYY-MM-DD"))
-  );
-
-  const [prevPrice, setprevPrice] = useState(null);
-  const [currentPrice, setcurrentPrice] = useState(null);
-
-  const [selectedIds, setSelectedIds] = useState([]);
 
   const [totalPages, settotalPages] = useState(1);
   const [currentPage, setcurrentPage] = useState(1);
   const [numOfProductPerPage, setnumOfProductPerPage] = useState(10);
 
-  const [stockStatusFilter, setstockStatusFilter] = useState(null);
   const [deleteProducts, setdeleteProducts] = useState(false);
 
   const handleChangeProductPerPage = (event) => {
     setnumOfProductPerPage(event.target.value);
   };
 
-  const FetchProducts = async () => {
-    setloading(true);
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.post(
-        `${BASE_URL}/getProductsByUserId`,
-        {
-          page: currentPage,
-          pageSize: numOfProductPerPage,
-          filters: {
-            StockStatus: stockStatusFilter,
-            category: [],
-            productPrice: {
-              minPrice: parseFloat(prevPrice),
-              maxPrice: parseFloat(currentPrice),
-            },
-            websites: selectedIds,
-            createdDate: {
-              startDate: startDate,
-              endDate: endDate,
-            },
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await response.data.products.products;
-      settotalPages(response.data.products.totalPages);
-      setproductsData(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setloading(false);
-    }
-  };
-
-  useEffect(() => {
-    FetchProducts();
-  }, [numOfProductPerPage, currentPage]);
-
   const {
-    setselectedProducts,
-    selectedProducts,
     setconfirmGroupCreate,
     confirmGroupCreate,
+    setviewProductsData,
+    viewProductsData,
   } = useUser();
 
   const handleCloseSnackbar = (event, reason) => {
@@ -505,13 +398,7 @@ const Products = () => {
           backgroundColor: "#F9F9FC",
         }}
       >
-        <Header
-          title="Products"
-          filter
-          filterBtn={() => setopenFilters(!openFilters)}
-          actionBtn
-          actionBtnFunc={() => setdeleteProducts(true)}
-        />
+        <Header title="" groupsDropdown />
         <DeleteModal
           open={deleteProducts}
           onClose={() => setdeleteProducts(false)}
@@ -519,23 +406,6 @@ const Products = () => {
           title="Delete Products"
           mainText="Are you sure you want to delete these products?"
           subText="Do you want to delete this leads? This action can’t be undone"
-        />
-        <FilterModal
-          open={openFilters}
-          handleClose={() => setopenFilters(false)}
-          startDate={startDate}
-          setstartDate={setstartDate}
-          endDate={endDate}
-          setendDate={setendDate}
-          prevPrice={prevPrice}
-          setprevPrice={setprevPrice}
-          currentPrice={currentPrice}
-          setcurrentPrice={setcurrentPrice}
-          setSelectedIds={setSelectedIds}
-          selectedIds={selectedIds}
-          applyFilter={() => FetchProducts()}
-          setstockStatusFilter={setstockStatusFilter}
-          stockStatusFilter={stockStatusFilter}
         />
 
         <ProductDetailModal
@@ -565,24 +435,15 @@ const Products = () => {
                 disableRowSelectionOnClick
                 showColumnVerticalBorder={false}
                 showCellVerticalBorder={true}
-                rows={productsData}
-                getRowId={(row) => row?.UserProductID}
+                rows={viewProductsData}
+                getRowId={(row) => row?.GroupID}
                 columns={productsColumns}
                 initialState={{
                   pagination: {
                     paginationModel: { pageSize: numOfProductPerPage },
                   },
                 }}
-                onRowSelectionModelChange={(ids) => {
-                  const selectedIDs = new Set(ids);
-                  const selectedRows = productsData?.filter((row) =>
-                    selectedIDs.has(row?.ProductID)
-                  );
-                  setselectedProducts(selectedRows);
-                  console.log(selectedRows);
-                }}
                 hideFooter={true}
-                checkboxSelection
               />
             </Box>
             <Box className="mt-4 mx-4">
@@ -635,4 +496,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default ViewProducts;

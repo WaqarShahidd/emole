@@ -212,6 +212,7 @@ const AccountBilling = () => {
     setaccountBillingModal,
     setbillingPlansModal,
     settermsPolicyModal,
+    userData,
   } = useUser();
 
   const billingColumns = [
@@ -438,7 +439,7 @@ const AccountBilling = () => {
                   fontSize={14}
                   color={colors.darkText}
                 >
-                  lindablair@mail.com
+                  {userData?.Email}
                 </Typography>
               </Stack>
               <Typography

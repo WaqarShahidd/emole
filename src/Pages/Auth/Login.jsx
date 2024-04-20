@@ -127,7 +127,7 @@ const Login = () => {
     } else {
       setloading(true);
       await axios
-        .post(`${BASE_URL}/api/loginUser`, {
+        .post(`${BASE_URL}/loginUser`, {
           Email: email,
           Password: password,
         })
