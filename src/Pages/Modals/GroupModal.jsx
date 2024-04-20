@@ -36,6 +36,7 @@ const GroupModal = ({ open, handleClose, data }) => {
     allGroups,
     GetGroups,
     setviewProductsData,
+    GetProductBySegment,
   } = useUser();
   const [deleteState, setdeleteState] = useState(false);
 
@@ -180,7 +181,8 @@ const GroupModal = ({ open, handleClose, data }) => {
           <IconButton
             sx={{ cursor: "pointer" }}
             onClick={() => {
-              setviewProductsData(params?.row?.segment?.Segment_Products);
+              setviewProductsData(params?.row?.segment?.GroupID);
+              GetProductBySegment();
               navigate("/group/view-products");
               setgroupModalState(false);
             }}

@@ -23,7 +23,7 @@ export function UserProvider({ children }) {
   const [allWebsites, setallWebsites] = useState([]);
   const [websiteDetailData, setwebsiteDetailData] = useState({});
 
-  const [viewProductsData, setviewProductsData] = useState([]);
+  const [viewProductsData, setviewProductsData] = useState("");
   const [websiteViewProductsData, setwebsiteViewProductsData] = useState([]);
 
   const GetWebsites = async () => {
@@ -54,6 +54,30 @@ export function UserProvider({ children }) {
       const data = await response.data.segments;
 
       setallGroups(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [productsBySegment, setproductsBySegment] = useState([]);
+
+  const GetProductBySegment = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/getProductsBySegmentId`,
+        {
+          GroupID: viewProductsData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.data.Products;
+
+      setproductsBySegment(data);
     } catch (error) {
       console.error(error);
     }
@@ -95,6 +119,8 @@ export function UserProvider({ children }) {
         viewProductsData,
         websiteViewProductsData,
         setwebsiteViewProductsData,
+        productsBySegment,
+        GetProductBySegment,
       }}
     >
       {children}

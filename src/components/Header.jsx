@@ -124,6 +124,7 @@ const Header = ({
     GetGroups,
     allGroups,
     setviewProductsData,
+    GetProductBySegment,
   } = useUser();
 
   const navigate = useNavigate();
@@ -242,7 +243,8 @@ const Header = ({
                   value={item?.segment?.GroupName}
                   onClick={(e) => {
                     setslectedGroup(item?.segment?.GroupName);
-                    setviewProductsData(item?.segment?.Segment_Products);
+                    setviewProductsData(item?.segment?.GroupID);
+                    GetProductBySegment(item?.segment?.GroupID);
                   }}
                 >
                   <ListItemText primary={item?.segment?.GroupName} />

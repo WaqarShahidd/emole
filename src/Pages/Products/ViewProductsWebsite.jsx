@@ -360,8 +360,6 @@ const ViewProductsWebsite = () => {
     setconfirmGroupCreate(false);
   };
 
-  console.log(websiteViewProductsData);
-
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
       <SideDrawer id={2} />

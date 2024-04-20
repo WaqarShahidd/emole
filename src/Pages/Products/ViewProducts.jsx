@@ -81,7 +81,7 @@ const ViewProducts = () => {
             <img
               className="rounded-md"
               width={70}
-              src={params?.row?.Product?.Images}
+              src={params?.row?.Images}
               alt="new"
               style={{ padding: "10px" }}
             />
@@ -93,9 +93,9 @@ const ViewProducts = () => {
               fontWeight={"bold"}
               fontSize={13}
             >
-              {params?.row?.Product?.Name}
+              {params?.row?.Name}
             </Typography>
-            <Typography
+            {/* <Typography
               fontFamily={"Urbanist"}
               fontWeight={"bold"}
               fontSize={13}
@@ -108,7 +108,7 @@ const ViewProducts = () => {
               }
             >
               {params?.row?.Product?.Page?.Website?.Name}
-            </Typography>
+            </Typography> */}
           </Box>
         </Stack>
       ),
@@ -136,25 +136,25 @@ const ViewProducts = () => {
               fontWeight={"bold"}
               fontSize={13}
             >
-              {params?.row?.Product?.LastPrice}
+              {params?.row?.LastPrice}
             </Typography>
-            {params?.row?.Product?.Price ? (
+            {params?.row?.Price ? (
               <>
                 <Typography
                   fontFamily={"Urbanist"}
                   fontWeight={"bold"}
                   fontSize={13}
                   color={
-                    parseFloat(params?.row?.Product?.LastPrice) <
-                    parseFloat(params?.row?.Product?.Price)
+                    parseFloat(params?.row?.LastPrice) <
+                    parseFloat(params?.row?.Price)
                       ? "green"
                       : "red"
                   }
                 >
-                  {params?.row?.Product?.Price}
+                  {params?.row?.Price}
                 </Typography>
-                {parseFloat(params?.row?.Product?.LastPrice) <
-                parseFloat(params?.row?.Product?.Price) ? (
+                {parseFloat(params?.row?.LastPrice) <
+                parseFloat(params?.row?.Price) ? (
                   <ArrowDropUp fontSize="small" color="success" />
                 ) : (
                   <ArrowDropDown fontSize="small" color="error" />
@@ -194,9 +194,9 @@ const ViewProducts = () => {
             fontWeight={"bold"}
             fontSize={13}
           >
-            {params?.row?.Product?.Category}
+            {params?.row?.Category}
           </Typography>
-          {params?.row?.category?.length > 1 && (
+          {/* {params?.row?.category?.length > 1 && (
             <Typography
               fontFamily={"Urbanist"}
               fontWeight={"bold"}
@@ -205,7 +205,7 @@ const ViewProducts = () => {
             >
               {params?.row?.category?.length - 1} more
             </Typography>
-          )}
+          )} */}
         </Box>
       ),
     },
@@ -238,16 +238,16 @@ const ViewProducts = () => {
             style={{
               textAlign: "center",
               backgroundColor: getStatusBackgroundColor(
-                params?.row?.Product?.StockStatus ? "In Stock" : "Out of stock"
+                params?.row?.StockStatus ? "In Stock" : "Out of stock"
               ),
               color: getStatusTextColor(
-                params?.row?.Product?.StockStatus ? "In Stock" : "Out of stock"
+                params?.row?.StockStatus ? "In Stock" : "Out of stock"
               ),
               fontWeight: "bold",
               borderRadius: "8px",
             }}
           >
-            {params?.row?.Product?.StockStatus ? "In Stock" : "Out of Stock"}
+            {params?.row?.StockStatus ? "In Stock" : "Out of Stock"}
           </Typography>
         </Box>
       ),
@@ -271,7 +271,7 @@ const ViewProducts = () => {
             fontWeight={"bold"}
             fontSize={13}
           >
-            {params?.row?.Product?.OutOfStockCount}
+            {params?.row?.OutOfStockCount}
           </Typography>
         </Box>
       ),
@@ -296,7 +296,7 @@ const ViewProducts = () => {
             fontWeight={"bold"}
             fontSize={13}
           >
-            {moment(params?.row?.Product?.createdAt).format("DD-MM-YYYY")}
+            {moment(params?.row?.createdAt).format("DD-MM-YYYY")}
           </Typography>
         </Box>
       ),
@@ -351,8 +351,8 @@ const ViewProducts = () => {
   const {
     setconfirmGroupCreate,
     confirmGroupCreate,
-    setviewProductsData,
-    viewProductsData,
+    GetProductBySegment,
+    productsBySegment,
   } = useUser();
 
   const handleCloseSnackbar = (event, reason) => {
@@ -362,6 +362,10 @@ const ViewProducts = () => {
 
     setconfirmGroupCreate(false);
   };
+
+  useEffect(() => {
+    GetProductBySegment();
+  }, []);
 
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
@@ -435,8 +439,8 @@ const ViewProducts = () => {
                 disableRowSelectionOnClick
                 showColumnVerticalBorder={false}
                 showCellVerticalBorder={true}
-                rows={viewProductsData}
-                getRowId={(row) => row?.GroupID}
+                rows={productsBySegment}
+                getRowId={(row) => row?.ProductID}
                 columns={productsColumns}
                 initialState={{
                   pagination: {
