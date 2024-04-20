@@ -1259,7 +1259,7 @@ const stockUpdateRowData = [
   },
 ];
 
-const DashboardBox = ({ title, productCount, Icon, navigate }) => (
+const DashboardBox = ({ title, productCount, Icon, onClick, btnText }) => (
   <Box
     sx={{
       height: 135,
@@ -1310,9 +1310,9 @@ const DashboardBox = ({ title, productCount, Icon, navigate }) => (
         fontSize: "12px",
         textTransform: "none",
       }}
-      onClick={() => navigate("/products")}
+      onClick={onClick}
     >
-      Discover Products
+      {btnText}
     </Button>
   </Box>
 );
@@ -1320,7 +1320,13 @@ const DashboardBox = ({ title, productCount, Icon, navigate }) => (
 const Dashboard = () => {
   const navigate = useNavigate();
 
-  const { allWebsites, GetWebsites, GetGroups } = useUser();
+  const {
+    allWebsites,
+    GetWebsites,
+    GetGroups,
+    setwebsiteModalState,
+    setgroupModalState,
+  } = useUser();
 
   const [countData, setcountData] = useState({});
   const GetCount = async () => {
@@ -1368,7 +1374,8 @@ const Dashboard = () => {
               title={"Total Products"}
               productCount={countData?.products}
               Icon={ShoppingCart}
-              navigate={navigate}
+              navigate={() => navigate("/products")}
+              btnText={"See Products"}
             />
           </Grid>
 
@@ -1377,7 +1384,8 @@ const Dashboard = () => {
               title="Total Out of Stock"
               productCount={countData?.stock}
               Icon={GridViewRounded}
-              navigate={navigate}
+              navigate={() => navigate("/products")}
+              btnText={"See Products"}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2.4}>
@@ -1385,7 +1393,8 @@ const Dashboard = () => {
               title="Total Websites"
               productCount={countData?.websites}
               Icon={LocalOfferRounded}
-              navigate={navigate}
+              navigate={() => setwebsiteModalState(true)}
+              btnText={"See Websites"}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2.4}>
@@ -1393,7 +1402,8 @@ const Dashboard = () => {
               title="Total Alerts"
               productCount={7}
               Icon={Notifications}
-              navigate={navigate}
+              navigate={() => navigate("/notifications")}
+              btnText={"See Alerts"}
             />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={2.4}>
@@ -1401,7 +1411,8 @@ const Dashboard = () => {
               title="Total Groups"
               productCount={countData?.group}
               Icon={DonutLarge}
-              navigate={navigate}
+              navigate={() => setgroupModalState(true)}
+              btnText={"See Groups"}
             />
           </Grid>
         </Grid>
