@@ -27,13 +27,35 @@ import { Alert, Snackbar } from "@mui/material";
 import { useUser } from "../constants/context";
 
 export default function Router() {
-  const { paymentSuccessful, setpaymentSuccessful } = useUser();
+  const {
+    paymentSuccessful,
+    setpaymentSuccessful,
+    profileUpdateSuccess,
+    setprofileUpdateSuccess,
+    resetSuccess,
+    setresetSuccess,
+  } = useUser();
+
   const handleClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
 
     setpaymentSuccessful(false);
+  };
+  const handleProfileUpdateClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setprofileUpdateSuccess(false);
+  };
+  const handleResetPassClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setresetSuccess(false);
   };
 
   return (
@@ -61,6 +83,34 @@ export default function Router() {
           sx={{ width: "100%" }}
         >
           Payment Successful.
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={profileUpdateSuccess}
+        autoHideDuration={4000}
+        onClose={handleProfileUpdateClose}
+      >
+        <Alert
+          onClose={handleProfileUpdateClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Profile Updated Successfully
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={resetSuccess}
+        autoHideDuration={4000}
+        onClose={handleResetPassClose}
+      >
+        <Alert
+          onClose={handleResetPassClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Password Changed Successfully
         </Alert>
       </Snackbar>
 

@@ -12,7 +12,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../constants/context";
 import axios from "axios";
 import { BASE_URL } from "../../constants/config";
@@ -20,26 +20,38 @@ import { CustomInput } from "../../components/CustomInput";
 import { colors } from "../../theme/theme";
 
 const EditProfile = () => {
-  const { editProfileModal, seteditProfileModal, userData } = useUser();
+  const {
+    editProfileModal,
+    seteditProfileModal,
+    userData,
+    GetUser,
+    setprofileUpdateSuccess,
+  } = useUser();
 
   const [loading, setloading] = useState(false);
 
   const [error, seterror] = useState(false);
   const [errorMsg, seterrorMsg] = useState("");
-  const [snackbarState, setsnackbarState] = useState(false);
 
   const [userName, setuserName] = useState(userData?.Username);
   const [email, setemail] = useState(userData?.Email);
+
+  useEffect(() => {
+    setuserName(userData?.Username);
+    setemail(userData?.Email);
+  }, [userData?.Email, userData?.Username]);
 
   const UpdateProfile = async () => {
     setloading(true);
     const token = localStorage.getItem("token");
     await axios
       .post(
-        `${BASE_URL}/loginUser`,
+        `${BASE_URL}/updateUser`,
         {
-          Username: userName,
-          Email: email,
+          user: {
+            Username: userName,
+            Email: email,
+          },
         },
         {
           headers: {
@@ -50,20 +62,14 @@ const EditProfile = () => {
       .then((res) => {
         setloading(false);
         seteditProfileModal(false);
+        GetUser();
+        setprofileUpdateSuccess(true);
       })
       .catch((e) => {
         seterror(true);
         seterrorMsg(e?.response?.data?.message);
         setloading(false);
       });
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setsnackbarState(false);
   };
 
   return (
@@ -79,20 +85,6 @@ const EditProfile = () => {
         },
       }}
     >
-      <Snackbar
-        open={snackbarState}
-        autoHideDuration={4000}
-        onClose={handleClose}
-      >
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          Profile Updated Successfully
-        </Alert>
-      </Snackbar>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
@@ -131,8 +123,6 @@ const EditProfile = () => {
               value={userName}
               setValue={setuserName}
               placeholder={"eg. John Doe"}
-              emailError={error}
-              setEmailError={seterror}
               mB={"20px"}
             />
 
@@ -141,8 +131,6 @@ const EditProfile = () => {
               value={email}
               setValue={setemail}
               placeholder={"eg. email@email.com"}
-              emailError={error}
-              setEmailError={seterror}
             />
           </Box>
         </Box>

@@ -27,6 +27,7 @@ import {
 import {
   ArrowDropDown,
   ArrowDropUp,
+  DeleteForever,
   Visibility,
   WatchLater,
 } from "@mui/icons-material";
@@ -38,6 +39,8 @@ import dayjs from "dayjs";
 import moment from "moment";
 import DeleteModal from "../../components/DeleteModal";
 import { useUser } from "../../constants/context";
+import { colors } from "../../theme/theme";
+import { useLocation } from "react-router-dom";
 
 const Products = () => {
   const [open, setOpen] = React.useState(false);
@@ -49,6 +52,8 @@ const Products = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const { state } = useLocation();
 
   const [productDetails, setproductDetails] = useState({});
 
@@ -88,17 +93,17 @@ const Products = () => {
           </Box>
           <Box className="flex-col flex w-full h-full  justify-center">
             <Typography
-              fontFamily={"Urbanist"}
-              color={"gray"}
+              fontFamily={"Urbanist-bolder"}
+              color={colors.darkText}
               fontWeight={"bold"}
-              fontSize={13}
+              fontSize={14}
             >
               {params?.row?.Product?.Name}
             </Typography>
             <Typography
               fontFamily={"Urbanist"}
               fontWeight={"bold"}
-              fontSize={13}
+              fontSize={12}
               className="underline text-blue-500 cursor-pointer"
               onClick={() =>
                 window.open(
@@ -380,6 +385,9 @@ const Products = () => {
           >
             <Visibility fontSize="small" />
           </IconButton>
+          <IconButton>
+            <DeleteForever fontSize="small" />
+          </IconButton>
         </Stack>
       ),
     },
@@ -406,7 +414,9 @@ const Products = () => {
   const [currentPage, setcurrentPage] = useState(1);
   const [numOfProductPerPage, setnumOfProductPerPage] = useState(10);
 
-  const [stockStatusFilter, setstockStatusFilter] = useState(null);
+  const [stockStatusFilter, setstockStatusFilter] = useState(
+    state?.filter === "false" ? false : null
+  );
   const [deleteProducts, setdeleteProducts] = useState(false);
 
   const handleChangeProductPerPage = (event) => {
@@ -416,6 +426,7 @@ const Products = () => {
   const FetchProducts = async () => {
     setloading(true);
     const token = localStorage.getItem("token");
+    console.log(state?.filter);
     try {
       const response = await axios.post(
         `${BASE_URL}/getProductsByUserId`,
@@ -471,6 +482,8 @@ const Products = () => {
     setconfirmGroupCreate(false);
   };
 
+  const [disableBtn, setdisableBtn] = useState(true);
+
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
       <SideDrawer id={2} />
@@ -512,6 +525,11 @@ const Products = () => {
           filterBtn={() => setopenFilters(!openFilters)}
           actionBtn
           actionBtnFunc={() => setdeleteProducts(true)}
+          hideColumns
+          addProducts
+          searchBar
+          setdisableBtn={setdisableBtn}
+          disableBtn={disableBtn}
         />
         <DeleteModal
           open={deleteProducts}
@@ -580,7 +598,6 @@ const Products = () => {
                     selectedIDs.has(row?.ProductID)
                   );
                   setselectedProducts(selectedRows);
-                  console.log(selectedRows);
                 }}
                 hideFooter={true}
                 checkboxSelection
@@ -591,11 +608,18 @@ const Products = () => {
                 <Pagination
                   count={totalPages}
                   variant="outlined"
+                  // color="primary"
                   shape="rounded"
                   onChange={(event, value) => {
                     setcurrentPage(value);
                     console.log(value);
                   }}
+                  // sx={(value) => ({
+                  //   "& .MuiPaginationItem-root": {
+                  //     color: "#fff",
+                  //     backgroundColor: colors.blueText,
+                  //   },
+                  // })}
                 />
                 <Box mx={2} width={200} height={20}>
                   <FormControl

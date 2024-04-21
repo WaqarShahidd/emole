@@ -7,6 +7,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Drawer,
   FormControl,
   InputLabel,
   ListItemText,
@@ -26,6 +27,7 @@ import dayjs from "dayjs";
 import moment from "moment";
 import axios from "axios";
 import { BASE_URL } from "../constants/config";
+import { colors } from "../theme/theme";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -87,29 +89,28 @@ const FilterModal = ({
   }, []);
 
   return (
-    <Dialog
-      fullWidth
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle align="center" id="alert-dialog-title">
-        <Typography
-          mb={1}
-          fontFamily={"Urbanist"}
-          fontWeight={"bold"}
-          fontSize={22}
-        >
-          Product Filters
-        </Typography>
-        <Divider />
-      </DialogTitle>
-
-      <DialogContent>
-        <Box py={2}>
-          {/* Website Dropdown */}
-          {/* <Typography
+    <Drawer anchor={"right"} open={open} onClose={handleClose}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+        height="100%"
+        p={4}
+      >
+        <Box>
+          <Typography
+            mb={1}
+            fontFamily={"Urbanist"}
+            fontWeight={"bold"}
+            fontSize={22}
+            textAlign={"center"}
+          >
+            Product Filters
+          </Typography>
+          <Divider />
+          <Box py={2}>
+            {/* Website Dropdown */}
+            {/* <Typography
             sx={{
               fontSize: "16px",
               fontWeight: "700",
@@ -167,125 +168,124 @@ const FilterModal = ({
             </Select>
           </FormControl> */}
 
-          {/* Stock Status Dropdown */}
-          <Typography
-            sx={{
-              fontSize: "16px",
-              fontWeight: "700",
-              fontFamily: "Urbanist-bold",
-              color: "#222",
-              pb: 1,
-            }}
-          >
-            Stock Status
-          </Typography>
-          <FormControl fullWidth>
-            <Select
-              displayEmpty
-              value={stockStatusFilter}
-              onChange={(e) => setstockStatusFilter(e.target.value)}
-              renderValue={(selected) => {
-                if (selected === null) {
-                  return <>Stock Status</>;
-                }
-
-                return selected ? "In Stock" : "Out of Stock";
+            {/* Stock Status Dropdown */}
+            <Typography
+              sx={{
+                fontSize: "16px",
+                fontWeight: "700",
+                fontFamily: "Urbanist-bold",
+                color: "#222",
+                pb: 1,
               }}
-              MenuProps={MenuProps}
-              inputProps={{ "aria-label": "Without label" }}
             >
-              <MenuItem value={true}>In Stock</MenuItem>
-              <MenuItem value={false}>Out of Stock</MenuItem>
-            </Select>
-          </FormControl>
+              Stock Status
+            </Typography>
+            <FormControl fullWidth>
+              <Select
+                displayEmpty
+                value={stockStatusFilter}
+                onChange={(e) => setstockStatusFilter(e.target.value)}
+                renderValue={(selected) => {
+                  if (selected === null) {
+                    return <>Stock Status</>;
+                  }
 
-          {/* Date Range */}
-          <Typography
-            sx={{
-              fontSize: "16px",
-              fontWeight: "700",
-              fontFamily: "Urbanist-bold",
-              color: "#222",
-
-              pt: 3,
-            }}
-          >
-            Choose Created Date Range
-          </Typography>
-          <Stack direction="row" justifyContent="space-between">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer
-                sx={{ width: "47.5%" }}
-                components={["DatePicker"]}
+                  return selected ? "In Stock" : "Out of Stock";
+                }}
+                MenuProps={MenuProps}
+                inputProps={{ "aria-label": "Without label" }}
               >
-                <DatePicker
-                  value={startDate}
-                  onChange={(newValue) => setstartDate(newValue)}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
+                <MenuItem value={true}>In Stock</MenuItem>
+                <MenuItem value={false}>Out of Stock</MenuItem>
+              </Select>
+            </FormControl>
 
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer
+            {/* Date Range */}
+            <Typography
+              sx={{
+                fontSize: "16px",
+                fontWeight: "700",
+                fontFamily: "Urbanist-bold",
+                color: "#222",
+
+                pt: 3,
+              }}
+            >
+              Choose Created Date Range
+            </Typography>
+            <Stack direction="row" justifyContent="space-between">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer
+                  sx={{ width: "47.5%" }}
+                  components={["DatePicker"]}
+                >
+                  <DatePicker
+                    value={startDate}
+                    onChange={(newValue) => setstartDate(newValue)}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer
+                  sx={{ width: "47.5%" }}
+                  components={["DatePicker"]}
+                >
+                  <DatePicker
+                    value={endDate}
+                    onChange={(newValue) => setendDate(newValue)}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+            </Stack>
+
+            {/* Price Range */}
+            <Typography
+              sx={{
+                fontSize: "16px",
+                fontWeight: "700",
+                fontFamily: "Urbanist-bold",
+                color: "#222",
+                pb: 1,
+                pt: 3,
+              }}
+            >
+              Choose Created Date Range
+            </Typography>
+            <Stack direction="row" justifyContent="space-between">
+              <TextField
+                id="outlined-number"
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                placeholder="Min Price"
                 sx={{ width: "47.5%" }}
-                components={["DatePicker"]}
-              >
-                <DatePicker
-                  value={endDate}
-                  onChange={(newValue) => setendDate(newValue)}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
-          </Stack>
-
-          {/* Price Range */}
-          <Typography
-            sx={{
-              fontSize: "16px",
-              fontWeight: "700",
-              fontFamily: "Urbanist-bold",
-              color: "#222",
-              pb: 1,
-              pt: 3,
-            }}
-          >
-            Choose Created Date Range
-          </Typography>
-          <Stack direction="row" justifyContent="space-between">
-            <TextField
-              id="outlined-number"
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              placeholder="Min Price"
-              sx={{ width: "47.5%" }}
-              value={prevPrice}
-              onChange={(e) => setprevPrice(e.target.value)}
-            />
-            <TextField
-              id="outlined-number"
-              type="number"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              placeholder="Max Price"
-              sx={{ width: "47.5%" }}
-              value={currentPrice}
-              onChange={(e) => {
-                if (prevPrice === null) {
-                  setprevPrice(0);
-                }
-                setcurrentPrice(e.target.value);
-              }}
-            />
-          </Stack>
+                value={prevPrice}
+                onChange={(e) => setprevPrice(e.target.value)}
+              />
+              <TextField
+                id="outlined-number"
+                type="number"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                placeholder="Max Price"
+                sx={{ width: "47.5%" }}
+                value={currentPrice}
+                onChange={(e) => {
+                  if (prevPrice === null) {
+                    setprevPrice(0);
+                  }
+                  setcurrentPrice(e.target.value);
+                }}
+              />
+            </Stack>
+          </Box>
         </Box>
-      </DialogContent>
-
-      <DialogActions>
         <Stack direction={"row"} spacing={2} width={"100%"}>
           <Button
+            disableElevation
             style={{
               background: "#f1f1f1",
               color: "black",
@@ -308,8 +308,9 @@ const FilterModal = ({
             Reset Filters
           </Button>
           <Button
+            disableElevation
             style={{
-              background: "linear-gradient(180deg, #2D60FF 0%, #2F33A1 100%)",
+              background: colors.blueText,
               fontFamily: "Urbanist",
               textTransform: "none",
               fontWeight: "bold",
@@ -325,8 +326,8 @@ const FilterModal = ({
             Apply
           </Button>
         </Stack>
-      </DialogActions>
-    </Dialog>
+      </Box>
+    </Drawer>
   );
 };
 

@@ -473,7 +473,7 @@ const AccountBilling = () => {
                   alignSelf: "flex-end",
                   cursor: "pointer",
                 }}
-                // onClick={() => seteditProfileModal(true)}
+                onClick={() => seteditProfileModal(true)}
               >
                 Edit
               </Typography>
@@ -512,7 +512,7 @@ const AccountBilling = () => {
                   alignSelf: "flex-end",
                   cursor: "pointer",
                 }}
-                // onClick={() => setresetPass(true)}
+                onClick={() => setresetPass(true)}
               >
                 Edit
               </Typography>

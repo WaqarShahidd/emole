@@ -20,14 +20,15 @@ import { CustomPasswordInput } from "../../components/CustomInput";
 import { colors } from "../../theme/theme";
 
 const ResetPasswordModal = () => {
-  const { resetPass, setresetPass, userData } = useUser();
+  const { resetPass, setresetPass, userData, setresetSuccess } = useUser();
 
   const [loading, setloading] = useState(false);
 
   const [error, seterror] = useState(false);
   const [errorMsg, seterrorMsg] = useState("");
 
-  const [snackbarState, setsnackbarState] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [confirmPassError, setconfirmPassError] = useState(false);
 
   const [oldPass, setoldPass] = useState("");
   const [newPass, setnewPass] = useState("");
@@ -42,10 +43,10 @@ const ResetPasswordModal = () => {
       setloading(true);
       await axios
         .post(
-          `${BASE_URL}/loginUser`,
+          `${BASE_URL}/resetPassword`,
           {
             oldPassword: oldPass,
-            newPassword: newPass,
+            Password: newPass,
           },
           {
             headers: {
@@ -55,6 +56,7 @@ const ResetPasswordModal = () => {
         )
         .then((res) => {
           setloading(false);
+          setresetSuccess(true);
         })
         .catch((e) => {
           seterror(true);
@@ -62,14 +64,6 @@ const ResetPasswordModal = () => {
           setloading(false);
         });
     }
-  };
-
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setsnackbarState(false);
   };
 
   return (
@@ -85,32 +79,13 @@ const ResetPasswordModal = () => {
         },
       }}
     >
-      <Snackbar
-        open={snackbarState}
-        autoHideDuration={4000}
-        onClose={handleClose}
-      >
-        <Alert
-          onClose={handleClose}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          Password Changed Successfully
-        </Alert>
-      </Snackbar>
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      {/* <ConfirmModal
-        open={confirmationModal}
-        onClose={() => setconfirmationModal(false)}
-        title="Product Group Created"
-        btnText="Add products"
-      /> */}
+
       <DialogTitle
         align="center"
         id="alert-dialog-title"
@@ -142,12 +117,16 @@ const ResetPasswordModal = () => {
               label={"New Password"}
               value={newPass}
               setValue={setnewPass}
+              passwordError={passwordError}
+              setPasswordError={setPasswordError}
             />
 
             <CustomPasswordInput
               label={"Confirm Password"}
               value={confirmPass}
               setValue={setconfirmPass}
+              passwordError={confirmPassError}
+              setPasswordError={setconfirmPassError}
             />
           </Box>
         </Box>

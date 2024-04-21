@@ -21,6 +21,8 @@ export function UserProvider({ children }) {
   const [confirmGroupCreate, setconfirmGroupCreate] = useState(false);
 
   const [paymentSuccessful, setpaymentSuccessful] = useState(false);
+  const [profileUpdateSuccess, setprofileUpdateSuccess] = useState(false);
+  const [resetSuccess, setresetSuccess] = useState(false);
 
   const [allWebsites, setallWebsites] = useState([]);
   const [websiteDetailData, setwebsiteDetailData] = useState({});
@@ -166,6 +168,10 @@ export function UserProvider({ children }) {
         GetPlans,
         paymentSuccessful,
         setpaymentSuccessful,
+        profileUpdateSuccess,
+        setprofileUpdateSuccess,
+        resetSuccess,
+        setresetSuccess,
       }}
     >
       {children}

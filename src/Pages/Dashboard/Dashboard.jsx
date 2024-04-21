@@ -1385,7 +1385,11 @@ const Dashboard = () => {
               title="Total Out of Stock"
               productCount={countData?.stock}
               Icon={GridViewRounded}
-              onClick={() => navigate("/products")}
+              onClick={() =>
+                navigate("/products", {
+                  state: { filter: "false" },
+                })
+              }
               btnText={"See Products"}
             />
           </Grid>

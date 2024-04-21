@@ -17,6 +17,7 @@ export const CustomInput = ({
   mT,
   emailError,
   setEmailError,
+  defaultValue,
 }) => {
   return (
     <div
@@ -68,6 +69,7 @@ export const CustomInput = ({
             textShadow: 1,
             height: "40px",
           }}
+          defaultValue={defaultValue ? defaultValue : ""}
           value={value}
           onChange={(e) => {
             setValue(e.target.value);

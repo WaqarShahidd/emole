@@ -1,5 +1,6 @@
 import {
   Alert,
+  alpha,
   Avatar,
   Backdrop,
   Box,
@@ -12,6 +13,8 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  InputAdornment,
+  InputBase,
   List,
   ListItemText,
   Menu,
@@ -19,19 +22,25 @@ import {
   Select,
   Snackbar,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { colors } from "../theme/theme";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {
+  AddOutlined,
   DeleteForeverOutlined,
   DonutSmall,
   ExpandMore,
   FilterAlt,
+  FilterAltOutlined,
   Person,
   PieChart,
   PieChartOutlineOutlined,
+  Search,
+  VisibilityOffOutlined,
+  VisibilityOutlined,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -109,6 +118,52 @@ function BpCheckbox({ props, handleCheckboxChange, checked, name }) {
   );
 }
 
+const SearchContainer = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: "8px",
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  "&:hover": {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  border: "1px solid #E0E2E7",
+  marginLeft: 0,
+  width: "100%",
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(2),
+    width: "auto",
+  },
+}));
+
+const SearchIconWrapper = styled("div")(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: "100%",
+  position: "absolute",
+  pointerEvents: "none",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: colors.darkText,
+  fontFamily: "Urbanist-bolder  ",
+  fontWeight: "800",
+  fontSize: "14px",
+  width: "100%",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(3)})`,
+    transition: theme.transitions.create("width"),
+    [theme.breakpoints.up("sm")]: {
+      width: "14ch",
+      "&:focus": {
+        width: "20ch",
+      },
+    },
+  },
+}));
+
 const Header = ({
   title,
   filter,
@@ -116,6 +171,11 @@ const Header = ({
   actionBtn,
   actionBtnFunc,
   groupsDropdown,
+  hideColumns,
+  addProducts,
+  searchBar,
+  setdisableBtn,
+  disableBtn,
 }) => {
   const {
     selectedProducts,
@@ -171,6 +231,8 @@ const Header = ({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        // boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.05)",
+        borderBottom: "1px solid #E0E2E7",
       }}
     >
       <CreateGroup handleClose={handleCloseGroup} open={createGroupAnchor} />
@@ -258,7 +320,7 @@ const Header = ({
             }}
             onClick={filterBtn}
           >
-            <FilterAlt
+            <FilterAltOutlined
               sx={{
                 color: colors.blueText,
                 fontSize: "20px",
@@ -278,6 +340,42 @@ const Header = ({
           </Box>
         )}
 
+        {hideColumns && (
+          <Box
+            sx={{
+              height: "40px",
+              padding: "5px 10px",
+              borderRadius: "8px",
+              backgroundColor: "#FFF",
+              border: "1px solid #E0E2E7",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+              ml: 2,
+            }}
+            onClick={filterBtn}
+          >
+            <VisibilityOutlined
+              sx={{
+                color: colors.blueText,
+                fontSize: "20px",
+              }}
+            />
+            <Typography
+              sx={{
+                color: colors.blueText,
+                fontSize: "14px",
+                fontWeight: "700",
+                fontFamily: "Urbanist-bold",
+                ml: 1,
+              }}
+            >
+              Show/Hide Columns
+            </Typography>
+          </Box>
+        )}
+
         {actionBtn && (
           <Box
             sx={{
@@ -292,7 +390,12 @@ const Header = ({
               cursor: "pointer",
               ml: 2,
             }}
-            onClick={handleClickAction}
+            onClick={(e) => {
+              console.log(disableBtn);
+              if (disableBtn) {
+                handleClickAction(e);
+              }
+            }}
           >
             <LogoutIcon
               sx={{
@@ -312,6 +415,57 @@ const Header = ({
               Action{" "}
             </Typography>
           </Box>
+        )}
+
+        {addProducts && (
+          <Box
+            sx={{
+              height: "40px",
+              padding: "5px 10px",
+              borderRadius: "8px",
+              backgroundColor: colors.blueText,
+              border: "1px solid #E0E2E7",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+              ml: 2,
+            }}
+            onClick={handleClickAction}
+          >
+            <AddOutlined
+              sx={{
+                color: "#fff",
+                fontSize: "20px",
+              }}
+            />
+            <Typography
+              sx={{
+                color: "#fff",
+                fontSize: "14px",
+                fontFamily: "Urbanist",
+                ml: 0.5,
+              }}
+            >
+              Add Products
+            </Typography>
+          </Box>
+        )}
+
+        {searchBar && (
+          <SearchContainer>
+            <SearchIconWrapper>
+              <Search sx={{ color: "#667085", fontSize: "20px" }} />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search Products"
+              inputProps={{
+                style: {
+                  color: colors.darkText,
+                },
+              }}
+            />
+          </SearchContainer>
         )}
 
         <Box
