@@ -8,17 +8,16 @@ const initialOptions = {
     "Ab2SVQO4EsAalbGFnZPx1Q_f51KlgpV4xaOUw6UWcvo2U3bFzNFSXzFtKPl9sK4mo10fJyKh2vjbHoy6",
   currency: "USD",
   intent: "capture",
-  amount: "1.00",
   disableFunding: "credit,card,venmo",
 };
 
 function App() {
   return (
-    <UserProvider>
-      <PayPalScriptProvider options={initialOptions}>
+    <PayPalScriptProvider options={initialOptions}>
+      <UserProvider>
         <Router />
-      </PayPalScriptProvider>
-    </UserProvider>
+      </UserProvider>
+    </PayPalScriptProvider>
   );
 }
 
