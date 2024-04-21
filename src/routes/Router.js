@@ -21,8 +21,21 @@ import SupportTutorialModal from "../Pages/Modals/SupportTutorialModal";
 import TutorialModal from "../Pages/Modals/TutorialModal";
 import ViewProducts from "../Pages/Products/ViewProducts";
 import ViewProductsWebsite from "../Pages/Products/ViewProductsWebsite";
+import EditProfile from "../Pages/Modals/EditProfile";
+import ResetPasswordModal from "../Pages/Modals/ResetPassword";
+import { Alert, Snackbar } from "@mui/material";
+import { useUser } from "../constants/context";
 
 export default function Router() {
+  const { paymentSuccessful, setpaymentSuccessful } = useUser();
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setpaymentSuccessful(false);
+  };
+
   return (
     <BrowserRouter>
       <GroupModal />
@@ -33,6 +46,23 @@ export default function Router() {
       <TermsPolicy />
       <SupportTutorialModal />
       <TutorialModal />
+      <EditProfile />
+      <ResetPasswordModal />
+
+      <Snackbar
+        open={paymentSuccessful}
+        autoHideDuration={2000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Payment Successful.
+        </Alert>
+      </Snackbar>
 
       <Routes>
         {/* auth router  */}

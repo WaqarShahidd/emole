@@ -66,6 +66,7 @@ const CreateGroup = ({ handleClose, open }) => {
           setloading(false);
           setconfirmGroupCreate(true);
           handleClose();
+          GetGroups();
         })
         .catch((e) => {
           seterror(true);
@@ -76,8 +77,8 @@ const CreateGroup = ({ handleClose, open }) => {
 
   const AddToGroup = async () => {
     const token = localStorage.getItem("token");
-    if (groupName === "") {
-      seterror(true);
+    if (selectedIds.length === 0) {
+      alert("Please select a group");
     } else {
       setloading(true);
       await axios
@@ -85,6 +86,7 @@ const CreateGroup = ({ handleClose, open }) => {
           `${BASE_URL}/addSegment`,
           {
             segment: {
+              GroupID: selectedIds,
               GroupName: groupName,
               Description: "",
               products: selectedProducts,
@@ -289,6 +291,7 @@ const CreateGroup = ({ handleClose, open }) => {
               variant="contained"
               autoFocus
               onClick={AddToGroup}
+              disabled={selectedIds.length === 0}
             >
               Add to Groups
             </Button>

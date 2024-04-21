@@ -43,7 +43,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                 <Stack direction="row">
                   <img
                     className="rounded-md"
-                    src={data?.Product?.Images}
+                    src={data?.Images}
                     alt="new"
                     style={{ width: "200px", height: "200px" }}
                   />
@@ -61,7 +61,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         mb: 1,
                       }}
                     >
-                      {data?.Product?.Name}
+                      {data?.Name}
                     </Typography>
 
                     <Stack
@@ -83,7 +83,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         fontFamily={"Urbanist-bold"}
                         fontSize={"14px"}
                       >
-                        ${data?.Product?.Price}
+                        ${data?.Price}
                       </Typography>
                     </Stack>
                     <Stack
@@ -105,7 +105,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         fontFamily={"Urbanist-bold"}
                         fontSize={"14px"}
                       >
-                        ${data?.Product?.LastPrice}
+                        ${data?.LastPrice}
                       </Typography>
                     </Stack>
                     <Stack
@@ -127,7 +127,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         fontFamily={"Urbanist-bold"}
                         fontSize={"14px"}
                       >
-                        {data?.Product?.Page?.Website?.Name}
+                        {data?.Page?.Website?.Name}
                       </Typography>
                     </Stack>
                     <Stack
@@ -149,7 +149,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         fontFamily={"Urbanist-bold"}
                         fontSize={"14px"}
                       >
-                        {moment(data?.Product?.createdAt).format("DD-MM-YYYY")}
+                        {moment(data?.createdAt).format("DD-MM-YYYY")}
                       </Typography>
                     </Stack>
                   </Box>
@@ -463,9 +463,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                               fontSize: 12,
                             }}
                           >
-                            {data?.Product?.StockStatus
-                              ? "In Stock"
-                              : "Out of stock"}
+                            {data?.StockStatus ? "In Stock" : "Out of stock"}
                           </Typography>
                         </Stack>
                       </Grid>
@@ -496,7 +494,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                               textDecorationLine: "underline",
                             }}
                           >
-                            {data?.Product?.OutOfStockCount}
+                            {data?.OutOfStockCount}
                           </Typography>
                         </Stack>
                       </Grid>
@@ -692,7 +690,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         fontWeight: "bold",
                       }}
                     >
-                      {data?.Product?.Category}
+                      {data?.Category}
                     </Typography>
                   </Stack>
                   <Stack
@@ -722,7 +720,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         fontWeight: "bold",
                       }}
                     >
-                      {data?.Product?.Tags}
+                      {data?.Tags}
                     </Typography>
                   </Stack>
                   <Stack
@@ -755,7 +753,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                       }}
                       ellipsis
                     >
-                      {data?.Product?.Images}
+                      {data?.Images}
                     </Typography>
                   </Stack>
                 </Box>
@@ -808,7 +806,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                       mt: 1,
                     }}
                   >
-                    {data?.Product?.Description}
+                    {data?.Description}
                   </Typography>
                 </Box>
               </Box>

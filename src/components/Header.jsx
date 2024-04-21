@@ -125,6 +125,8 @@ const Header = ({
     allGroups,
     setviewProductsData,
     GetProductBySegment,
+    GetUser,
+    seteditProfileModal,
   } = useUser();
 
   const navigate = useNavigate();
@@ -152,21 +154,6 @@ const Header = ({
 
   const handleChange = (event) => {
     setslectedGroup(event.target.value);
-  };
-
-  const GetUser = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.get(`${BASE_URL}/getUserById`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.data.result;
-      setuserData(data);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   useEffect(() => {
@@ -347,7 +334,7 @@ const Header = ({
               flexDirection: "column",
             }}
           >
-            {userData?.Email}
+            {userData?.Username ? userData?.Username : userData?.Email}
           </Typography>
 
           <ExpandMore
@@ -357,6 +344,11 @@ const Header = ({
         </Box>
       </Stack>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+        {/* <MenuItem
+           onClick={() => seteditProfileModal(true)}
+        >
+          Edit Profile
+        </MenuItem> */}
         <MenuItem
           onClick={() => {
             handleClose();

@@ -131,7 +131,7 @@ const WebsiteModalComp = ({
               ml: 1,
             }}
           >
-            125
+            12
           </Typography>
         </Stack>
         <Stack direction={"row"} alignItems={"center"}>
@@ -144,7 +144,7 @@ const WebsiteModalComp = ({
               ml: 1,
             }}
           >
-            125
+            1
           </Typography>
         </Stack>
         <Stack direction={"row"} alignItems={"center"}>
@@ -157,7 +157,7 @@ const WebsiteModalComp = ({
               ml: 1,
             }}
           >
-            125
+            5
           </Typography>
         </Stack>
       </Stack>

@@ -85,6 +85,7 @@ export const CustomPasswordInput = ({
   setValue,
   passwordError,
   setPasswordError,
+  label,
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -107,13 +108,13 @@ export const CustomPasswordInput = ({
           fontFamily: "Urbanist",
         }}
       >
-        Password
+        {label ? label : "Password"}
       </Typography>
       <FormControl fullWidth variant="outlined">
         <TextField
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder="Your password"
+          placeholder={label ? `Enter ${label}` : "Enter Password"}
           type={showPassword ? "text" : "password"}
           error={passwordError}
           helperText={passwordError ? "Minimum 8 characters required" : ""}

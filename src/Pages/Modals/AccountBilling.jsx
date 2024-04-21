@@ -17,12 +17,13 @@ import { styled } from "@mui/material/styles";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
-import React from "react";
+import React, { useState } from "react";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
 import { DataGrid } from "@mui/x-data-grid";
 import { Visibility } from "@mui/icons-material";
 import { billingRows } from "../../assets/DummyData";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -82,13 +83,14 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const Row = ({ leftText1, leftText2, rightText1, borderB }) => {
-  const [selectedValue, setSelectedValue] = React.useState(null);
-
-  const handleChange = (value) => {
-    setSelectedValue(value);
-  };
-
+const Row = ({
+  leftText1,
+  leftText2,
+  rightText1,
+  borderB,
+  selected,
+  onSelect,
+}) => {
   return (
     <Box
       sx={{
@@ -100,15 +102,10 @@ const Row = ({ leftText1, leftText2, rightText1, borderB }) => {
       }}
     >
       <Radio
-        checked={selectedValue === leftText1}
-        onChange={() => setSelectedValue(leftText1)}
-        value={leftText1}
-        name="radio-buttons"
-        sx={{
-          "&, &.Mui-checked": {
-            color: "white",
-          },
-        }}
+        checked={selected}
+        onChange={onSelect}
+        style={{ color: "#fff" }}
+        inputProps={{ "aria-label": "Select plan" }}
       />
 
       <Box
@@ -128,18 +125,40 @@ const Row = ({ leftText1, leftText2, rightText1, borderB }) => {
             flexDirection: "column",
           }}
         >
-          <Typography
-            style={{
-              fontFamily: "Urbanist",
-              fontSize: "18px",
-              fontWeight: "700",
-              color: "#fff",
-              textAlign: "left",
-              mb: 0,
-            }}
-          >
-            {leftText1}
-          </Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography
+              style={{
+                fontFamily: "Urbanist",
+                fontSize: "18px",
+                fontWeight: "700",
+                color: "#fff",
+                textAlign: "left",
+                mb: 0,
+              }}
+            >
+              {leftText1}
+            </Typography>
+            {/* <Box
+              sx={{
+                ml: 2,
+                backgroundColor: "#1A9882",
+                borderRadius: "8px",
+                px: 1.5,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: "Urbanist-bold",
+                  fontSize: "12px",
+                  fontWeight: "500",
+                  color: "#fff",
+                  textAlign: "center",
+                }}
+              >
+                Current Plan
+              </Typography>
+            </Box> */}
+          </Stack>
           <Typography
             style={{
               fontFamily: "Urbanist",
@@ -150,7 +169,7 @@ const Row = ({ leftText1, leftText2, rightText1, borderB }) => {
               mt: 0,
             }}
           >
-            {leftText2}
+            {leftText2} Products Monitoring
           </Typography>
         </Box>
         <Box
@@ -186,26 +205,6 @@ const Row = ({ leftText1, leftText2, rightText1, borderB }) => {
   );
 };
 
-const plans = [
-  {
-    id: 1,
-    leftText1: "Starter Plan",
-    leftText2: "1 Website",
-    rightText1: "49",
-  },
-  {
-    id: 2,
-    leftText1: "Growth Plan",
-    leftText2: "3 Website",
-    rightText1: "99",
-  },
-  {
-    id: 3,
-    leftText1: "Master Plan",
-    leftText2: "5 Website",
-    rightText1: "149",
-  },
-];
 const AccountBilling = () => {
   const {
     accountBillingModal,
@@ -213,6 +212,10 @@ const AccountBilling = () => {
     setbillingPlansModal,
     settermsPolicyModal,
     userData,
+    seteditProfileModal,
+    setresetPass,
+    allPlans,
+    setpaymentSuccessful,
   } = useUser();
 
   const billingColumns = [
@@ -246,9 +249,40 @@ const AccountBilling = () => {
     //   ),
     // },
     {
+      field: "date",
+      headerName: "Date",
+      // width: 160,
+      flex: 1,
+
+      renderHeader: (params) => (
+        <Typography
+          fontSize={13}
+          fontFamily={"Urbanist"}
+          fontWeight={"bold"}
+          px={1}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <div
+          style={{
+            marginLeft: 10,
+            fontWeight: "500",
+            fontSize: "14px",
+            color: "#667085",
+            fontFamily: "PublicSans",
+          }}
+        >
+          {params.row.date}
+        </div>
+      ),
+    },
+    {
       field: "amount",
       headerName: "Products",
-      width: 125,
+      // width: 125,
+      flex: 1,
       headerAlign: "center",
       align: "center",
       renderHeader: (params) => (
@@ -275,7 +309,8 @@ const AccountBilling = () => {
       headerName: "Status",
       headerAlign: "center",
       align: "center",
-      width: 125,
+      // width: 125,
+      flex: 1,
       renderHeader: (params) => (
         <Typography fontSize={13} fontFamily={"Urbanist"} fontWeight={"bold"}>
           {params?.colDef?.headerName}
@@ -295,31 +330,7 @@ const AccountBilling = () => {
         </div>
       ),
     },
-    {
-      field: "date",
-      headerName: "Date",
-      width: 160,
-      headerAlign: "center",
-      align: "center",
-      renderHeader: (params) => (
-        <Typography fontSize={13} fontFamily={"Urbanist"} fontWeight={"bold"}>
-          {params?.colDef?.headerName}
-        </Typography>
-      ),
-      renderCell: (params) => (
-        <div
-          style={{
-            marginLeft: 10,
-            fontWeight: "500",
-            fontSize: "14px",
-            color: "#667085",
-            fontFamily: "PublicSans",
-          }}
-        >
-          {params.row.date}
-        </div>
-      ),
-    },
+
     {
       field: "view",
       headerName: "View",
@@ -338,6 +349,15 @@ const AccountBilling = () => {
       ),
     },
   ];
+
+  const [selectedPlanId, setSelectedPlanId] = useState(null);
+
+  const [planPrice, setPlanPrice] = useState("");
+
+  const handleSelectPlan = (planId, price) => {
+    setSelectedPlanId(planId);
+    setPlanPrice(price);
+  };
 
   return (
     <Box
@@ -404,7 +424,9 @@ const AccountBilling = () => {
                   color: colors.blueText,
                   fontFamily: "Urbanist-bold",
                   fontSize: 12,
+                  cursor: "pointer",
                 }}
+                onClick={() => settermsPolicyModal(true)}
               >
                 Policy{" "}
               </Typography>
@@ -449,7 +471,9 @@ const AccountBilling = () => {
                   fontSize: 12,
                   textDecorationLine: "underline",
                   alignSelf: "flex-end",
+                  cursor: "pointer",
                 }}
+                // onClick={() => seteditProfileModal(true)}
               >
                 Edit
               </Typography>
@@ -486,7 +510,9 @@ const AccountBilling = () => {
                   fontSize: 12,
                   textDecorationLine: "underline",
                   alignSelf: "flex-end",
+                  cursor: "pointer",
                 }}
+                // onClick={() => setresetPass(true)}
               >
                 Edit
               </Typography>
@@ -604,75 +630,88 @@ const AccountBilling = () => {
               </Typography>
             </Stack>
 
-            <Row
-              borderB
-              leftText1="Starter Plan"
-              leftText2="1 Website"
-              rightText1="49"
-            />
-            <Row
-              borderB
-              leftText1="Growth Plan"
-              leftText2="3 Website"
-              rightText1="99"
-            />
-            <Row
-              leftText1="Master Plan"
-              leftText2="5 Website"
-              rightText1="149"
-            />
+            {allPlans?.map((plan) => (
+              <Row
+                borderB
+                leftText1={plan?.PlanName}
+                leftText2={plan?.NumberOfProducts}
+                rightText1={plan?.PlanPrice}
+                selected={selectedPlanId === plan?.idPlans}
+                onSelect={() =>
+                  handleSelectPlan(plan?.idPlans, plan?.PlanPrice)
+                }
+                key={plan?.idPlans}
+              />
+            ))}
           </Box>
+          {planPrice && (
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontFamily: "Urbanist-bold",
+                color: "#667085",
+                mt: 2,
+              }}
+            >
+              ** You will be charge {planPrice}$ every month
+            </Typography>
+          )}
           <Typography
             sx={{
               fontSize: "15px",
               fontFamily: "Urbanist-bold",
-              color: "#667085",
-              mt: 2,
+              color: colors.blueText,
+              textDecoration: "underline",
+              mt: planPrice ? 1 : 3,
+              cursor: "pointer",
             }}
+            onClick={() => settermsPolicyModal(true)}
           >
-            ** You will be charge 29$ every month
+            Read Terms and Policy before upgrading
           </Typography>
 
           {/* Billing History Table */}
-          <Box
-            bgcolor="#fff"
-            sx={{ minHeight: "300px", borderRadius: "8px" }}
-            width="100%"
-          >
-            <Typography
-              sx={{
-                fontFamily: "Urbanist-bold",
-                fontWeight: "700",
-                fontSize: "20px",
-                color: colors.text,
-                mb: 1,
-                pt: 2,
-                px: 2,
-              }}
+          {userData?.currentPlan && (
+            <Box
+              bgcolor="#fff"
+              sx={{ minHeight: "300px", borderRadius: "8px" }}
+              width="100%"
             >
-              Billing History
-            </Typography>
+              <Typography
+                sx={{
+                  fontFamily: "Urbanist-bold",
+                  fontWeight: "700",
+                  fontSize: "20px",
+                  color: colors.text,
+                  mb: 1,
+                  pt: 2,
+                  px: 2,
+                }}
+              >
+                Billing History
+              </Typography>
 
-            <Divider
-              sx={{
-                border: 0,
-                borderTop: "1px dashed #AEB7C9",
-                my: 2,
-                mx: 2,
-              }}
-            />
+              <Divider
+                sx={{
+                  border: 0,
+                  borderTop: "1px dashed #AEB7C9",
+                  my: 2,
+                  mx: 2,
+                }}
+              />
 
-            <DataGrid
-              rows={billingRows}
-              columns={billingColumns}
-              sx={{
-                borderRadius: "12px",
-                border: "none",
-                height: "358px",
-              }}
-              hideFooter={true}
-            />
-          </Box>
+              <DataGrid
+                rows={billingRows}
+                columns={billingColumns}
+                sx={{
+                  borderRadius: "12px",
+                  border: "none",
+                  height: "358px",
+                }}
+                hideFooter={true}
+              />
+            </Box>
+          )}
         </DialogContent>
         <DialogActions sx={{ bgcolor: "#fff" }}>
           <Stack direction={"row"} spacing={2} width={"100%"}>
@@ -684,6 +723,8 @@ const AccountBilling = () => {
                 textTransform: "none",
                 fontFamily: "Urbanist",
                 fontWeight: "bold",
+                width: "50%",
+                height: "50px",
               }}
               variant="contained"
               fullWidth
@@ -691,7 +732,7 @@ const AccountBilling = () => {
             >
               Close
             </Button>
-            <Button
+            {/* <Button
               disableElevation
               style={{
                 background: "#002987",
@@ -713,7 +754,54 @@ const AccountBilling = () => {
                 alt=""
               />
               Pay 29$ with PayPal
-            </Button>
+            </Button> */}
+            <Box
+              sx={{
+                width: "50%",
+              }}
+            >
+              <PayPalButtons
+                style={{
+                  color: "blue",
+                  label: "paypal",
+                  tagline: false,
+                  height: 50,
+                }}
+                forceReRender={[planPrice]}
+                disabled={selectedPlanId === null}
+                createOrder={(data, actions) => {
+                  settermsPolicyModal(true);
+                  return actions.order.create({
+                    purchase_units: [
+                      {
+                        amount: {
+                          currency_code: "USD",
+                          value: planPrice,
+                        },
+                      },
+                    ],
+                  });
+                }}
+                onApprove={async (data, actions) => {
+                  return actions.order.capture().then(function (details) {
+                    setbillingPlansModal(false);
+                    setpaymentSuccessful(true);
+                    // return fetch("/paypal-transaction-complete", {
+                    //   method: "post",
+                    //   body: JSON.stringify({
+                    //     orderID: data.orderID
+                    //   })
+                    // });
+                  });
+                }}
+                onCancel={(data) => {
+                  setaccountBillingModal(false);
+                }}
+                onError={(err) => {
+                  alert("Error Occured", planPrice);
+                }}
+              />
+            </Box>
           </Stack>
         </DialogActions>
       </Dialog>

@@ -327,6 +327,7 @@ const ViewProducts = () => {
             onClick={() => {
               handleClickOpen();
               setproductDetails(params.row);
+              console.log(params.row);
             }}
           >
             <Visibility fontSize="small" />

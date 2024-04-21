@@ -13,12 +13,14 @@ export function UserProvider({ children }) {
   const [termsPolicyModal, settermsPolicyModal] = useState(false);
   const [supportTutorialModal, setsupportTutorialModal] = useState(false);
   const [tutorialModal, settutorialModal] = useState(false);
+  const [editProfileModal, seteditProfileModal] = useState(false);
+  const [resetPass, setresetPass] = useState(false);
 
   const [selectedProducts, setselectedProducts] = useState([]);
 
   const [confirmGroupCreate, setconfirmGroupCreate] = useState(false);
 
-  const [userData, setuserData] = useState({});
+  const [paymentSuccessful, setpaymentSuccessful] = useState(false);
 
   const [allWebsites, setallWebsites] = useState([]);
   const [websiteDetailData, setwebsiteDetailData] = useState({});
@@ -83,6 +85,40 @@ export function UserProvider({ children }) {
     }
   };
 
+  const [userData, setuserData] = useState({});
+
+  const GetUser = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getUserById`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data.result;
+      setuserData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [allPlans, setallPlans] = useState([]);
+
+  const GetPlans = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getPlans`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data.plans;
+      setallPlans(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -108,6 +144,7 @@ export function UserProvider({ children }) {
         setconfirmGroupCreate,
         setuserData,
         userData,
+        GetUser,
         setwebsiteDetailData,
         websiteDetailData,
         allWebsites,
@@ -121,6 +158,14 @@ export function UserProvider({ children }) {
         setwebsiteViewProductsData,
         productsBySegment,
         GetProductBySegment,
+        editProfileModal,
+        seteditProfileModal,
+        resetPass,
+        setresetPass,
+        allPlans,
+        GetPlans,
+        paymentSuccessful,
+        setpaymentSuccessful,
       }}
     >
       {children}

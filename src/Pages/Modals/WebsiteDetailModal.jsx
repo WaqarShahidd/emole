@@ -22,6 +22,7 @@ export const WebsiteDetailModal = () => {
     websiteDetailData,
     setwebsiteDetailData,
     setwebsiteViewProductsData,
+    setwebsiteModalState,
   } = useUser();
   return (
     <Box
@@ -55,7 +56,7 @@ export const WebsiteDetailModal = () => {
         >
           <Typography
             mb={1}
-            fontFamily={"Urbanist-bold"}
+            fontFamily={"Urbanist-bolder"}
             fontWeight={"bold"}
             fontSize={22}
             border={"none"}
@@ -170,6 +171,7 @@ export const WebsiteDetailModal = () => {
                 fontSize={14}
                 color={colors.subText}
                 mb={1}
+                onClick={() => console.log(websiteDetailData?.products)}
               >
                 Total out of stock products{" "}
               </Typography>
@@ -181,7 +183,9 @@ export const WebsiteDetailModal = () => {
                   textDecorationLine: "underline",
                 }}
               >
-                52{" "}
+                {websiteDetailData?.products?.OutOfStockCount
+                  ? websiteDetailData?.products?.OutOfStockCount
+                  : 0}
               </Typography>
             </Stack>
           </Box>
@@ -597,6 +601,7 @@ export const WebsiteDetailModal = () => {
               fullWidth
               onClick={() => {
                 setwebsiteDetail(false);
+                setwebsiteModalState(false);
                 setwebsiteViewProductsData(websiteDetailData);
                 navigate("/website/view-products");
               }}

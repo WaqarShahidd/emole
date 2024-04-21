@@ -80,7 +80,7 @@ const TutorialModal = () => {
             fontSize={22}
             border={"none"}
           >
-            Terms & Policy
+            Tutorial - How to use {alignment} Tab
           </Typography>
         </DialogTitle>
         <DialogContent>

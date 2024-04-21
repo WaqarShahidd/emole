@@ -72,33 +72,6 @@ export const billingRows = [
     name: "Growth",
     websites: 3,
   },
-  {
-    id: 6,
-    date: "2021-10-05",
-    amount: 500,
-    alerts: 6,
-    status: "Monthly",
-    name: "Growth",
-    websites: 3,
-  },
-  {
-    id: 7,
-    date: "2021-10-05",
-    amount: 500,
-    alerts: 6,
-    status: "Monthly",
-    name: "Growth",
-    websites: 3,
-  },
-  {
-    id: 8,
-    date: "2021-10-05",
-    amount: 500,
-    alerts: 6,
-    status: "Monthly",
-    name: "Growth",
-    websites: 3,
-  },
 ];
 
 export const prodRows = [

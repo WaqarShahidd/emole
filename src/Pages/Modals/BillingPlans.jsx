@@ -5,13 +5,17 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Radio,
   Stack,
   Switch,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../constants/context";
 import { styled } from "@mui/material/styles";
+import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { PayPalButton } from "react-paypal-button-v2";
+import { colors } from "../../theme/theme";
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
@@ -57,7 +61,15 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const Row = ({ leftText1, leftText2, rightText1, borderB }) => {
+const Row = ({
+  leftText1,
+  leftText2,
+  rightText1,
+  borderB,
+  selected,
+  onSelect,
+  mB,
+}) => {
   return (
     <Box
       sx={{
@@ -65,16 +77,14 @@ const Row = ({ leftText1, leftText2, rightText1, borderB }) => {
         alignItems: "center",
         justifyContent: "center",
         width: "100%",
+        mb: mB,
       }}
     >
-      <Box
-        sx={{
-          height: "20px",
-          width: "20px",
-          borderRadius: "10px",
-          border: "2px solid #858D9D",
-          backgroundColor: "#fff",
-        }}
+      <Radio
+        checked={selected}
+        onChange={onSelect}
+        style={{ color: "#fff" }}
+        inputProps={{ "aria-label": "Select plan" }}
       />
       <Box
         sx={{
@@ -94,18 +104,40 @@ const Row = ({ leftText1, leftText2, rightText1, borderB }) => {
             flexDirection: "column",
           }}
         >
-          <Typography
-            style={{
-              fontFamily: "Urbanist",
-              fontSize: "18px",
-              fontWeight: "700",
-              color: "#fff",
-              textAlign: "left",
-              mb: 0,
-            }}
-          >
-            {leftText1}
-          </Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography
+              style={{
+                fontFamily: "Urbanist",
+                fontSize: "18px",
+                fontWeight: "700",
+                color: "#fff",
+                textAlign: "left",
+                mb: 0,
+              }}
+            >
+              {leftText1}
+            </Typography>
+            {/* <Box
+              sx={{
+                ml: 2,
+                backgroundColor: "#1A9882",
+                borderRadius: "8px",
+                px: 1.5,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: "Urbanist-bold",
+                  fontSize: "12px",
+                  fontWeight: "500",
+                  color: "#fff",
+                  textAlign: "center",
+                }}
+              >
+                Current Plan
+              </Typography>
+            </Box> */}
+          </Stack>
           <Typography
             style={{
               fontFamily: "Urbanist",
@@ -116,7 +148,7 @@ const Row = ({ leftText1, leftText2, rightText1, borderB }) => {
               mt: 0,
             }}
           >
-            {leftText2}
+            {leftText2} Products Monitoring
           </Typography>
         </Box>
         <Box
@@ -153,8 +185,28 @@ const Row = ({ leftText1, leftText2, rightText1, borderB }) => {
 };
 
 const BillingPlans = () => {
-  const { billingPlansModal, setbillingPlansModal, settermsPolicyModal } =
-    useUser();
+  const {
+    billingPlansModal,
+    setbillingPlansModal,
+    settermsPolicyModal,
+    allPlans,
+    GetPlans,
+    setpaymentSuccessful,
+  } = useUser();
+
+  useEffect(() => {
+    GetPlans();
+  }, []);
+
+  const [selectedPlanId, setSelectedPlanId] = useState(null);
+
+  const [planPrice, setPlanPrice] = useState("");
+
+  const handleSelectPlan = (planId, price) => {
+    setSelectedPlanId(planId);
+    setPlanPrice(price);
+  };
+
   return (
     <Box
       sx={{
@@ -173,24 +225,6 @@ const BillingPlans = () => {
           },
         }}
       >
-        {/* <DialogTitle
-          align="center"
-          id="alert-dialog-title"
-          bgcolor={"#fff"}
-          sx={{
-            borderBottom: "1px solid #E0E2E7",
-          }}
-        >
-          <Typography
-            mb={1}
-            fontFamily={"Urbanist-bold"}
-            fontWeight={"bold"}
-            fontSize={22}
-            border={"none"}
-          >
-            Account and biiling{" "}
-          </Typography>
-        </DialogTitle> */}
         <DialogContent>
           <Box
             sx={{
@@ -255,27 +289,96 @@ const BillingPlans = () => {
             </Stack>
 
             {/* Rows */}
-            <Row
-              borderB
-              leftText1="Starter Plan"
-              leftText2="1 Website"
-              rightText1="49"
-            />
-            <Row
-              borderB
-              leftText1="Growth Plan"
-              leftText2="3 Website"
-              rightText1="99"
-            />
-            <Row
-              leftText1="Master Plan"
-              leftText2="5 Website"
-              rightText1="149"
-            />
+            {allPlans?.map((plan) => (
+              <Row
+                borderB={
+                  plan?.idPlans === allPlans[allPlans.length - 1]?.idPlans
+                    ? false
+                    : true
+                }
+                mB={
+                  plan?.idPlans === allPlans[allPlans.length - 1]?.idPlans
+                    ? 9
+                    : 0
+                }
+                leftText1={plan?.PlanName}
+                leftText2={plan?.NumberOfProducts}
+                rightText1={plan?.PlanPrice}
+                selected={selectedPlanId === plan?.idPlans}
+                onSelect={() =>
+                  handleSelectPlan(plan?.idPlans, plan?.PlanPrice)
+                }
+                key={plan?.idPlans}
+              />
+            ))}
 
+            {planPrice && (
+              <Typography
+                sx={{
+                  fontSize: "15px",
+                  fontFamily: "Urbanist-bold",
+                  color: "#fff",
+                }}
+              >
+                ** You will be charge {planPrice}$ every month
+              </Typography>
+            )}
+            <Typography
+              sx={{
+                fontSize: "15px",
+                fontFamily: "Urbanist-bold",
+                color: "#fff",
+                textDecoration: "underline",
+                mb: 2,
+                cursor: "pointer",
+              }}
+              onClick={() => settermsPolicyModal(true)}
+            >
+              Read Terms and Policy before upgrading
+            </Typography>
             {/* Btn */}
 
-            <Button
+            <PayPalButtons
+              style={{
+                color: "blue",
+                label: "paypal",
+                tagline: false,
+              }}
+              forceReRender={[planPrice]}
+              disabled={selectedPlanId === null}
+              createOrder={(data, actions) => {
+                return actions.order.create({
+                  purchase_units: [
+                    {
+                      amount: {
+                        currency_code: "USD",
+                        value: planPrice,
+                      },
+                    },
+                  ],
+                });
+              }}
+              onApprove={async (data, actions) => {
+                return actions.order.capture().then(function (details) {
+                  setbillingPlansModal(false);
+                  setpaymentSuccessful(true);
+                  // return fetch("/paypal-transaction-complete", {
+                  //   method: "post",
+                  //   body: JSON.stringify({
+                  //     orderID: data.orderID
+                  //   })
+                  // });
+                });
+              }}
+              onCancel={(data) => {
+                setbillingPlansModal(false);
+              }}
+              onError={(err) => {
+                alert("Error Occured", planPrice);
+              }}
+            />
+
+            {/* <Button
               type="submit"
               variant="contained"
               disableElevation
@@ -305,43 +408,9 @@ const BillingPlans = () => {
                 alt=""
               />
               Pay with PayPal
-            </Button>
+            </Button> */}
           </Box>
         </DialogContent>
-        {/* <DialogActions sx={{ bgcolor: "#fff" }}>
-          <Stack direction={"row"} spacing={2} width={"100%"}>
-            <Button
-              disableElevation
-              style={{
-                background: "#f1f1f1",
-                color: "black",
-                textTransform: "none",
-                fontFamily: "Urbanist",
-                fontWeight: "bold",
-              }}
-              variant="contained"
-              fullWidth
-              onClick={() => setaccountBillingModal(false)}
-            >
-              Close
-            </Button>
-            <Button
-              disableElevation
-              style={{
-                background: "#002987",
-                fontFamily: "Urbanist",
-                textTransform: "none",
-                fontWeight: "bold",
-              }}
-              variant="contained"
-              fullWidth
-              onClick={() => setaccountBillingModal(false)}
-              autoFocus
-            >
-              Pay 29$ with PayPal
-            </Button>
-          </Stack>
-        </DialogActions> */}
       </Dialog>
     </Box>
   );

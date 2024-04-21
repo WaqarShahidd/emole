@@ -374,7 +374,8 @@ const Products = () => {
           <IconButton
             onClick={() => {
               handleClickOpen();
-              setproductDetails(params.row);
+              setproductDetails(params.row?.Product);
+              console.log(params.row);
             }}
           >
             <Visibility fontSize="small" />
