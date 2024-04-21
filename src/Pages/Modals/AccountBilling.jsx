@@ -632,7 +632,11 @@ const AccountBilling = () => {
 
             {allPlans?.map((plan) => (
               <Row
-                borderB
+                borderB={
+                  plan?.idPlans !== allPlans[allPlans.length - 1]?.idPlans
+                    ? true
+                    : false
+                }
                 leftText1={plan?.PlanName}
                 leftText2={plan?.NumberOfProducts}
                 rightText1={plan?.PlanPrice}

@@ -345,7 +345,7 @@ const BillingPlans = () => {
                 tagline: false,
               }}
               forceReRender={[planPrice]}
-              // disabled={selectedPlanId === null}
+              disabled={selectedPlanId === null}
               createOrder={(data, actions) => {
                 return actions.order.create({
                   purchase_units: [
