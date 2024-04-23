@@ -33,6 +33,7 @@ import {
   DeleteForeverOutlined,
   DonutSmall,
   ExpandMore,
+  FileDownloadRounded,
   FilterAlt,
   FilterAltOutlined,
   Person,
@@ -176,6 +177,7 @@ const Header = ({
   searchBar,
   setdisableBtn,
   disableBtn,
+  exportBtn,
 }) => {
   const {
     selectedProducts,
@@ -376,6 +378,41 @@ const Header = ({
           </Box>
         )}
 
+        {exportBtn && (
+          <Box
+            sx={{
+              height: "40px",
+              padding: "5px 10px",
+              borderRadius: "8px",
+              backgroundColor: "#FFF",
+              border: "1px solid #E0E2E7",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+              ml: 2,
+            }}
+          >
+            <FileDownloadRounded
+              sx={{
+                color: colors.blueText,
+                fontSize: "20px",
+                mt: 0.75,
+              }}
+            />
+            <Typography
+              sx={{
+                color: colors.blueText,
+                fontSize: "14px",
+                fontWeight: "700",
+                fontFamily: "Urbanist-bold",
+              }}
+            >
+              Export{" "}
+            </Typography>
+          </Box>
+        )}
+
         {actionBtn && (
           <Box
             sx={{
@@ -468,7 +505,7 @@ const Header = ({
           </SearchContainer>
         )}
 
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             alignItems: "center",
@@ -495,7 +532,7 @@ const Header = ({
             style={{ color: colors.text, cursor: "pointer" }}
             onClick={handleClick}
           />
-        </Box>
+        </Box> */}
       </Stack>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         {/* <MenuItem

@@ -28,6 +28,7 @@ import {
   ArrowDropDown,
   ArrowDropUp,
   DeleteForever,
+  Image,
   Visibility,
   WatchLater,
 } from "@mui/icons-material";
@@ -40,9 +41,11 @@ import moment from "moment";
 import DeleteModal from "../../components/DeleteModal";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Products = () => {
+  const navigate = useNavigate();
+
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -373,21 +376,32 @@ const Products = () => {
           alignItems={"center"}
           height={"100%"}
         >
-          <IconButton>
-            <WatchLater fontSize="small" />
-          </IconButton>
-          <IconButton
+          <img
+            src={require("../../assets/icons/history1.png")}
+            alt=""
+            style={{ height: "15px", width: "15px", cursor: "pointer" }}
+            onClick={() => navigate("/product-history")}
+          />
+          <img
+            src={require("../../assets/icons/view.png")}
+            alt=""
+            style={{
+              height: "15px",
+              width: "15px",
+              margin: "0 10px",
+              cursor: "pointer",
+            }}
             onClick={() => {
               handleClickOpen();
               setproductDetails(params.row?.Product);
               console.log(params.row);
             }}
-          >
-            <Visibility fontSize="small" />
-          </IconButton>
-          <IconButton>
-            <DeleteForever fontSize="small" />
-          </IconButton>
+          />
+          <img
+            src={require("../../assets/icons/delete.png")}
+            alt=""
+            style={{ height: "17.5px", width: "15px", cursor: "pointer" }}
+          />
         </Stack>
       ),
     },
@@ -509,6 +523,7 @@ const Products = () => {
           Product Group Created
         </Alert>
       </Snackbar>
+
       <Box
         sx={{
           display: "flex",

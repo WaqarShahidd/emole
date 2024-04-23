@@ -121,8 +121,10 @@ const Login = () => {
 
   const HandleLogin = async () => {
     if (email === "" || password === "") {
-      seterror(true);
-      seterrorMsg("Please fill all the fields!");
+      // seterror(true);
+      // seterrorMsg("Please fill all the fields!");
+      setEmailError(true);
+      setPasswordError(true);
       console.log(errorMsg);
     } else {
       setloading(true);

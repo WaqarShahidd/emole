@@ -163,6 +163,23 @@ const SideDrawer = ({ id }) => {
             </ListItem>
           ))}
         </List>
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            alignItems: "flex-end",
+          }}
+        >
+          <img
+            src={require("../assets/icons/logout.png")}
+            style={{ height: "50px", cursor: "pointer" }}
+            onClick={() => {
+              localStorage.removeItem("token");
+              window.location.reload();
+            }}
+            alt=""
+          />
+        </Box>
       </Drawer>
     </Box>
   );

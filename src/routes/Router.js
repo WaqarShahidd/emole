@@ -25,6 +25,7 @@ import EditProfile from "../Pages/Modals/EditProfile";
 import ResetPasswordModal from "../Pages/Modals/ResetPassword";
 import { Alert, Snackbar } from "@mui/material";
 import { useUser } from "../constants/context";
+import ProductHistory from "../Pages/Products/ProductHistory";
 
 export default function Router() {
   const {
@@ -131,6 +132,7 @@ export default function Router() {
             path="/website/view-products"
             element={<ViewProductsWebsite />}
           />
+          <Route exact path="/product-history" element={<ProductHistory />} />
           <Route exact path="/segments" element={<Segments />} />
           <Route exact path="/notifications" element={<Notifications />} />
           <Route exact path="/account" element={<Account />} />
