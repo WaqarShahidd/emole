@@ -16,6 +16,7 @@ export function UserProvider({ children }) {
   const [editProfileModal, seteditProfileModal] = useState(false);
   const [resetPass, setresetPass] = useState(false);
   const [showHideFieldsDrawer, setshowHideFieldsDrawer] = useState(false);
+  const [addProdDrawer, setaddProdDrawer] = useState(false);
 
   const [selectedProducts, setselectedProducts] = useState([]);
 
@@ -122,6 +123,40 @@ export function UserProvider({ children }) {
     }
   };
 
+  const [userPlan, setuserPlan] = useState({});
+
+  const GetUserPlan = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/checkUserSubs`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data.result;
+      setuserPlan(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const [billingHistory, setbillingHistory] = useState([]);
+
+  const GetBillingHistory = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getUserBillingInfo`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data.result;
+      setbillingHistory(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -175,6 +210,13 @@ export function UserProvider({ children }) {
         setresetSuccess,
         showHideFieldsDrawer,
         setshowHideFieldsDrawer,
+        addProdDrawer,
+        setaddProdDrawer,
+        GetUserPlan,
+        userPlan,
+        GetBillingHistory,
+        billingHistory,
+        setbillingHistory,
       }}
     >
       {children}

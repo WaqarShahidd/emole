@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Drawer,
   Radio,
   Stack,
   Switch,
@@ -208,211 +209,177 @@ const BillingPlans = () => {
   };
 
   return (
-    <Box
+    <Drawer
+      anchor={"right"}
+      open={billingPlansModal}
+      onClose={() => setbillingPlansModal(false)}
       sx={{
-        background: "linear-gradient(180deg, #2D60FF 0%, #2F33A1 100%)",
+        "& .MuiDrawer-paper": {
+          maxHeight: "100%",
+          width: "600px",
+          overflowY: "auto",
+          overflowX: "hidden",
+          background: "linear-gradient(180deg, #2D60FF 0%, #2F33A1 100%)",
+        },
       }}
     >
-      <Dialog
-        fullWidth
-        open={billingPlansModal}
-        onClose={() => setbillingPlansModal(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        PaperProps={{
-          style: {
-            background: "linear-gradient(180deg, #2D60FF 0%, #2F33A1 100%)",
-          },
-        }}
+      <Box
+        display="flex"
+        flexDirection="column"
+        height="100%"
+        justifyContent="space-between"
       >
-        <DialogContent>
-          <Box
+        <Box
+          sx={{
+            p: 2,
+          }}
+        >
+          <Typography
             sx={{
-              px: 2,
+              // fontFamily: "Poppins",
+              fontSize: "28px",
+              fontWeight: "600",
+              color: "#fff",
+              mt: 1,
+              textAlign: "center",
             }}
           >
-            <Typography
-              sx={{
-                // fontFamily: "Poppins",
-                fontSize: "28px",
-                fontWeight: "600",
-                color: "#fff",
-                mt: 1,
-                textAlign: "center",
-              }}
-            >
-              Need more products?
+            Need more products?
+          </Typography>
+
+          <Typography
+            sx={{
+              // fontFamily: "Poppins",
+              fontSize: "30px",
+              fontWeight: "900",
+              color: "#fff",
+              textAlign: "center",
+            }}
+          >
+            Choose the plan that fits YOU!
+          </Typography>
+
+          <Typography
+            sx={{
+              fontFamily: "PublicSans",
+              fontSize: "12px",
+              fontWeight: "500",
+              color: "#fff",
+              mt: 1,
+              textAlign: "center",
+            }}
+          >
+            more recently with desktop publishing software like Aldus PageMaker
+            including versions of Lorem Ipsum.
+          </Typography>
+
+          <Stack
+            direction="row"
+            spacing={1}
+            alignItems="center"
+            sx={{ my: 2, alignItems: "center", justifyContent: "center" }}
+          >
+            <Typography style={{ color: "#fff", fontFamily: "Urbanist" }}>
+              Years
             </Typography>
-
-            <Typography
-              sx={{
-                // fontFamily: "Poppins",
-                fontSize: "30px",
-                fontWeight: "900",
-                color: "#fff",
-                textAlign: "center",
-              }}
-            >
-              Choose the plan that fits YOU!
+            <AntSwitch
+              defaultChecked
+              inputProps={{ "aria-label": "ant design" }}
+            />
+            <Typography style={{ color: "#fff", fontFamily: "Urbanist" }}>
+              Month
             </Typography>
+          </Stack>
 
-            <Typography
-              sx={{
-                fontFamily: "PublicSans",
-                fontSize: "12px",
-                fontWeight: "500",
-                color: "#fff",
-                mt: 1,
-                textAlign: "center",
-              }}
-            >
-              more recently with desktop publishing software like Aldus
-              PageMaker including versions of Lorem Ipsum.
-            </Typography>
-
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-              sx={{ my: 2, alignItems: "center", justifyContent: "center" }}
-            >
-              <Typography style={{ color: "#fff", fontFamily: "Urbanist" }}>
-                Years
-              </Typography>
-              <AntSwitch
-                defaultChecked
-                inputProps={{ "aria-label": "ant design" }}
-              />
-              <Typography style={{ color: "#fff", fontFamily: "Urbanist" }}>
-                Month
-              </Typography>
-            </Stack>
-
-            {/* Rows */}
-            {allPlans?.map((plan) => (
-              <Row
-                borderB={
-                  plan?.idPlans === allPlans[allPlans.length - 1]?.idPlans
-                    ? false
-                    : true
-                }
-                mB={
-                  plan?.idPlans === allPlans[allPlans.length - 1]?.idPlans
-                    ? 9
-                    : 0
-                }
-                leftText1={plan?.PlanName}
-                leftText2={plan?.NumberOfProducts}
-                rightText1={plan?.PlanPrice}
-                selected={selectedPlanId === plan?.idPlans}
-                onSelect={() =>
-                  handleSelectPlan(plan?.idPlans, plan?.PlanPrice)
-                }
-                key={plan?.idPlans}
-              />
-            ))}
-
-            {planPrice && (
-              <Typography
-                sx={{
-                  fontSize: "15px",
-                  fontFamily: "Urbanist-bold",
-                  color: "#fff",
-                }}
-              >
-                ** You will be charge {planPrice}$ every month
-              </Typography>
-            )}
+          {/* Rows */}
+          {allPlans?.map((plan) => (
+            <Row
+              borderB={
+                plan?.idPlans === allPlans[allPlans.length - 1]?.idPlans
+                  ? false
+                  : true
+              }
+              mB={
+                plan?.idPlans === allPlans[allPlans.length - 1]?.idPlans ? 9 : 0
+              }
+              leftText1={plan?.PlanName}
+              leftText2={plan?.NumberOfProducts}
+              rightText1={plan?.PlanPrice}
+              selected={selectedPlanId === plan?.idPlans}
+              onSelect={() => handleSelectPlan(plan?.idPlans, plan?.PlanPrice)}
+              key={plan?.idPlans}
+            />
+          ))}
+        </Box>
+        <Box m={2}>
+          {planPrice && (
             <Typography
               sx={{
                 fontSize: "15px",
                 fontFamily: "Urbanist-bold",
                 color: "#fff",
-                textDecoration: "underline",
-                mb: 2,
-                cursor: "pointer",
               }}
-              onClick={() => settermsPolicyModal(true)}
             >
-              Read Terms and Policy before upgrading
+              ** You will be charge {planPrice}$ every month
             </Typography>
-            {/* Btn */}
+          )}
+          <Typography
+            sx={{
+              fontSize: "15px",
+              fontFamily: "Urbanist-bold",
+              color: "#fff",
+              textDecoration: "underline",
+              mb: 2,
+              cursor: "pointer",
+            }}
+            onClick={() => settermsPolicyModal(true)}
+          >
+            Read Terms and Policy before upgrading
+          </Typography>
+          {/* Btn */}
 
-            <PayPalButtons
-              style={{
-                color: "blue",
-                label: "paypal",
-                tagline: false,
-              }}
-              forceReRender={[planPrice]}
-              disabled={selectedPlanId === null}
-              createOrder={(data, actions) => {
-                return actions.order.create({
-                  purchase_units: [
-                    {
-                      amount: {
-                        currency_code: "USD",
-                        value: planPrice,
-                      },
+          <PayPalButtons
+            style={{
+              color: "blue",
+              label: "paypal",
+              tagline: false,
+            }}
+            forceReRender={[planPrice]}
+            disabled={selectedPlanId === null}
+            createOrder={(data, actions) => {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      currency_code: "USD",
+                      value: planPrice,
                     },
-                  ],
-                });
-              }}
-              onApprove={async (data, actions) => {
-                return actions.order.capture().then(function (details) {
-                  setbillingPlansModal(false);
-                  setpaymentSuccessful(true);
-                  // return fetch("/paypal-transaction-complete", {
-                  //   method: "post",
-                  //   body: JSON.stringify({
-                  //     orderID: data.orderID
-                  //   })
-                  // });
-                });
-              }}
-              onCancel={(data) => {
+                  },
+                ],
+              });
+            }}
+            onApprove={async (data, actions) => {
+              return actions.order.capture().then(function (details) {
                 setbillingPlansModal(false);
-              }}
-              onError={(err) => {
-                alert("Error Occured", planPrice);
-              }}
-            />
-
-            {/* <Button
-              type="submit"
-              variant="contained"
-              disableElevation
-              sx={{
-                width: "100%",
-                height: "50px",
-                backgroundColor: "#fff",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                textTransform: "none",
-                borderRadius: "8px",
-                fontFamily: "Urbanist",
-                fontSize: "16px",
-                fontWeight: "700",
-                mt: 1,
-                color: "#000",
-                ":hover": {
-                  backgroundColor: "#fff",
-                },
-              }}
-              onClick={() => settermsPolicyModal(true)}
-            >
-              <img
-                src={require("../../assets/images/pp.png")}
-                style={{ height: "18px", width: "18px", marginRight: "5px" }}
-                alt=""
-              />
-              Pay with PayPal
-            </Button> */}
-          </Box>
-        </DialogContent>
-      </Dialog>
-    </Box>
+                setpaymentSuccessful(true);
+                // return fetch("/paypal-transaction-complete", {
+                //   method: "post",
+                //   body: JSON.stringify({
+                //     orderID: data.orderID
+                //   })
+                // });
+              });
+            }}
+            onCancel={(data) => {
+              setbillingPlansModal(false);
+            }}
+            onError={(err) => {
+              alert("Error Occured", planPrice);
+            }}
+          />
+        </Box>
+      </Box>
+    </Drawer>
   );
 };
 

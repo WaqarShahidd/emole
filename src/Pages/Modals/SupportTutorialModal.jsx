@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Drawer,
   Stack,
   Typography,
 } from "@mui/material";
@@ -17,45 +18,46 @@ const SupportTutorialModal = () => {
   const { supportTutorialModal, setsupportTutorialModal, settutorialModal } =
     useUser();
   return (
-    <Box
+    <Drawer
+      anchor={"right"}
+      open={supportTutorialModal}
+      onClose={() => setsupportTutorialModal(false)}
       sx={{
-        backgroundColor: "#F9F9FC",
+        "& .MuiDrawer-paper": {
+          maxHeight: "100%",
+          width: "600px",
+          overflowY: "auto",
+          overflowX: "hidden",
+          backgroundColor: "#F0F1F3",
+        },
       }}
     >
-      <Dialog
-        fullWidth
-        open={supportTutorialModal}
-        onClose={() => setsupportTutorialModal(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        PaperProps={{
-          style: {
-            width: 700,
-            backgroundColor: "#FAFAFA",
-          },
-        }}
+      <Box
+        display="flex"
+        flexDirection="column"
+        height="100%"
+        justifyContent="space-between"
       >
-        <DialogTitle
-          align="center"
-          id="alert-dialog-title"
-          bgcolor={"#fff"}
-          sx={{
-            borderBottom: "1px solid #E0E2E7",
-          }}
-        >
-          <Typography
-            mb={1}
-            fontFamily={"Urbanist-bold"}
-            fontWeight={"bold"}
-            fontSize={22}
-            border={"none"}
-          >
-            Support & Tutorial
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
+        <Box>
           <Box
-            my={2}
+            sx={{
+              backgroundColor: "#fff",
+              p: 3,
+              borderBottom: "1px solid #E0E2E7",
+            }}
+          >
+            <Typography
+              fontFamily={"Urbanist-bolder"}
+              color={colors.darkText}
+              fontSize={22}
+              textAlign={"center"}
+            >
+              Support & Tutorial
+            </Typography>
+          </Box>
+
+          <Box
+            m={2}
             p={2}
             sx={{
               backgroundColor: "#fff",
@@ -96,7 +98,10 @@ const SupportTutorialModal = () => {
                 }}
                 variant="contained"
                 autoFocus
-                onClick={() => settutorialModal(true)}
+                onClick={() => {
+                  settutorialModal(true);
+                  setsupportTutorialModal(false);
+                }}
               >
                 Read Tutorial
               </Button>
@@ -123,7 +128,7 @@ const SupportTutorialModal = () => {
             </Typography>
           </Box>
           <Box
-            my={2}
+            m={2}
             p={2}
             sx={{
               backgroundColor: "#fff",
@@ -164,7 +169,10 @@ const SupportTutorialModal = () => {
                 }}
                 variant="contained"
                 autoFocus
-                onClick={() => settutorialModal(true)}
+                onClick={() => {
+                  settutorialModal(true);
+                  setsupportTutorialModal(false);
+                }}
               >
                 Read Tutorial
               </Button>
@@ -191,7 +199,7 @@ const SupportTutorialModal = () => {
             </Typography>
           </Box>
           <Box
-            my={2}
+            m={2}
             p={2}
             sx={{
               backgroundColor: "#fff",
@@ -232,7 +240,10 @@ const SupportTutorialModal = () => {
                 }}
                 variant="contained"
                 autoFocus
-                onClick={() => settutorialModal(true)}
+                onClick={() => {
+                  settutorialModal(true);
+                  setsupportTutorialModal(false);
+                }}
               >
                 Read Tutorial
               </Button>
@@ -259,7 +270,7 @@ const SupportTutorialModal = () => {
             </Typography>
           </Box>
           <Box
-            my={2}
+            m={2}
             p={2}
             sx={{
               backgroundColor: "#fff",
@@ -300,7 +311,10 @@ const SupportTutorialModal = () => {
                 }}
                 variant="contained"
                 autoFocus
-                onClick={() => settutorialModal(true)}
+                onClick={() => {
+                  settutorialModal(true);
+                  setsupportTutorialModal(false);
+                }}
               >
                 Read Tutorial
               </Button>
@@ -326,43 +340,51 @@ const SupportTutorialModal = () => {
               professor at Hampden-Sydney College in Virginia.
             </Typography>
           </Box>
-        </DialogContent>
-        <DialogActions sx={{ bgcolor: "#fff" }}>
-          <Stack direction={"row"} spacing={2} width={"100%"}>
-            <Button
-              disableElevation
-              style={{
-                background: "#f1f1f1",
-                color: "black",
-                textTransform: "none",
-                fontFamily: "Urbanist",
-                fontWeight: "bold",
-              }}
-              variant="contained"
-              fullWidth
-              onClick={() => setsupportTutorialModal(false)}
-            >
-              Close
-            </Button>
-            <Button
-              disableElevation
-              style={{
-                background: colors.blueText,
-                fontFamily: "Urbanist",
-                textTransform: "none",
-                fontWeight: "bold",
-              }}
-              variant="contained"
-              fullWidth
-              onClick={() => setsupportTutorialModal(false)}
-              autoFocus
-            >
-              Contact Support{" "}
-            </Button>
-          </Stack>
-        </DialogActions>
-      </Dialog>
-    </Box>
+        </Box>
+
+        <Stack
+          sx={{
+            backgroundColor: "#fff",
+            py: 1,
+            px: 2,
+          }}
+          direction={"row"}
+          spacing={2}
+          width={"100%"}
+        >
+          <Button
+            disableElevation
+            style={{
+              background: "#f1f1f1",
+              color: "black",
+              textTransform: "none",
+              fontFamily: "Urbanist",
+              fontWeight: "bold",
+            }}
+            variant="contained"
+            fullWidth
+            onClick={() => setsupportTutorialModal(false)}
+          >
+            Close
+          </Button>
+          <Button
+            disableElevation
+            style={{
+              background: colors.blueText,
+              fontFamily: "Urbanist",
+              textTransform: "none",
+              fontWeight: "bold",
+            }}
+            variant="contained"
+            fullWidth
+            onClick={() => setsupportTutorialModal(false)}
+            autoFocus
+          >
+            Contact Support{" "}
+          </Button>
+        </Stack>
+      </Box>
+    </Drawer>
   );
 };
 

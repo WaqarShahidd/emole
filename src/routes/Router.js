@@ -26,6 +26,7 @@ import ResetPasswordModal from "../Pages/Modals/ResetPassword";
 import { Alert, Snackbar } from "@mui/material";
 import { useUser } from "../constants/context";
 import ProductHistory from "../Pages/Products/ProductHistory";
+import AddProduct from "../Pages/Modals/AddProduct";
 
 export default function Router() {
   const {
@@ -71,6 +72,7 @@ export default function Router() {
       <TutorialModal />
       <EditProfile />
       <ResetPasswordModal />
+      <AddProduct />
 
       <Snackbar
         open={paymentSuccessful}

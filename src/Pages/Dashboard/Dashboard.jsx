@@ -1326,6 +1326,8 @@ const Dashboard = () => {
     setwebsiteModalState,
     setgroupModalState,
     GetPlans,
+    GetUserPlan,
+    GetBillingHistory,
   } = useUser();
 
   const [countData, setcountData] = useState({});
@@ -1350,6 +1352,8 @@ const Dashboard = () => {
     GetGroups();
     GetCount();
     GetPlans();
+    GetUserPlan();
+    GetBillingHistory();
   }, []);
 
   return (

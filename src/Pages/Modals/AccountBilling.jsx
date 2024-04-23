@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Drawer,
   Radio,
   Stack,
   Switch,
@@ -17,13 +18,17 @@ import { styled } from "@mui/material/styles";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
 import { DataGrid } from "@mui/x-data-grid";
 import { Visibility } from "@mui/icons-material";
 import { billingRows } from "../../assets/DummyData";
 import { PayPalButtons } from "@paypal/react-paypal-js";
+import axios from "axios";
+import { BASE_URL } from "../../constants/config";
+import { greyEye } from "../../components/ImageImport";
+import moment from "moment";
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 10,
@@ -128,8 +133,8 @@ const Row = ({
           <Stack direction="row" spacing={1} alignItems="center">
             <Typography
               style={{
-                fontFamily: "Urbanist",
-                fontSize: "18px",
+                fontFamily: "Urbanist-bolder",
+                fontSize: "22px",
                 fontWeight: "700",
                 color: "#fff",
                 textAlign: "left",
@@ -181,8 +186,8 @@ const Row = ({
         >
           <Typography
             style={{
-              fontFamily: "Urbanist",
-              fontSize: "22px",
+              fontFamily: "Urbanist-bolder",
+              fontSize: "32px",
               fontWeight: "700",
               color: "#fff",
             }}
@@ -216,6 +221,9 @@ const AccountBilling = () => {
     setresetPass,
     allPlans,
     setpaymentSuccessful,
+    userPlan,
+    GetUserPlan,
+    billingHistory,
   } = useUser();
 
   const billingColumns = [
@@ -274,7 +282,7 @@ const AccountBilling = () => {
             fontFamily: "PublicSans",
           }}
         >
-          {params.row.date}
+          {moment(params.row?.createdAt).format("DD.MM.YYYY")}
         </div>
       ),
     },
@@ -300,7 +308,7 @@ const AccountBilling = () => {
             fontFamily: "PublicSans",
           }}
         >
-          ${params.row.amount}
+          ${params.row?.Plan?.PlanPrice}
         </div>
       ),
     },
@@ -326,7 +334,7 @@ const AccountBilling = () => {
             fontFamily: "PublicSans",
           }}
         >
-          {params.row.status}
+          {params.row?.Duration === "30" ? "Monthly" : "Yearly"}
         </div>
       ),
     },
@@ -343,8 +351,28 @@ const AccountBilling = () => {
         </Typography>
       ),
       renderCell: (params) => (
-        <div style={{ cursor: "pointer" }}>
-          <Visibility sx={{ color: "#858D9D", fontSize: "18px" }} />
+        <div
+          style={{
+            cursor: "pointer",
+            height: "100%",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          onClick={() => {
+            setbillingPlansModal(true);
+            setaccountBillingModal(false);
+          }}
+        >
+          <img
+            src={greyEye}
+            alt=""
+            style={{
+              height: "18px",
+              width: "18px",
+            }}
+          />
         </div>
       ),
     },
@@ -359,50 +387,77 @@ const AccountBilling = () => {
     setPlanPrice(price);
   };
 
+  const GetPlans = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getUserBillingInfo`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data;
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    GetPlans();
+  }, []);
+
+  const progress =
+    (userPlan?.remainingProducts /
+      parseInt(userPlan?.subscribedPlane?.NumberOfProducts)) *
+    100;
+
+  console.log(userPlan);
   return (
-    <Box
+    <Drawer
+      anchor={"right"}
+      open={accountBillingModal}
+      onClose={() => setaccountBillingModal(false)}
       sx={{
-        backgroundColor: "#F9F9FC",
+        "& .MuiDrawer-paper": {
+          maxHeight: "100%",
+          width: "600px",
+          overflowY: "auto",
+          overflowX: "hidden",
+          backgroundColor: "#F0F1F3",
+        },
       }}
     >
-      <Dialog
-        fullWidth
-        open={accountBillingModal}
-        onClose={() => setaccountBillingModal(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        PaperProps={{
-          style: {
-            width: 700,
-            backgroundColor: "#FAFAFA",
-          },
-        }}
+      <Box
+        display="flex"
+        flexDirection="column"
+        height="100%"
+        justifyContent="space-between"
       >
-        <DialogTitle
-          align="center"
-          id="alert-dialog-title"
-          bgcolor={"#fff"}
-          sx={{
-            borderBottom: "1px solid #E0E2E7",
-          }}
-        >
-          <Typography
-            mb={1}
-            fontFamily={"Urbanist-bold"}
-            fontWeight={"bold"}
-            fontSize={22}
-            border={"none"}
+        <Box>
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              p: 3,
+              borderBottom: "1px solid #E0E2E7",
+            }}
           >
-            Account and biiling{" "}
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
+            <Typography
+              fontFamily={"Urbanist-bolder"}
+              color={colors.darkText}
+              fontSize={22}
+              textAlign={"center"}
+            >
+              Account and biiling
+            </Typography>
+          </Box>
+
           {/* Account Details */}
           <Box
-            my={2}
+            m={2}
             p={2}
             sx={{
               backgroundColor: "#fff",
+              border: "1px solid #E0E2E7",
               borderRadius: "8px",
             }}
           >
@@ -425,6 +480,7 @@ const AccountBilling = () => {
                   fontFamily: "Urbanist-bold",
                   fontSize: 12,
                   cursor: "pointer",
+                  textDecorationLine: "underline",
                 }}
                 onClick={() => settermsPolicyModal(true)}
               >
@@ -539,7 +595,7 @@ const AccountBilling = () => {
                   fontSize={14}
                   color={colors.darkText}
                 >
-                  FREE{" "}
+                  {userPlan?.subscribedPlane?.PlanName}
                 </Typography>
               </Stack>
               <Typography
@@ -551,9 +607,14 @@ const AccountBilling = () => {
                   alignSelf: "flex-end",
                   cursor: "pointer",
                 }}
-                onClick={() => setbillingPlansModal(true)}
+                onClick={() => {
+                  setbillingPlansModal(true);
+                  setaccountBillingModal(false);
+                }}
               >
-                Upgrade to pro
+                {userPlan?.subscribedPlane?.PlanName === "Free"
+                  ? "Upgrade to pro"
+                  : "Change Plan"}
               </Typography>
             </Stack>
 
@@ -570,8 +631,10 @@ const AccountBilling = () => {
                   color: colors.subText,
                   fontFamily: "PublicSans",
                 }}
+                onClick={() => console.log(userPlan)}
               >
-                3/5 Products
+                {userPlan?.remainingProducts}/
+                {userPlan?.subscribedPlane?.NumberOfProducts} Products
               </Typography>
               <Typography
                 sx={{
@@ -580,163 +643,188 @@ const AccountBilling = () => {
                   fontFamily: "Urbanist-bold",
                 }}
               >
-                60%
+                {progress}%
               </Typography>
             </Stack>
-            <BorderLinearProgress variant="determinate" value={60} />
+            <BorderLinearProgress variant="determinate" value={progress} />
           </Box>
 
-          {/* Packages */}
-          <Box
-            sx={{
-              backgroundImage: "linear-gradient(to bottom, #2D60FF, #1B3A99)",
-              py: 2,
-              px: 1,
-              borderRadius: "8px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              flexDirection: "column",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "28px",
-                fontWeight: "bold",
-                color: "#fff",
-                fontFamily: "Urbanist-bolder",
-                maxWidth: "95%",
-                textAlign: "center",
-              }}
-            >
-              Get more products to monitor UPGRADE NOW
-            </Typography>
-
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-              sx={{ my: 2, alignItems: "center", justifyContent: "center" }}
-            >
-              <Typography style={{ color: "#fff", fontFamily: "Urbanist" }}>
-                Years
-              </Typography>
-              <AntSwitch
-                defaultChecked
-                inputProps={{ "aria-label": "ant design" }}
-              />
-              <Typography style={{ color: "#fff", fontFamily: "Urbanist" }}>
-                Month
-              </Typography>
-            </Stack>
-
-            {allPlans?.map((plan) => (
-              <Row
-                borderB={
-                  plan?.idPlans !== allPlans[allPlans.length - 1]?.idPlans
-                    ? true
-                    : false
-                }
-                leftText1={plan?.PlanName}
-                leftText2={plan?.NumberOfProducts}
-                rightText1={plan?.PlanPrice}
-                selected={selectedPlanId === plan?.idPlans}
-                onSelect={() =>
-                  handleSelectPlan(plan?.idPlans, plan?.PlanPrice)
-                }
-                key={plan?.idPlans}
-              />
-            ))}
-          </Box>
-          {planPrice && (
-            <Typography
-              sx={{
-                fontSize: "15px",
-                fontFamily: "Urbanist-bold",
-                color: "#667085",
-                mt: 2,
-              }}
-            >
-              ** You will be charge {planPrice}$ every month
-            </Typography>
-          )}
-          <Typography
-            sx={{
-              fontSize: "15px",
-              fontFamily: "Urbanist-bold",
-              color: colors.blueText,
-              textDecoration: "underline",
-              mt: planPrice ? 1 : 3,
-              cursor: "pointer",
-            }}
-            onClick={() => settermsPolicyModal(true)}
-          >
-            Read Terms and Policy before upgrading
-          </Typography>
-
-          {/* Billing History Table */}
-          {userData?.currentPlan && (
-            <Box
-              bgcolor="#fff"
-              sx={{ minHeight: "300px", borderRadius: "8px" }}
-              width="100%"
-            >
-              <Typography
+          {userPlan?.subscribedPlane?.PlanName === "Free" ? (
+            <>
+              {/* Packages */}
+              <Box
+                m={2}
                 sx={{
-                  fontFamily: "Urbanist-bold",
-                  fontWeight: "700",
-                  fontSize: "20px",
-                  color: colors.text,
-                  mb: 1,
-                  pt: 2,
-                  px: 2,
+                  backgroundImage:
+                    "linear-gradient(to bottom, #2D60FF, #1B3A99)",
+                  py: 2,
+                  px: 1,
+                  borderRadius: "8px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
                 }}
               >
-                Billing History
+                <Typography
+                  sx={{
+                    fontSize: "28px",
+                    fontWeight: "bold",
+                    color: "#fff",
+                    fontFamily: "Urbanist-bolder",
+                    maxWidth: "95%",
+                    textAlign: "center",
+                  }}
+                >
+                  Get more products to monitor UPGRADE NOW
+                </Typography>
+
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  alignItems="center"
+                  sx={{ my: 2, alignItems: "center", justifyContent: "center" }}
+                >
+                  <Typography style={{ color: "#fff", fontFamily: "Urbanist" }}>
+                    Years
+                  </Typography>
+                  <AntSwitch
+                    defaultChecked
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
+                  <Typography style={{ color: "#fff", fontFamily: "Urbanist" }}>
+                    Month
+                  </Typography>
+                </Stack>
+
+                {allPlans?.map((plan) => (
+                  <Row
+                    borderB={
+                      plan?.idPlans !== allPlans[allPlans.length - 1]?.idPlans
+                        ? true
+                        : false
+                    }
+                    leftText1={plan?.PlanName}
+                    leftText2={plan?.NumberOfProducts}
+                    rightText1={plan?.PlanPrice}
+                    selected={selectedPlanId === plan?.idPlans}
+                    onSelect={() =>
+                      handleSelectPlan(plan?.idPlans, plan?.PlanPrice)
+                    }
+                    key={plan?.idPlans}
+                  />
+                ))}
+              </Box>
+              {planPrice && (
+                <Typography
+                  m={2}
+                  sx={{
+                    fontSize: "15px",
+                    fontFamily: "Urbanist-bold",
+                    color: "#667085",
+                    mt: 2,
+                  }}
+                >
+                  ** You will be charge {planPrice}$ every month
+                </Typography>
+              )}
+              <Typography
+                m={2}
+                sx={{
+                  fontSize: "15px",
+                  fontFamily: "Urbanist-bold",
+                  color: colors.blueText,
+                  textDecoration: "underline",
+                  mt: planPrice ? 1 : 3,
+                  cursor: "pointer",
+                }}
+                onClick={() => settermsPolicyModal(true)}
+              >
+                Read Terms and Policy before upgrading
               </Typography>
+            </>
+          ) : (
+            <>
+              {/* Billing History Table */}
+              {!userData?.currentPlan && (
+                <Box
+                  m={2}
+                  sx={{
+                    minHeight: "300px",
+                    backgroundColor: "#fff",
+                    border: "1px solid #E0E2E7",
+                    borderRadius: "8px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontFamily: "Urbanist-bold",
+                      fontWeight: "700",
+                      fontSize: "20px",
+                      color: colors.text,
+                      mb: 1,
+                      pt: 2,
+                      px: 2,
+                    }}
+                  >
+                    Billing History
+                  </Typography>
 
-              <Divider
-                sx={{
-                  border: 0,
-                  borderTop: "1px dashed #AEB7C9",
-                  my: 2,
-                  mx: 2,
-                }}
-              />
+                  <Divider
+                    sx={{
+                      border: 0,
+                      borderTop: "1px dashed #AEB7C9",
+                      my: 2,
+                      mx: 2,
+                    }}
+                  />
 
-              <DataGrid
-                rows={billingRows}
-                columns={billingColumns}
-                sx={{
-                  borderRadius: "12px",
-                  border: "none",
-                  height: "358px",
-                }}
-                hideFooter={true}
-              />
-            </Box>
+                  <DataGrid
+                    rows={billingHistory}
+                    columns={billingColumns}
+                    getRowId={(row) => row?.BillingID}
+                    sx={{
+                      borderRadius: "12px",
+                      border: "none",
+                      height: "358px",
+                      px: 1,
+                    }}
+                    hideFooter={true}
+                  />
+                </Box>
+              )}
+            </>
           )}
-        </DialogContent>
-        <DialogActions sx={{ bgcolor: "#fff" }}>
-          <Stack direction={"row"} spacing={2} width={"100%"}>
-            <Button
-              disableElevation
-              style={{
-                background: "#f1f1f1",
-                color: "black",
-                textTransform: "none",
-                fontFamily: "Urbanist",
-                fontWeight: "bold",
-                width: "50%",
-                height: "50px",
-              }}
-              variant="contained"
-              fullWidth
-              onClick={() => setaccountBillingModal(false)}
-            >
-              Close
-            </Button>
-            {/* <Button
+        </Box>
+
+        <Stack
+          sx={{
+            backgroundColor: "#fff",
+            py: 1,
+            px: 2,
+          }}
+          direction={"row"}
+          spacing={2}
+          width={"100%"}
+        >
+          <Button
+            disableElevation
+            style={{
+              background: "#f1f1f1",
+              color: "black",
+              textTransform: "none",
+              fontFamily: "Urbanist",
+              fontWeight: "bold",
+              width: "50%",
+              height: "50px",
+            }}
+            variant="contained"
+            fullWidth
+            onClick={() => setaccountBillingModal(false)}
+          >
+            Close
+          </Button>
+          {/* <Button
               disableElevation
               style={{
                 background: "#002987",
@@ -759,57 +847,70 @@ const AccountBilling = () => {
               />
               Pay 29$ with PayPal
             </Button> */}
-            <Box
-              sx={{
-                width: "50%",
+          <Box
+            sx={{
+              width: "50%",
+            }}
+          >
+            <PayPalButtons
+              style={{
+                color: "blue",
+                label: "paypal",
+                tagline: false,
+                height: 50,
               }}
-            >
-              <PayPalButtons
-                style={{
-                  color: "blue",
-                  label: "paypal",
-                  tagline: false,
-                  height: 50,
-                }}
-                forceReRender={[planPrice]}
-                disabled={selectedPlanId === null}
-                createOrder={(data, actions) => {
-                  settermsPolicyModal(true);
-                  return actions.order.create({
-                    purchase_units: [
-                      {
-                        amount: {
-                          currency_code: "USD",
-                          value: planPrice,
-                        },
+              forceReRender={[planPrice]}
+              disabled={selectedPlanId === null}
+              createOrder={(data, actions) => {
+                return actions.order.create({
+                  purchase_units: [
+                    {
+                      amount: {
+                        currency_code: "USD",
+                        value: planPrice,
                       },
-                    ],
-                  });
-                }}
-                onApprove={async (data, actions) => {
-                  return actions.order.capture().then(function (details) {
-                    setbillingPlansModal(false);
-                    setpaymentSuccessful(true);
-                    // return fetch("/paypal-transaction-complete", {
-                    //   method: "post",
-                    //   body: JSON.stringify({
-                    //     orderID: data.orderID
-                    //   })
-                    // });
-                  });
-                }}
-                onCancel={(data) => {
-                  setaccountBillingModal(false);
-                }}
-                onError={(err) => {
-                  alert("Error Occured", planPrice);
-                }}
-              />
-            </Box>
-          </Stack>
-        </DialogActions>
-      </Dialog>
-    </Box>
+                    },
+                  ],
+                });
+              }}
+              onApprove={async (data, actions) => {
+                return actions.order.capture().then(async function (details) {
+                  setbillingPlansModal(false);
+                  setpaymentSuccessful(true);
+                  const token = localStorage.getItem("token");
+                  return await axios
+                    .post(
+                      `${BASE_URL}/subscribeToPlan`,
+                      {
+                        Plan: selectedPlanId,
+                        Duration: "30",
+                      },
+                      {
+                        headers: {
+                          Authorization: `Bearer ${token}`,
+                        },
+                      }
+                    )
+                    .then((res) => {
+                      console.log(res);
+                      GetUserPlan();
+                    })
+                    .catch((e) => {
+                      console.log(e);
+                    });
+                });
+              }}
+              onCancel={(data) => {
+                setaccountBillingModal(false);
+              }}
+              onError={(err) => {
+                alert("Error Occured", planPrice);
+              }}
+            />
+          </Box>
+        </Stack>
+      </Box>
+    </Drawer>
   );
 };
 

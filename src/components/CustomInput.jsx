@@ -73,6 +73,9 @@ export const CustomInput = ({
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
+            if (emailError) {
+              setEmailError(false);
+            }
           }}
           error={emailError}
           helperText={emailError ? "Cannot be empty" : ""}

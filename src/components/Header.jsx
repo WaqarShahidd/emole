@@ -51,6 +51,7 @@ import { styled } from "@mui/material/styles";
 import { useUser } from "../constants/context";
 import { ConfirmModal } from "./CustomModals";
 import CreateGroup from "../Pages/Modals/CreateGroup";
+import { deleteGrey, greyExport, greyGroups } from "./ImageImport";
 
 const BpIcon = styled("span")(({ theme }) => ({
   borderRadius: 3,
@@ -178,6 +179,7 @@ const Header = ({
   search,
   setSearch,
   exportBtn,
+  exportOnClick,
 }) => {
   const {
     selectedProducts,
@@ -190,6 +192,7 @@ const Header = ({
     GetUser,
     seteditProfileModal,
     setshowHideFieldsDrawer,
+    setaddProdDrawer,
   } = useUser();
 
   const navigate = useNavigate();
@@ -454,19 +457,29 @@ const Header = ({
                 fontSize: "20px",
               }}
             /> */}
-            <img
-              src={require("../assets/icons/actions.png")}
-              style={{
-                height: "18px",
-                // width: "18px",
-                cursor: "pointer",
-                color: colors.blueText,
-              }}
-              alt=""
-            />
+            {selectedProducts.length === 0 ? (
+              <img
+                src={require("../assets/icons/actions-o.png")}
+                style={{
+                  height: "18px",
+                }}
+                alt=""
+              />
+            ) : (
+              <img
+                src={require("../assets/icons/actions.png")}
+                style={{
+                  height: "18px",
+                  cursor: "pointer",
+                }}
+                alt=""
+              />
+            )}
+
             <Typography
               sx={{
-                color: selectedProducts.length === 0 ? "grey" : colors.blueText,
+                color:
+                  selectedProducts.length === 0 ? colors.dsds : colors.blueText,
                 fontSize: "14px",
                 fontWeight: "700",
                 fontFamily: "Urbanist-bold",
@@ -492,7 +505,7 @@ const Header = ({
               cursor: "pointer",
               ml: 2,
             }}
-            onClick={handleClickAction}
+            onClick={() => setaddProdDrawer(true)}
           >
             <AddOutlined
               sx={{
@@ -597,6 +610,7 @@ const Header = ({
             fontFamily: "Urbanist-bold",
             fontSize: "14px",
             pb: 1,
+            color: "#777980",
           }}
           onClick={() => {
             handleClose();
@@ -604,15 +618,43 @@ const Header = ({
             setcreateGroupAnchor(true);
           }}
         >
-          <PieChart
-            sx={{
-              color: colors.subText,
-              fontSize: "19px",
-              width: "22px",
-              mr: 2,
+          <img
+            src={greyGroups}
+            style={{
+              height: "15px",
+              width: "15px",
+              cursor: "pointer",
+              marginRight: "10px",
             }}
-          />{" "}
-          Group Selected
+            alt=""
+          />
+          Group selected
+        </MenuItem>
+        <MenuItem
+          sx={{
+            borderBottom: "1px solid #EBEFF5",
+            fontFamily: "Urbanist-bold",
+            fontSize: "14px",
+            pb: 1,
+            color: "#777980",
+          }}
+          onClick={() => {
+            handleClose();
+            setanchorAction(null);
+            exportOnClick();
+          }}
+        >
+          <img
+            src={greyExport}
+            style={{
+              height: "15px",
+              width: "15px",
+              cursor: "pointer",
+              marginRight: "10px",
+            }}
+            alt=""
+          />
+          Export selected
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -622,12 +664,20 @@ const Header = ({
           sx={{
             fontFamily: "Urbanist-bold",
             fontSize: "14px",
+            color: "#777980",
           }}
         >
-          <DeleteForeverOutlined
-            sx={{ color: colors.subText, mr: 2, width: "22px" }}
-          />{" "}
-          Delete Selected
+          <img
+            src={deleteGrey}
+            style={{
+              height: "15px",
+              width: "15px",
+              cursor: "pointer",
+              marginRight: "10px",
+            }}
+            alt=""
+          />
+          Delete selected
         </MenuItem>
       </Menu>
     </div>

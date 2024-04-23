@@ -5,6 +5,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Drawer,
   Stack,
   ToggleButton,
   ToggleButtonGroup,
@@ -47,46 +48,47 @@ const TutorialModal = () => {
   ];
 
   return (
-    <Box
+    <Drawer
+      anchor={"right"}
+      open={tutorialModal}
+      onClose={() => settutorialModal(false)}
       sx={{
-        backgroundColor: "#F9F9FC",
+        "& .MuiDrawer-paper": {
+          maxHeight: "100%",
+          width: "600px",
+          overflowY: "auto",
+          overflowX: "hidden",
+          backgroundColor: "#F0F1F3",
+        },
       }}
     >
-      <Dialog
-        fullWidth
-        open={tutorialModal}
-        onClose={() => settutorialModal(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        PaperProps={{
-          style: {
-            width: 700,
-            backgroundColor: "#FAFAFA",
-          },
-        }}
+      <Box
+        display="flex"
+        flexDirection="column"
+        height="100%"
+        justifyContent="space-between"
       >
-        <DialogTitle
-          align="center"
-          id="alert-dialog-title"
-          bgcolor={"#fff"}
-          sx={{
-            borderBottom: "1px solid #E0E2E7",
-          }}
-        >
-          <Typography
-            mb={1}
-            fontFamily={"Urbanist-bold"}
-            fontWeight={"bold"}
-            fontSize={22}
-            border={"none"}
+        <Box>
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              p: 3,
+              borderBottom: "1px solid #E0E2E7",
+            }}
           >
-            Tutorial - How to use {alignment} Tab
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
+            <Typography
+              fontFamily={"Urbanist-bolder"}
+              color={colors.darkText}
+              fontSize={22}
+              textAlign={"center"}
+            >
+              Tutorial - How to use {alignment} Tab
+            </Typography>
+          </Box>
+
           {/* Account Details */}
           <Box
-            my={2}
+            m={2}
             p={2}
             sx={{
               backgroundColor: "#fff",
@@ -168,27 +170,36 @@ const TutorialModal = () => {
               non-characteristic words etc.
             </Typography>
           </Box>
-        </DialogContent>
-        <DialogActions sx={{ bgcolor: "#fff" }}>
-          <Stack direction={"row"} spacing={2} width={"100%"}>
-            <Button
-              style={{
-                background: "#f1f1f1",
-                color: "black",
-                textTransform: "none",
-                fontFamily: "Urbanist",
-                fontWeight: "bold",
-              }}
-              variant="contained"
-              fullWidth
-              onClick={() => settutorialModal(false)}
-            >
-              Close
-            </Button>
-          </Stack>
-        </DialogActions>
-      </Dialog>
-    </Box>
+        </Box>
+
+        <Stack
+          sx={{
+            backgroundColor: "#fff",
+            py: 1,
+            px: 2,
+          }}
+          direction={"row"}
+          spacing={2}
+          width={"100%"}
+        >
+          <Button
+            disableElevation
+            style={{
+              background: "#F0F1F3",
+              color: colors.darkText,
+              textTransform: "none",
+              fontFamily: "Urbanist",
+              fontWeight: "bold",
+            }}
+            variant="contained"
+            fullWidth
+            onClick={() => settutorialModal(false)}
+          >
+            Close
+          </Button>
+        </Stack>
+      </Box>
+    </Drawer>
   );
 };
 

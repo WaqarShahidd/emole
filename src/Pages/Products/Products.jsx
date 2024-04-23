@@ -6,33 +6,21 @@ import { DataGrid } from "@mui/x-data-grid";
 import {
   getStatusBackgroundColor,
   getStatusTextColor,
-  prodRows,
 } from "../../assets/DummyData";
 import {
   Alert,
   Backdrop,
-  Button,
   CircularProgress,
   FormControl,
   Grid,
-  IconButton,
-  InputLabel,
   MenuItem,
-  OutlinedInput,
   Pagination,
   Select,
   Snackbar,
   Stack,
   Typography,
 } from "@mui/material";
-import {
-  ArrowDropDown,
-  ArrowDropUp,
-  DeleteForever,
-  Image,
-  Visibility,
-  WatchLater,
-} from "@mui/icons-material";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import ProductDetailModal from "../../components/ProductDetailModal";
 import FilterModal from "../../components/FilterModal";
 import { BASE_URL } from "../../constants/config";
@@ -44,6 +32,7 @@ import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
 import { useLocation, useNavigate } from "react-router-dom";
 import ShowHideFields from "../Modals/ShowHideFields";
+import { saveAs } from "file-saver";
 
 const Products = () => {
   const navigate = useNavigate();
@@ -110,12 +99,10 @@ const Products = () => {
               fontWeight={"bold"}
               fontSize={12}
               className="underline text-blue-500 cursor-pointer"
-              onClick={() =>
-                window.open(
-                  `${params?.row?.Product?.Page?.Website?.URL}`,
-                  "_blank"
-                )
-              }
+              onClick={() => {
+                setwebsiteDetailData(params?.row?.Product?.Page?.Website);
+                setwebsiteDetail(true);
+              }}
             >
               {params?.row?.Product?.Page?.Website?.Name}
             </Typography>
@@ -196,28 +183,37 @@ const Products = () => {
           {params?.colDef?.headerName}
         </Typography>
       ),
-      renderCell: (params) => (
-        <Box className="flex-col flex w-full h-full  justify-center">
-          <Typography
-            fontFamily={"Urbanist"}
-            color={"gray"}
-            fontWeight={"bold"}
-            fontSize={13}
-          >
-            {params?.row?.Product?.Category}
-          </Typography>
-          {params?.row?.category?.length > 1 && (
+      renderCell: (params) => {
+        const categoriesArray = params?.row?.Product?.Category?.split(", ");
+
+        return (
+          <Box className="flex-col flex w-full h-full  justify-center">
             <Typography
               fontFamily={"Urbanist"}
+              color={"gray"}
               fontWeight={"bold"}
               fontSize={13}
-              className=" font-bold text-blue-500 cursor-pointer"
+              on
             >
-              {params?.row?.category?.length - 1} more
+              {categoriesArray ? categoriesArray[0] : ""}
             </Typography>
-          )}
-        </Box>
-      ),
+            {categoriesArray?.length > 1 && (
+              <Typography
+                fontFamily={"Urbanist"}
+                fontWeight={"bold"}
+                fontSize={13}
+                className=" font-bold text-blue-500 cursor-pointer"
+                onClick={() => {
+                  handleClickOpen();
+                  setproductDetails(params.row?.Product);
+                }}
+              >
+                {categoriesArray?.length - 1} more
+              </Typography>
+            )}
+          </Box>
+        );
+      },
     },
     // {
     //   field: "linked_website",
@@ -396,7 +392,6 @@ const Products = () => {
             onClick={() => {
               handleClickOpen();
               setproductDetails(params.row?.Product);
-              console.log(params.row);
             }}
           />
           <img
@@ -491,6 +486,8 @@ const Products = () => {
     selectedProducts,
     setconfirmGroupCreate,
     confirmGroupCreate,
+    setwebsiteDetailData,
+    setwebsiteDetail,
   } = useUser();
 
   const handleCloseSnackbar = (event, reason) => {
@@ -510,6 +507,27 @@ const Products = () => {
     view: true,
     stockStatus: true,
   });
+
+  const handleExportData = () => {
+    const csvContent = productsData
+      .map((row) => [
+        row?.UserProductID,
+        row?.Product?.Name,
+        row?.Product?.Page?.Website?.Name,
+        row?.Product?.Page?.Website?.URL,
+        row?.Product?.Price,
+        row?.Product?.LastPrice,
+        row?.Product?.Category,
+        row?.Product?.StockStatus,
+        row?.Product?.OutOfStockCount,
+        row?.Product?.createdAt,
+      ])
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+
+    saveAs(blob, "data.csv");
+  };
 
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
@@ -549,7 +567,8 @@ const Products = () => {
         }}
       >
         <Header
-          title="Products"
+          title=""
+          groupsDropdown
           filter
           filterBtn={() => setopenFilters(!openFilters)}
           actionBtn
@@ -560,6 +579,7 @@ const Products = () => {
           selectedProducts={selectedProducts}
           search={search}
           setSearch={setSearch}
+          exportOnClick={handleExportData}
         />
         <ShowHideFields
           columnVisibilityModel={columnVisibilityModel}

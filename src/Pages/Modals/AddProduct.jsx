@@ -31,17 +31,19 @@ import { useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import { deleteGrey, greyEye } from "../../components/ImageImport";
 
-const GroupModal = ({ open, handleClose, data }) => {
+const AddProduct = () => {
   const navigate = useNavigate();
+
   const {
-    groupModalState,
-    setgroupModalState,
     allGroups,
     GetGroups,
     setviewProductsData,
     GetProductBySegment,
     setconfirmGroupCreate,
+    addProdDrawer,
+    setaddProdDrawer,
   } = useUser();
+
   const [deleteState, setdeleteState] = useState(false);
 
   const [deleteGroupId, setdeleteGroupId] = useState("");
@@ -189,7 +191,7 @@ const GroupModal = ({ open, handleClose, data }) => {
               setviewProductsData(params?.row?.segment?.GroupID);
               GetProductBySegment();
               navigate("/group/view-products");
-              setgroupModalState(false);
+              setaddProdDrawer(false);
             }}
           >
             <img
@@ -213,6 +215,7 @@ const GroupModal = ({ open, handleClose, data }) => {
   ];
 
   const [groupNameSearch, setgroupNameSearch] = useState("");
+  const [groupName, setgroupName] = useState("");
   const [createGroup, setcreateGroup] = useState("");
   const [error, seterror] = useState(false);
 
@@ -279,7 +282,6 @@ const GroupModal = ({ open, handleClose, data }) => {
         .then((res) => {
           setloading(false);
           setconfirmGroupCreate(true);
-          handleClose();
           seterror(false);
           GetGroups();
         })
@@ -321,8 +323,8 @@ const GroupModal = ({ open, handleClose, data }) => {
   return (
     <Drawer
       anchor={"right"}
-      open={groupModalState}
-      onClose={() => setgroupModalState(false)}
+      open={addProdDrawer}
+      onClose={() => setaddProdDrawer(false)}
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
@@ -368,16 +370,11 @@ const GroupModal = ({ open, handleClose, data }) => {
         height="100%"
         justifyContent="space-between"
       >
-        <Box
-          sx={{
-            height: "100%",
-            overflowY: "auto",
-          }}
-        >
+        <Box>
           <Box
             sx={{
               backgroundColor: "#fff",
-              p: 2,
+              p: 3,
               borderBottom: "1px solid #E0E2E7",
             }}
           >
@@ -387,7 +384,7 @@ const GroupModal = ({ open, handleClose, data }) => {
               fontSize={22}
               textAlign={"center"}
             >
-              Product Groups
+              Add New Product
             </Typography>
           </Box>
           <Box
@@ -411,7 +408,7 @@ const GroupModal = ({ open, handleClose, data }) => {
                   pb: 1,
                 }}
               >
-                Create new group
+                Enter Product URL(s)
               </Typography>
               <Typography
                 sx={{
@@ -422,8 +419,8 @@ const GroupModal = ({ open, handleClose, data }) => {
                   maxWidth: "90%",
                 }}
               >
-                Enter the URL of a specific product or a category/shop page.
-                Emole will scan and track all products listed on the page.
+                Enter the URL of a specific product or a page contain list of
+                products like category page or brand page.
               </Typography>
               <Stack
                 direction="row"
@@ -433,13 +430,13 @@ const GroupModal = ({ open, handleClose, data }) => {
               >
                 <Box
                   sx={{
-                    width: "85%",
+                    width: "75%",
                   }}
                 >
                   <CustomInput
                     value={createGroup}
                     setValue={setcreateGroup}
-                    placeholder="Enter group name"
+                    placeholder="eg, https://example.com/shop"
                     emailError={error}
                     setEmailError={seterror}
                   />
@@ -448,7 +445,7 @@ const GroupModal = ({ open, handleClose, data }) => {
                   sx={{
                     alignSelf: "flex-end",
                     display: "contents",
-                    width: "20%",
+                    width: "30%",
                   }}
                 >
                   <Button
@@ -461,15 +458,14 @@ const GroupModal = ({ open, handleClose, data }) => {
                       color: "#fff",
                     }}
                     sx={{
-                      fontSize: "12px",
+                      fontSize: "10px",
                       height: "40px",
                       borderRadius: "8px",
                     }}
                     variant="contained"
                     autoFocus
-                    onClick={CreateGroup}
                   >
-                    Create
+                    Search products
                   </Button>
                 </Box>
               </Stack>
@@ -493,7 +489,7 @@ const GroupModal = ({ open, handleClose, data }) => {
                     color: colors.blueText,
                   }}
                 >
-                  Total Groups
+                  Total products found
                 </Typography>
                 <Typography
                   sx={{
@@ -503,32 +499,75 @@ const GroupModal = ({ open, handleClose, data }) => {
                     color: colors.blueText,
                   }}
                 >
-                  {allGroups?.length}
+                  126
                 </Typography>
               </Stack>
             </Box>
-            {/* <Box sx={{ alignContent: "flex-end", width: "25%" }}>
-              <Button
-                disableElevation
-                style={{
-                  background: colors.blueText,
-                  fontFamily: "Urbanist",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  color: "#fff",
-                }}
+          </Box>
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              m: 2,
+              borderRadius: "8px",
+              p: 2,
+            }}
+          >
+            <Typography
+              sx={{
+                background: colors.darkText,
+                fontFamily: "Urbanist-bold",
+              }}
+            >
+              Add products to new group
+            </Typography>
+            <Box
+              mt={1}
+              pb={2}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "100%",
+                mb: error ? 2 : 0,
+              }}
+            >
+              <Box sx={{ width: "75%" }}>
+                <CustomInput
+                  value={groupName}
+                  setValue={setgroupName}
+                  placeholder={"Enter group name"}
+                  emailError={error}
+                  setEmailError={seterror}
+                />
+              </Box>
+              <Box
                 sx={{
-                  fontSize: "12px",
-                  height: "40px",
-                  borderRadius: "8px",
+                  alignSelf: "flex-end",
+                  display: "contents",
+                  width: "35%",
                 }}
-                variant="contained"
-                onClick={() => setgroupModalState(false)}
-                autoFocus
               >
-                Search Products
-              </Button>
-            </Box> */}
+                <Button
+                  disableElevation
+                  style={{
+                    background: colors.blueText,
+                    fontFamily: "Urbanist",
+                    textTransform: "none",
+                    fontWeight: "bold",
+                    color: "#fff",
+                  }}
+                  sx={{
+                    fontSize: "12px",
+                    height: "40px",
+                    borderRadius: "8px",
+                  }}
+                  variant="contained"
+                  autoFocus
+                  onClick={CreateGroup}
+                >
+                  Create Group
+                </Button>
+              </Box>
+            </Box>
           </Box>
           <Box
             m={2}
@@ -554,18 +593,6 @@ const GroupModal = ({ open, handleClose, data }) => {
                 }}
               >
                 Add products to existing group
-              </Typography>
-              <Typography
-                sx={{
-                  fontSize: "12px",
-                  fontWeight: "700",
-                  fontFamily: "Urbanist-bold",
-                  color: colors.blueText,
-                  cursor: "pointer",
-                }}
-                onClick={handleExportData}
-              >
-                Export all groups
               </Typography>
             </Stack>
             <Divider
@@ -615,7 +642,7 @@ const GroupModal = ({ open, handleClose, data }) => {
             }}
             variant="contained"
             fullWidth
-            onClick={() => setgroupModalState(false)}
+            onClick={() => setaddProdDrawer(false)}
           >
             Close
           </Button>
@@ -630,7 +657,7 @@ const GroupModal = ({ open, handleClose, data }) => {
             variant="contained"
             fullWidth
             onClick={() => {
-              setgroupModalState(false);
+              setaddProdDrawer(false);
               navigate("/products");
             }}
             autoFocus
@@ -643,4 +670,4 @@ const GroupModal = ({ open, handleClose, data }) => {
   );
 };
 
-export default GroupModal;
+export default AddProduct;

@@ -70,23 +70,7 @@ const FilterModal = ({
     });
   };
 
-  const [allWebsites, setallWebsites] = useState([]);
-
-  const GetWebsites = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/getAllWebsites`);
-      const data = await response.data.websites;
-      setallWebsites(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   let currentDate = new Date().toLocaleDateString();
-
-  useEffect(() => {
-    GetWebsites();
-  }, []);
 
   return (
     <Drawer

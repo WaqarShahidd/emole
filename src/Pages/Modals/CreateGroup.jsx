@@ -112,6 +112,14 @@ const CreateGroup = ({ handleClose, open }) => {
     }
   };
 
+  const [groupNameSearch, setgroupNameSearch] = useState("");
+
+  const filteredGroup = allGroups?.filter((i) =>
+    i?.segment?.GroupName?.toLocaleLowerCase()?.includes(
+      groupNameSearch?.toLocaleLowerCase()
+    )
+  );
+
   return (
     <Drawer
       anchor={"right"}
@@ -138,7 +146,7 @@ const CreateGroup = ({ handleClose, open }) => {
         <Box
           sx={{
             backgroundColor: "#fff",
-            p: 3,
+            p: 2,
             borderBottom: "1px solid #E0E2E7",
           }}
         >
@@ -162,11 +170,11 @@ const CreateGroup = ({ handleClose, open }) => {
         >
           <Typography
             sx={{
-              background: colors.darkText,
+              color: colors.darkText,
               fontFamily: "Urbanist-bold",
             }}
           >
-            Create New Group
+            Add products to new group
           </Typography>
           <Box
             mt={1}
@@ -223,15 +231,20 @@ const CreateGroup = ({ handleClose, open }) => {
         >
           <Typography
             sx={{
-              background: colors.darkText,
+              color: colors.darkText,
               fontFamily: "Urbanist-bold",
+              mb: 2,
             }}
           >
-            Add to existing Group
+            Add products to existing group
           </Typography>
-
-          <FormGroup sx={{ px: 0.5 }}>
-            {allGroups?.map((group) => {
+          <CustomInput
+            value={groupNameSearch}
+            setValue={setgroupNameSearch}
+            placeholder="Search group"
+          />
+          <FormGroup sx={{ px: 0.5, mt: 2 }}>
+            {filteredGroup?.map((group) => {
               const isChecked = selectedIds.includes(group?.segment?.GroupID);
               return (
                 <FormControlLabel
@@ -243,6 +256,31 @@ const CreateGroup = ({ handleClose, open }) => {
                       onChange={(event) =>
                         handleCheckboxChange(event, group?.segment?.GroupID)
                       }
+                      sx={{
+                        my: 0.5,
+                        borderRadius: "8px",
+                        "& .MuiSvgIcon-root": {
+                          width: "25px",
+                          height: "25px",
+                          borderRadius: "6px",
+                        },
+                        "&:hover, &.Mui-checked:hover": {
+                          backgroundColor: "transparent",
+                        },
+                        "& .MuiCheckbox-indeterminate": {
+                          backgroundColor: "transparent",
+                        },
+                        "& .MuiIconButton-label": {
+                          borderRadius: "8px",
+                          border: "2px solid #858D9D",
+                          width: "25px",
+                          height: "25px",
+                        },
+                        color: "grey",
+                        "&.Mui-checked": {
+                          color: "grey",
+                        },
+                      }}
                     />
                   }
                   label={
@@ -323,7 +361,7 @@ const CreateGroup = ({ handleClose, open }) => {
                 onClick={AddToGroup}
                 disabled={selectedIds.length === 0}
               >
-                Add to Groups
+                Add to Group
               </Button>
             </Box>
           </FormGroup>
