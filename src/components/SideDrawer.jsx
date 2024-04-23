@@ -24,53 +24,6 @@ import { useUser } from "../constants/context";
 
 const drawerWidth = 75;
 
-const listRoutes = [
-  {
-    id: 1,
-    name: "Dashboard",
-    icon: <GridViewRoundedIcon />,
-    route: "/",
-  },
-  {
-    id: 2,
-    name: "Products",
-    icon: <ShoppingCart />,
-    route: "/products",
-  },
-  // {
-  //   id: 3,
-  //   name: "Segments",
-  //   icon: <DonutLarge />,
-  //   route: "/segments",
-  // },
-  {
-    id: 3,
-    name: "Group",
-    icon: <PieChart />,
-  },
-  {
-    id: 4,
-    name: "Notifications",
-    icon: <Notifications />,
-    route: "/notifications",
-  },
-  {
-    id: 5,
-    name: "Websites",
-    icon: <Language />,
-  },
-  {
-    id: 6,
-    name: "Account",
-    icon: <ThreeP />,
-  },
-  {
-    id: 7,
-    name: "Tutorial",
-    icon: <QuizRounded />,
-  },
-];
-
 const SideDrawer = ({ id }) => {
   const navigate = useNavigate();
   const [selected, setselected] = React.useState("");
@@ -78,6 +31,123 @@ const SideDrawer = ({ id }) => {
   useEffect(() => {
     setselected(id);
   }, [id]);
+
+  const listRoutes = [
+    {
+      id: 1,
+      name: "Dashboard",
+      icon: (
+        <img
+          src={
+            id === 1
+              ? require("../assets/icons/dashboard.png")
+              : require("../assets/icons/dashboard-o.png")
+          }
+          alt=""
+          style={{ height: "20px", width: "20px" }}
+        />
+      ),
+      route: "/",
+    },
+    {
+      id: 2,
+      name: "Products",
+      icon: (
+        <img
+          src={
+            id === 2
+              ? require("../assets/icons/product.png")
+              : require("../assets/icons/product-o.png")
+          }
+          alt=""
+          style={{ height: "20px", width: "20px" }}
+        />
+      ),
+      route: "/products",
+    },
+    // {
+    //   id: 3,
+    //   name: "Segments",
+    //   icon: <DonutLarge />,
+    //   route: "/segments",
+    // },
+    {
+      id: 3,
+      name: "Group",
+      icon: (
+        <img
+          src={
+            id === 3
+              ? require("../assets/icons/groups.png")
+              : require("../assets/icons/groups-o.png")
+          }
+          alt=""
+          style={{ height: "20px", width: "20px" }}
+        />
+      ),
+    },
+    {
+      id: 4,
+      name: "Notifications",
+      icon: (
+        <img
+          src={
+            id === 4
+              ? require("../assets/icons/notification.png")
+              : require("../assets/icons/notification-o.png")
+          }
+          alt=""
+          style={{ height: "20px", width: "20px" }}
+        />
+      ),
+      route: "/notifications",
+    },
+    {
+      id: 5,
+      name: "Websites",
+      icon: (
+        <img
+          src={
+            id === 3
+              ? require("../assets/icons/websites.png")
+              : require("../assets/icons/websites-o.png")
+          }
+          alt=""
+          style={{ height: "20px", width: "20px" }}
+        />
+      ),
+    },
+    {
+      id: 6,
+      name: "Account",
+      icon: (
+        <img
+          src={
+            id === 3
+              ? require("../assets/icons/account.png")
+              : require("../assets/icons/account-o.png")
+          }
+          alt=""
+          style={{ height: "20px" }}
+        />
+      ),
+    },
+    {
+      id: 7,
+      name: "Tutorial",
+      icon: (
+        <img
+          src={
+            id === 3
+              ? require("../assets/icons/contact.png")
+              : require("../assets/icons/contact-o.png")
+          }
+          alt=""
+          style={{ height: "20px", width: "20px" }}
+        />
+      ),
+    },
+  ];
 
   const {
     setgroupModalState,
@@ -126,7 +196,7 @@ const SideDrawer = ({ id }) => {
               key={text}
               sx={{
                 borderLeft: selected === text.id ? "4px solid #3250FF" : "none",
-                paddingLeft: selected === text.id ? "5%" : "10%",
+                paddingLeft: selected === text.id ? "5%" : "7.5%",
                 backgroundColor: selected === text.id ? "#F0F1F3" : "#fff",
                 overflow: "hidden",
               }}
@@ -163,6 +233,25 @@ const SideDrawer = ({ id }) => {
             </ListItem>
           ))}
         </List>
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "center",
+            mb: 2,
+          }}
+        >
+          <img
+            src={require("../assets/icons/logout.png")}
+            style={{ height: "20px", width: "20px", cursor: "pointer" }}
+            onClick={() => {
+              localStorage.removeItem("token");
+              window.location.reload();
+            }}
+            alt=""
+          />
+        </Box>
       </Drawer>
     </Box>
   );

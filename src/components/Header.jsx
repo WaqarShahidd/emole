@@ -33,6 +33,7 @@ import {
   DeleteForeverOutlined,
   DonutSmall,
   ExpandMore,
+  FileDownloadRounded,
   FilterAlt,
   FilterAltOutlined,
   Person,
@@ -176,6 +177,7 @@ const Header = ({
   searchBar,
   search,
   setSearch,
+  exportBtn,
 }) => {
   const {
     selectedProducts,
@@ -321,11 +323,15 @@ const Header = ({
             }}
             onClick={filterBtn}
           >
-            <FilterAltOutlined
-              sx={{
+            <img
+              src={require("../assets/icons/filter.png")}
+              style={{
+                height: "15px",
+                width: "15px",
+                cursor: "pointer",
                 color: colors.blueText,
-                fontSize: "20px",
               }}
+              alt=""
             />
             <Typography
               sx={{
@@ -357,11 +363,21 @@ const Header = ({
             }}
             onClick={() => setshowHideFieldsDrawer(true)}
           >
-            <VisibilityOutlined
+            {/* <VisibilityOutlined
               sx={{
                 color: colors.blueText,
                 fontSize: "20px",
               }}
+            /> */}
+            <img
+              src={require("../assets/icons/view-o.png")}
+              style={{
+                height: "15px",
+                width: "15px",
+                cursor: "pointer",
+                color: colors.blueText,
+              }}
+              alt=""
             />
             <Typography
               sx={{
@@ -373,6 +389,41 @@ const Header = ({
               }}
             >
               Show/Hide Columns
+            </Typography>
+          </Box>
+        )}
+
+        {exportBtn && (
+          <Box
+            sx={{
+              height: "40px",
+              padding: "5px 10px",
+              borderRadius: "8px",
+              backgroundColor: "#FFF",
+              border: "1px solid #E0E2E7",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+              ml: 2,
+            }}
+          >
+            <FileDownloadRounded
+              sx={{
+                color: colors.blueText,
+                fontSize: "20px",
+                mt: 0.75,
+              }}
+            />
+            <Typography
+              sx={{
+                color: colors.blueText,
+                fontSize: "14px",
+                fontWeight: "700",
+                fontFamily: "Urbanist-bold",
+              }}
+            >
+              Export{" "}
             </Typography>
           </Box>
         )}
@@ -397,11 +448,21 @@ const Header = ({
               }
             }}
           >
-            <LogoutIcon
+            {/* <LogoutIcon
               sx={{
                 color: selectedProducts.length === 0 ? "grey" : colors.blueText,
                 fontSize: "20px",
               }}
+            /> */}
+            <img
+              src={require("../assets/icons/actions.png")}
+              style={{
+                height: "18px",
+                // width: "18px",
+                cursor: "pointer",
+                color: colors.blueText,
+              }}
+              alt=""
             />
             <Typography
               sx={{
@@ -455,7 +516,16 @@ const Header = ({
         {searchBar && (
           <SearchContainer>
             <SearchIconWrapper>
-              <Search sx={{ color: "#667085", fontSize: "20px" }} />
+              <img
+                src={require("../assets/icons/search.png")}
+                style={{
+                  height: "18px",
+                  width: "18px",
+                  cursor: "pointer",
+                  color: colors.blueText,
+                }}
+                alt=""
+              />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search Products"
@@ -470,7 +540,7 @@ const Header = ({
           </SearchContainer>
         )}
 
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             alignItems: "center",
@@ -497,7 +567,7 @@ const Header = ({
             style={{ color: colors.text, cursor: "pointer" }}
             onClick={handleClick}
           />
-        </Box>
+        </Box> */}
       </Stack>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         {/* <MenuItem
