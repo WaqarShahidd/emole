@@ -584,7 +584,7 @@ const Products = () => {
             <Box
               sx={{
                 backgroundColor: "white",
-                borderRadius: 2,
+                borderRadius: 4,
               }}
             >
               <DataGrid

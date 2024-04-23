@@ -457,8 +457,8 @@ const Header = ({
             <img
               src={require("../assets/icons/actions.png")}
               style={{
-                height: "15px",
-                width: "15px",
+                height: "18px",
+                // width: "18px",
                 cursor: "pointer",
                 color: colors.blueText,
               }}
