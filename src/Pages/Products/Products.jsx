@@ -401,6 +401,7 @@ const Products = () => {
             src={require("../../assets/icons/delete.png")}
             alt=""
             style={{ height: "17.5px", width: "15px", cursor: "pointer" }}
+            onClick={() => setdeleteProducts(true)}
           />
         </Stack>
       ),
@@ -552,7 +553,7 @@ const Products = () => {
           onClick={() => console.log("Delete")}
           title="Delete Products"
           mainText="Are you sure you want to delete these products?"
-          subText="Do you want to delete this leads? This action can’t be undone"
+          subText="Are you sure you want to delete these products? This action cannot be undone and historical data will no longer be available."
         />
         <FilterModal
           open={openFilters}

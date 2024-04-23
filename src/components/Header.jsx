@@ -322,11 +322,15 @@ const Header = ({
             }}
             onClick={filterBtn}
           >
-            <FilterAltOutlined
-              sx={{
+            <img
+              src={require("../assets/icons/filter.png")}
+              style={{
+                height: "15px",
+                width: "15px",
+                cursor: "pointer",
                 color: colors.blueText,
-                fontSize: "20px",
               }}
+              alt=""
             />
             <Typography
               sx={{
@@ -358,11 +362,21 @@ const Header = ({
             }}
             onClick={filterBtn}
           >
-            <VisibilityOutlined
+            {/* <VisibilityOutlined
               sx={{
                 color: colors.blueText,
                 fontSize: "20px",
               }}
+            /> */}
+            <img
+              src={require("../assets/icons/view-o.png")}
+              style={{
+                height: "15px",
+                width: "15px",
+                cursor: "pointer",
+                color: colors.blueText,
+              }}
+              alt=""
             />
             <Typography
               sx={{
@@ -434,11 +448,21 @@ const Header = ({
               }
             }}
           >
-            <LogoutIcon
+            {/* <LogoutIcon
               sx={{
                 color: colors.blueText,
                 fontSize: "20px",
               }}
+            /> */}
+            <img
+              src={require("../assets/icons/actions.png")}
+              style={{
+                height: "15px",
+                width: "15px",
+                cursor: "pointer",
+                color: colors.blueText,
+              }}
+              alt=""
             />
             <Typography
               sx={{
@@ -492,7 +516,16 @@ const Header = ({
         {searchBar && (
           <SearchContainer>
             <SearchIconWrapper>
-              <Search sx={{ color: "#667085", fontSize: "20px" }} />
+              <img
+                src={require("../assets/icons/search.png")}
+                style={{
+                  height: "18px",
+                  width: "18px",
+                  cursor: "pointer",
+                  color: colors.blueText,
+                }}
+                alt=""
+              />
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search Products"
