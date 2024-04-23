@@ -89,26 +89,51 @@ const FilterModal = ({
   }, []);
 
   return (
-    <Drawer anchor={"right"} open={open} onClose={handleClose}>
+    <Drawer
+      anchor={"right"}
+      open={open}
+      onClose={handleClose}
+      sx={{
+        "& .MuiDrawer-paper": {
+          maxHeight: "100%",
+          overflowY: "auto",
+          overflowX: "hidden",
+          backgroundColor: "#F0F1F3",
+        },
+      }}
+    >
       <Box
         display="flex"
         flexDirection="column"
-        justifyContent="space-between"
         height="100%"
-        p={4}
+        justifyContent="space-between"
       >
         <Box>
-          <Typography
-            mb={1}
-            fontFamily={"Urbanist"}
-            fontWeight={"bold"}
-            fontSize={22}
-            textAlign={"center"}
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              p: 3,
+              borderBottom: "1px solid #E0E2E7",
+            }}
           >
-            Product Filters
-          </Typography>
-          <Divider />
-          <Box py={2}>
+            <Typography
+              fontFamily={"Urbanist-bolder"}
+              color={colors.darkText}
+              fontSize={22}
+              textAlign={"center"}
+            >
+              Product Filters
+            </Typography>
+          </Box>
+
+          <Box
+            sx={{
+              backgroundColor: "#fff",
+              m: 3,
+              borderRadius: "8px",
+              p: 3,
+            }}
+          >
             {/* Website Dropdown */}
             {/* <Typography
             sx={{
@@ -283,7 +308,15 @@ const FilterModal = ({
             </Stack>
           </Box>
         </Box>
-        <Stack direction={"row"} spacing={2} width={"100%"}>
+        <Stack
+          sx={{
+            backgroundColor: "#fff",
+            p: 3,
+          }}
+          direction={"row"}
+          spacing={2}
+          width={"100%"}
+        >
           <Button
             disableElevation
             style={{
@@ -292,6 +325,7 @@ const FilterModal = ({
               textTransform: "none",
               fontFamily: "Urbanist",
               fontWeight: "bold",
+              height: "45px",
             }}
             variant="contained"
             fullWidth
@@ -314,6 +348,7 @@ const FilterModal = ({
               fontFamily: "Urbanist",
               textTransform: "none",
               fontWeight: "bold",
+              height: "45px",
             }}
             variant="contained"
             fullWidth

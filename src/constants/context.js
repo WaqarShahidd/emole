@@ -15,6 +15,7 @@ export function UserProvider({ children }) {
   const [tutorialModal, settutorialModal] = useState(false);
   const [editProfileModal, seteditProfileModal] = useState(false);
   const [resetPass, setresetPass] = useState(false);
+  const [showHideFieldsDrawer, setshowHideFieldsDrawer] = useState(false);
 
   const [selectedProducts, setselectedProducts] = useState([]);
 
@@ -172,6 +173,8 @@ export function UserProvider({ children }) {
         setprofileUpdateSuccess,
         resetSuccess,
         setresetSuccess,
+        showHideFieldsDrawer,
+        setshowHideFieldsDrawer,
       }}
     >
       {children}

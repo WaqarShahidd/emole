@@ -174,8 +174,8 @@ const Header = ({
   hideColumns,
   addProducts,
   searchBar,
-  setdisableBtn,
-  disableBtn,
+  search,
+  setSearch,
 }) => {
   const {
     selectedProducts,
@@ -187,6 +187,7 @@ const Header = ({
     GetProductBySegment,
     GetUser,
     seteditProfileModal,
+    setshowHideFieldsDrawer,
   } = useUser();
 
   const navigate = useNavigate();
@@ -354,7 +355,7 @@ const Header = ({
               cursor: "pointer",
               ml: 2,
             }}
-            onClick={filterBtn}
+            onClick={() => setshowHideFieldsDrawer(true)}
           >
             <VisibilityOutlined
               sx={{
@@ -387,25 +388,24 @@ const Header = ({
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              cursor: "pointer",
+              cursor: selectedProducts.length === 0 ? "default" : "pointer",
               ml: 2,
             }}
             onClick={(e) => {
-              console.log(disableBtn);
-              if (disableBtn) {
+              if (selectedProducts.length !== 0) {
                 handleClickAction(e);
               }
             }}
           >
             <LogoutIcon
               sx={{
-                color: colors.blueText,
+                color: selectedProducts.length === 0 ? "grey" : colors.blueText,
                 fontSize: "20px",
               }}
             />
             <Typography
               sx={{
-                color: colors.blueText,
+                color: selectedProducts.length === 0 ? "grey" : colors.blueText,
                 fontSize: "14px",
                 fontWeight: "700",
                 fontFamily: "Urbanist-bold",
@@ -464,6 +464,8 @@ const Header = ({
                   color: colors.darkText,
                 },
               }}
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
             />
           </SearchContainer>
         )}
@@ -528,9 +530,8 @@ const Header = ({
           }}
           onClick={() => {
             handleClose();
-            if (selectedProducts.length === 0) {
-              alert("Please select products to add in a group");
-            } else setcreateGroupAnchor(true);
+            setanchorAction(null);
+            setcreateGroupAnchor(true);
           }}
         >
           <PieChart

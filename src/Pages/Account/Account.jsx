@@ -434,13 +434,13 @@ const Account = () => {
                     "& .MuiSvgIcon-root": {
                       width: "20px",
                       height: "20px",
-                      borderRadius: "6px", // Adjust border radius for the checkbox icon
+                      borderRadius: "6px",
                     },
                     "&:hover, &.Mui-checked:hover": {
-                      backgroundColor: "transparent", // Remove hover background color
+                      backgroundColor: "transparent",
                     },
                     "& .MuiCheckbox-indeterminate": {
-                      backgroundColor: "transparent", // Remove indeterminate background color
+                      backgroundColor: "transparent",
                     },
                     "& .MuiIconButton-label": {
                       borderRadius: "8px",

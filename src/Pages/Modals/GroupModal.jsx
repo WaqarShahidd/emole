@@ -10,6 +10,7 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
+  Drawer,
   Grid,
   IconButton,
   Snackbar,
@@ -253,9 +254,18 @@ const GroupModal = ({ open, handleClose, data }) => {
   );
 
   return (
-    <Box
+    <Drawer
+      anchor={"right"}
+      open={groupModalState}
+      onClose={() => setgroupModalState(false)}
       sx={{
-        backgroundColor: "#F9F9FC",
+        "& .MuiDrawer-paper": {
+          maxHeight: "100%",
+          minWidth: "600px",
+          overflowY: "auto",
+          overflowX: "hidden",
+          backgroundColor: "#F0F1F3",
+        },
       }}
     >
       <Snackbar
@@ -278,7 +288,6 @@ const GroupModal = ({ open, handleClose, data }) => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-
       <DeleteModal
         open={deleteState}
         onClose={() => setdeleteState(false)}
@@ -288,40 +297,31 @@ const GroupModal = ({ open, handleClose, data }) => {
         subText="Do you want to delete this group? This action can’t be undone"
       />
 
-      <Dialog
-        fullWidth
-        open={groupModalState}
-        onClose={() => setgroupModalState(false)}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-        PaperProps={{
-          style: {
-            width: 700,
-            backgroundColor: "#FAFAFA",
-          },
-        }}
+      <Box
+        display="flex"
+        flexDirection="column"
+        height="100%"
+        justifyContent="space-between"
       >
-        <DialogTitle
-          align="center"
-          id="alert-dialog-title"
-          bgcolor={"#fff"}
-          sx={{
-            borderBottom: "1px solid #E0E2E7",
-          }}
-        >
-          <Typography
-            mb={1}
-            fontFamily={"Urbanist-bold"}
-            fontWeight={"bold"}
-            fontSize={22}
-            border={"none"}
-          >
-            Product Groups
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
+        <Box>
           <Box
-            my={2}
+            sx={{
+              backgroundColor: "#fff",
+              p: 3,
+              borderBottom: "1px solid #E0E2E7",
+            }}
+          >
+            <Typography
+              fontFamily={"Urbanist-bolder"}
+              color={colors.darkText}
+              fontSize={22}
+              textAlign={"center"}
+            >
+              Product Groups
+            </Typography>
+          </Box>
+          <Box
+            m={2}
             p={2}
             sx={{
               backgroundColor: "#fff",
@@ -332,12 +332,73 @@ const GroupModal = ({ open, handleClose, data }) => {
             }}
           >
             <Box sx={{ width: "100%" }}>
-              <CustomInput
-                label={"Search Group"}
-                value={groupNameSearch}
-                setValue={setgroupNameSearch}
-                placeholder="Search group by name..."
-              />
+              <Typography
+                sx={{
+                  fontSize: "16px",
+                  fontWeight: "700",
+                  fontFamily: "Urbanist-bold",
+                  color: "#222",
+                  pb: 1,
+                }}
+              >
+                Create new group
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontFamily: "Urbanist",
+                  color: colors.subText,
+                  pb: 2,
+                  maxWidth: "90%",
+                }}
+              >
+                Enter the URL of a specific product or a category/shop page.
+                Emole will scan and track all products listed on the page.
+              </Typography>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Box
+                  sx={{
+                    width: "85%",
+                  }}
+                >
+                  <CustomInput
+                    value={groupNameSearch}
+                    setValue={setgroupNameSearch}
+                    placeholder="Enter group name"
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    alignSelf: "flex-end",
+                    display: "contents",
+                    width: "20%",
+                  }}
+                >
+                  <Button
+                    disableElevation
+                    style={{
+                      background: colors.blueText,
+                      fontFamily: "Urbanist",
+                      textTransform: "none",
+                      fontWeight: "bold",
+                      color: "#fff",
+                    }}
+                    sx={{
+                      fontSize: "12px",
+                      height: "40px",
+                      borderRadius: "8px",
+                    }}
+                    variant="contained"
+                    autoFocus
+                  >
+                    Create
+                  </Button>
+                </Box>
+              </Stack>
             </Box>
             {/* <Box sx={{ alignContent: "flex-end", width: "25%" }}>
               <Button
@@ -363,7 +424,7 @@ const GroupModal = ({ open, handleClose, data }) => {
             </Box> */}
           </Box>
           <Box
-            my={2}
+            m={2}
             p={2}
             sx={{
               backgroundColor: "#fff",
@@ -378,59 +439,72 @@ const GroupModal = ({ open, handleClose, data }) => {
                 fontSize: "14px",
                 color: "#222",
                 lineHeight: "20px",
-                marginBottom: "2px",
+                mb: 2,
               }}
             >
-              All Groups
+              Add products to existing group
             </Typography>
+            <CustomInput
+              value={groupNameSearch}
+              setValue={setgroupNameSearch}
+              placeholder="Search group"
+            />
             <DataGrid
               rows={filteredGroup}
               columns={groupColumns}
               sx={{
                 borderRadius: "12px",
                 border: "none",
+                mt: 1,
               }}
               getRowId={(row) => row?.segment?.GroupID}
               hideFooter={true}
             />
           </Box>
-        </DialogContent>
-        <DialogActions sx={{ bgcolor: "#fff" }}>
-          <Stack direction={"row"} spacing={2} width={"100%"}>
-            <Button
-              disableElevation
-              style={{
-                background: "#f1f1f1",
-                color: "black",
-                textTransform: "none",
-                fontFamily: "Urbanist",
-                fontWeight: "bold",
-              }}
-              variant="contained"
-              fullWidth
-              onClick={() => setgroupModalState(false)}
-            >
-              Close
-            </Button>
-            <Button
-              disableElevation
-              style={{
-                background: colors.blueText,
-                fontFamily: "Urbanist",
-                textTransform: "none",
-                fontWeight: "bold",
-              }}
-              variant="contained"
-              fullWidth
-              onClick={() => setgroupModalState(false)}
-              autoFocus
-            >
-              Save
-            </Button>
-          </Stack>
-        </DialogActions>
-      </Dialog>
-    </Box>
+        </Box>
+
+        <Stack
+          sx={{
+            backgroundColor: "#fff",
+            p: 3,
+          }}
+          direction={"row"}
+          spacing={2}
+          width={"100%"}
+        >
+          <Button
+            disableElevation
+            style={{
+              background: "#f1f1f1",
+              color: "black",
+              textTransform: "none",
+              fontFamily: "Urbanist",
+              fontWeight: "bold",
+            }}
+            variant="contained"
+            fullWidth
+            onClick={() => setgroupModalState(false)}
+          >
+            Close
+          </Button>
+          <Button
+            disableElevation
+            style={{
+              background: colors.blueText,
+              fontFamily: "Urbanist",
+              textTransform: "none",
+              fontWeight: "bold",
+            }}
+            variant="contained"
+            fullWidth
+            onClick={() => setgroupModalState(false)}
+            autoFocus
+          >
+            Add Products
+          </Button>
+        </Stack>
+      </Box>
+    </Drawer>
   );
 };
 

@@ -10,6 +10,7 @@ import {
   CircularProgress,
   Dialog,
   DialogContent,
+  Drawer,
   FormControlLabel,
   FormGroup,
   Typography,
@@ -112,125 +113,154 @@ const CreateGroup = ({ handleClose, open }) => {
   };
 
   return (
-    <Dialog
-      onClose={handleClose}
+    <Drawer
+      anchor={"right"}
       open={open}
-      PaperProps={{
-        style: {
-          borderRadius: "8px",
-          padding: "0",
-          width: "500px",
-          maxWidth: "100%",
+      onClose={handleClose}
+      sx={{
+        "& .MuiDrawer-paper": {
+          maxHeight: "100%",
+          minWidth: "500px",
+          overflowY: "hidden",
+          overflowX: "hidden",
+          backgroundColor: "#F0F1F3",
         },
       }}
     >
-      <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
-      {/* <ConfirmModal
-          open={confirmationModal}
-          onClose={() => setconfirmationModal(false)}
-          title="Product Group Created"
-          btnText="Add products"
-        /> */}
+      <Box display="flex" flexDirection="column">
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
 
-      <DialogContent>
-        <Typography
-          sx={{
-            background: colors.darkText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          Create New Group
-        </Typography>
         <Box
-          mt={1}
-          pb={2}
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "100%",
-            mb: error ? 2 : 0,
+            backgroundColor: "#fff",
+            p: 3,
+            borderBottom: "1px solid #E0E2E7",
           }}
         >
-          <Box sx={{ width: "70%" }}>
-            <CustomInput
-              value={groupName}
-              setValue={setgroupName}
-              placeholder={"eg. Product above 100$"}
-              emailError={error}
-              setEmailError={seterror}
-            />
-          </Box>
-          <Box
-            sx={{ alignSelf: "flex-end", display: "contents", width: "35%" }}
+          <Typography
+            fontFamily={"Urbanist-bolder"}
+            color={colors.darkText}
+            fontSize={22}
+            textAlign={"center"}
           >
-            <Button
-              disableElevation
-              style={{
-                background: colors.blueText,
-                fontFamily: "Urbanist",
-                textTransform: "none",
-                fontWeight: "bold",
-                color: "#fff",
-              }}
-              sx={{
-                fontSize: "12px",
-                height: "40px",
-                borderRadius: "8px",
-              }}
-              variant="contained"
-              autoFocus
-              onClick={CreateGroup}
-            >
-              Create Group
-            </Button>
-          </Box>
+            Groups
+          </Typography>
         </Box>
 
-        <Typography
+        <Box
           sx={{
-            background: colors.darkText,
-            fontFamily: "Urbanist-bold",
+            backgroundColor: "#fff",
+            m: 3,
+            borderRadius: "8px",
+            p: 2,
           }}
         >
-          Add to existing Group
-        </Typography>
-
-        <FormGroup sx={{ px: 0.5 }}>
-          {allGroups?.map((group) => {
-            const isChecked = selectedIds.includes(group?.segment?.GroupID);
-            return (
-              <FormControlLabel
-                key={group?.segment?.GroupID}
-                sx={{ mb: -1 }}
-                control={
-                  <Checkbox
-                    checked={isChecked}
-                    onChange={(event) =>
-                      handleCheckboxChange(event, group?.segment?.GroupID)
-                    }
-                  />
-                }
-                label={
-                  <Typography
-                    sx={{
-                      color: colors.subText,
-                      fontFamily: "Urbanist-bold",
-                      fontSize: "15px",
-                    }}
-                    variant="body2"
-                  >
-                    {group?.segment?.GroupName}
-                  </Typography>
-                }
+          <Typography
+            sx={{
+              background: colors.darkText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            Create New Group
+          </Typography>
+          <Box
+            mt={1}
+            pb={2}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "100%",
+              mb: error ? 2 : 0,
+            }}
+          >
+            <Box sx={{ width: "70%" }}>
+              <CustomInput
+                value={groupName}
+                setValue={setgroupName}
+                placeholder={"eg. Product above 100$"}
+                emailError={error}
+                setEmailError={seterror}
               />
-            );
-          })}
-          {/* <FormControlLabel
+            </Box>
+            <Box
+              sx={{ alignSelf: "flex-end", display: "contents", width: "35%" }}
+            >
+              <Button
+                disableElevation
+                style={{
+                  background: colors.blueText,
+                  fontFamily: "Urbanist",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  color: "#fff",
+                }}
+                sx={{
+                  fontSize: "12px",
+                  height: "40px",
+                  borderRadius: "8px",
+                }}
+                variant="contained"
+                autoFocus
+                onClick={CreateGroup}
+              >
+                Create Group
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            backgroundColor: "#fff",
+            mx: 3,
+            borderRadius: "8px",
+            p: 2,
+          }}
+        >
+          <Typography
+            sx={{
+              background: colors.darkText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            Add to existing Group
+          </Typography>
+
+          <FormGroup sx={{ px: 0.5 }}>
+            {allGroups?.map((group) => {
+              const isChecked = selectedIds.includes(group?.segment?.GroupID);
+              return (
+                <FormControlLabel
+                  key={group?.segment?.GroupID}
+                  sx={{ mb: -1 }}
+                  control={
+                    <Checkbox
+                      checked={isChecked}
+                      onChange={(event) =>
+                        handleCheckboxChange(event, group?.segment?.GroupID)
+                      }
+                    />
+                  }
+                  label={
+                    <Typography
+                      sx={{
+                        color: colors.subText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: "15px",
+                      }}
+                      variant="body2"
+                    >
+                      {group?.segment?.GroupName}
+                    </Typography>
+                  }
+                />
+              );
+            })}
+            {/* <FormControlLabel
             control={
               <Checkbox
                 checked={checkboxState.timesRestocked}
@@ -272,33 +302,34 @@ const CreateGroup = ({ handleClose, open }) => {
               </Typography>
             }
           /> */}
-          <Box sx={{ width: "100%", mt: 2 }}>
-            <Button
-              disableElevation
-              style={{
-                background: colors.blueText,
-                fontFamily: "Urbanist",
-                textTransform: "none",
-                fontWeight: "bold",
-                color: "#fff",
-              }}
-              sx={{
-                fontSize: "12px",
-                height: "40px",
-                borderRadius: "8px",
-                width: "100%",
-              }}
-              variant="contained"
-              autoFocus
-              onClick={AddToGroup}
-              disabled={selectedIds.length === 0}
-            >
-              Add to Groups
-            </Button>
-          </Box>
-        </FormGroup>
-      </DialogContent>
-    </Dialog>
+            <Box sx={{ width: "100%", mt: 2 }}>
+              <Button
+                disableElevation
+                style={{
+                  background: colors.blueText,
+                  fontFamily: "Urbanist",
+                  textTransform: "none",
+                  fontWeight: "bold",
+                  color: "#fff",
+                }}
+                sx={{
+                  fontSize: "12px",
+                  height: "40px",
+                  borderRadius: "8px",
+                  width: "100%",
+                }}
+                variant="contained"
+                autoFocus
+                onClick={AddToGroup}
+                disabled={selectedIds.length === 0}
+              >
+                Add to Groups
+              </Button>
+            </Box>
+          </FormGroup>
+        </Box>
+      </Box>
+    </Drawer>
   );
 };
 
