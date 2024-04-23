@@ -514,7 +514,7 @@ const AddProduct = () => {
           >
             <Typography
               sx={{
-                background: colors.darkText,
+                color: colors.darkText,
                 fontFamily: "Urbanist-bold",
               }}
             >
