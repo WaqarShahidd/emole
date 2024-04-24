@@ -422,6 +422,7 @@ const Products = () => {
 
   const [selectedIds, setSelectedIds] = useState([]);
 
+  const [totalCount, settotalCount] = useState(0);
   const [totalPages, settotalPages] = useState(1);
   const [currentPage, setcurrentPage] = useState(1);
   const [numOfProductPerPage, setnumOfProductPerPage] = useState(10);
@@ -430,6 +431,9 @@ const Products = () => {
     state?.filter === "false" ? false : null
   );
   const [deleteProducts, setdeleteProducts] = useState(false);
+
+  const startIndex = (currentPage - 1) * numOfProductPerPage + 1;
+  const endIndex = Math.min(startIndex + numOfProductPerPage - 1);
 
   const handleChangeProductPerPage = (event) => {
     setnumOfProductPerPage(event.target.value);
@@ -468,6 +472,7 @@ const Products = () => {
         }
       );
       const data = await response.data.products.products;
+      settotalCount(response.data?.products?.totalCount);
       settotalPages(response.data.products.totalPages);
       setproductsData(data);
     } catch (error) {
@@ -621,6 +626,159 @@ const Products = () => {
         <Grid container p={2}>
           <Grid item xs={12}>
             <Box
+              mb={2}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  color: "#667085",
+                  fontSize: 14,
+                  fontFamily: "Urbanist-bold",
+                }}
+              >
+                Showing {startIndex}-{endIndex} from {totalCount}
+              </Typography>
+              {/* <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  maxWidth: "75%",
+                }}
+              >
+                {startDate && (
+                  <Typography
+                    sx={{
+                      color: colors.blueText,
+                      fontFamily: "Urbanist-bold",
+                      fontSize: 14,
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                    onClick={() => console.log(startDate)}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: "Urbanist-bold",
+                        mr: 1,
+                        fontSize: 14,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setstartDate(null)}
+                    >
+                      X
+                    </Typography>
+                    Date from {moment(startDate).format("DD.MM.YYYY")}
+                  </Typography>
+                )}
+                {startDate && (
+                  <Typography
+                    sx={{
+                      color: colors.blueText,
+                      fontFamily: "Urbanist-bold",
+                      fontSize: 14,
+                      mx: 2,
+                    }}
+                  >
+                    |
+                  </Typography>
+                )}
+                {endDate && (
+                  <Typography
+                    sx={{
+                      color: colors.blueText,
+                      fontFamily: "Urbanist-bold",
+                      fontSize: 14,
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontFamily: "Urbanist-bold",
+                        mr: 1,
+                        fontSize: 14,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setendDate(null)}
+                    >
+                      X
+                    </Typography>
+                    Date till {moment(endDate).format("DD.MM.YYYY")}
+                  </Typography>
+                )}
+                <Typography
+                  sx={{
+                    color: colors.blueText,
+                    fontFamily: "Urbanist-bold",
+                    fontSize: 14,
+                    mx: 2,
+                  }}
+                >
+                  |
+                </Typography>
+                {prevPrice && (
+                  <Typography
+                    sx={{
+                      color: colors.blueText,
+                      fontFamily: "Urbanist-bold",
+                      fontSize: 14,
+                    }}
+                  >
+                    Min Price: {prevPrice}
+                  </Typography>
+                )}
+                <Typography
+                  sx={{
+                    color: colors.blueText,
+                    fontFamily: "Urbanist-bold",
+                    fontSize: 14,
+                    mx: 2,
+                  }}
+                >
+                  |
+                </Typography>
+
+                {currentPrice && (
+                  <Typography
+                    sx={{
+                      color: colors.blueText,
+                      fontFamily: "Urbanist-bold",
+                      fontSize: 14,
+                    }}
+                  >
+                    Max Price: {currentPrice}
+                  </Typography>
+                )}
+                <Typography
+                  sx={{
+                    color: colors.blueText,
+                    fontFamily: "Urbanist-bold",
+                    fontSize: 14,
+                    mx: 2,
+                  }}
+                >
+                  |
+                </Typography>
+                {stockStatusFilter !== null && (
+                  <Typography
+                    sx={{
+                      color: colors.blueText,
+                      fontFamily: "Urbanist-bold",
+                      fontSize: 14,
+                    }}
+                  >
+                    Stock Status:{" "}
+                    {stockStatusFilter ? "In Stock" : "Out of Stock"}
+                  </Typography>
+                )}
+              </Box> */}
+            </Box>
+            <Box
               sx={{
                 backgroundColor: "white",
                 borderRadius: 4,
@@ -667,30 +825,28 @@ const Products = () => {
               />
             </Box>
             <Box className="mt-4 mx-4">
-              <Stack direction={"row-reverse"}>
-                <Pagination
-                  count={totalPages}
-                  variant="outlined"
-                  // color="primary"
-                  shape="rounded"
-                  onChange={(event, value) => {
-                    setcurrentPage(value);
-                    console.log(value);
+              <Stack
+                direction={"row"}
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography
+                  sx={{
+                    color: "#667085",
+                    fontSize: 14,
+                    fontFamily: "Urbanist-bold",
                   }}
-                  // sx={(value) => ({
-                  //   "& .MuiPaginationItem-root": {
-                  //     color: "#fff",
-                  //     backgroundColor: colors.blueText,
-                  //   },
-                  // })}
-                />
-                <Box mx={2} width={200} height={20}>
-                  <FormControl
-                    variant="outlined"
-                    style={{ width: "100%" }}
-                    margin={"1"}
-                  >
-                    {/* <InputLabel
+                >
+                  Showing {startIndex}-{endIndex} from {totalCount}
+                </Typography>
+                <Stack direction="row">
+                  <Box mx={2} width={200} height={20}>
+                    <FormControl
+                      variant="outlined"
+                      style={{ width: "100%" }}
+                      margin={"1"}
+                    >
+                      {/* <InputLabel
                       style={{
                         fontSize: 12,
                       }}
@@ -698,22 +854,39 @@ const Products = () => {
                     >
                       X-Per page
                     </InputLabel> */}
-                    <Select
-                      fullWidth
-                      defaultValue={10}
-                      // input={<OutlinedInput sx={{ fontSize: 14 }} label="Tag" />}
-                      size="small"
-                      variant="outlined"
-                      // value={num}
+                      <Select
+                        fullWidth
+                        defaultValue={10}
+                        // input={<OutlinedInput sx={{ fontSize: 14 }} label="Tag" />}
+                        size="small"
+                        variant="outlined"
+                        // value={num}
 
-                      style={{ height: 32 }}
-                      onChange={handleChangeProductPerPage}
-                    >
-                      <MenuItem value={5}>Five</MenuItem>
-                      <MenuItem value={10}>Ten</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
+                        style={{ height: 32 }}
+                        onChange={handleChangeProductPerPage}
+                      >
+                        <MenuItem value={5}>Five</MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Pagination
+                    count={totalPages}
+                    variant="outlined"
+                    // color="primary"
+                    shape="rounded"
+                    onChange={(event, value) => {
+                      setcurrentPage(value);
+                      console.log(value);
+                    }}
+                    // sx={(value) => ({
+                    //   "& .MuiPaginationItem-root": {
+                    //     color: "#fff",
+                    //     backgroundColor: colors.blueText,
+                    //   },
+                    // })}
+                  />
+                </Stack>
               </Stack>
             </Box>
           </Grid>

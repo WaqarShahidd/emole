@@ -230,6 +230,7 @@ const FilterModal = ({
                 >
                   <DatePicker
                     value={startDate}
+                    format="DD.MM.YYYY"
                     onChange={(newValue) => setstartDate(newValue)}
                   />
                 </DemoContainer>
@@ -242,6 +243,7 @@ const FilterModal = ({
                 >
                   <DatePicker
                     value={endDate}
+                    format="DD.MM.YYYY"
                     onChange={(newValue) => setendDate(newValue)}
                   />
                 </DemoContainer>
