@@ -190,6 +190,7 @@ export function UserProvider({ children }) {
         GetWebsites,
         allGroups,
         GetGroups,
+        setallGroups,
         setviewProductsData,
         viewProductsData,
         websiteViewProductsData,

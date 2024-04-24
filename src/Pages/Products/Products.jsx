@@ -785,6 +785,9 @@ const Products = () => {
               }}
             >
               <DataGrid
+                disableColumnMenu
+                disableColumnFilter
+                disableColumnSorting
                 sx={{
                   "&, [class^=MuiDataGrid-main]": { borderRadius: 4 },
                   ".MuiDataGrid-columnHeaderTitleContainer": {

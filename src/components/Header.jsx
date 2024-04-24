@@ -255,58 +255,81 @@ const Header = ({
           {title}
         </Typography>
         {groupsDropdown && (
-          <FormControl fullWidth>
-            <Select
-              displayEmpty
-              value={slectedGroup}
-              onChange={handleChange}
-              renderValue={(selected) => {
-                if (slectedGroup === "") {
-                  return (
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <DonutSmall
-                        style={{
-                          color: "#858D9D",
-                          fontSize: "18px",
-                          marginRight: "5px",
-                        }}
-                      />
-                      <p
-                        style={{
-                          fontSize: "12px",
-                          fontFamily: "Urbanist-bold",
-                          color: "#858D9D",
-                        }}
-                      >
-                        Select Group
-                      </p>
-                    </div>
-                  );
-                }
+          <>
+            {allGroups.length === 0 ? (
+              <Typography
+                sx={{
+                  color:
+                    selectedProducts.length === 0 ? "grey" : colors.blueText,
+                  fontFamily: "Urbanist-bold",
+                  fontSize: 14,
+                  display: "flex",
+                  alignItems: "center",
+                  cursor: selectedProducts.length === 0 ? "default" : "pointer",
+                }}
+                onClick={() => {
+                  if (selectedProducts.length !== 0) {
+                    setcreateGroupAnchor(true);
+                  }
+                }}
+              >
+                No group created yet
+              </Typography>
+            ) : (
+              <FormControl fullWidth>
+                <Select
+                  displayEmpty
+                  value={slectedGroup}
+                  onChange={handleChange}
+                  renderValue={(selected) => {
+                    if (slectedGroup === "") {
+                      return (
+                        <div style={{ display: "flex", alignItems: "center" }}>
+                          <DonutSmall
+                            style={{
+                              color: "#858D9D",
+                              fontSize: "18px",
+                              marginRight: "5px",
+                            }}
+                          />
+                          <p
+                            style={{
+                              fontSize: "12px",
+                              fontFamily: "Urbanist-bold",
+                              color: "#858D9D",
+                            }}
+                          >
+                            Select Group
+                          </p>
+                        </div>
+                      );
+                    }
 
-                return selected;
-              }}
-              sx={{
-                height: "40px",
-                border: "1px solid #E0E2E7",
-                borderRadius: "8px",
-              }}
-            >
-              {allGroups?.map((item) => (
-                <MenuItem
-                  key={item.id}
-                  value={item?.segment?.GroupName}
-                  onClick={(e) => {
-                    setslectedGroup(item?.segment?.GroupName);
-                    setviewProductsData(item?.segment?.GroupID);
-                    GetProductBySegment(item?.segment?.GroupID);
+                    return selected;
+                  }}
+                  sx={{
+                    height: "40px",
+                    border: "1px solid #E0E2E7",
+                    borderRadius: "8px",
                   }}
                 >
-                  <ListItemText primary={item?.segment?.GroupName} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+                  {allGroups?.map((item) => (
+                    <MenuItem
+                      key={item.id}
+                      value={item?.segment?.GroupName}
+                      onClick={(e) => {
+                        setslectedGroup(item?.segment?.GroupName);
+                        setviewProductsData(item?.segment?.GroupID);
+                        GetProductBySegment(item?.segment?.GroupID);
+                      }}
+                    >
+                      <ListItemText primary={item?.segment?.GroupName} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          </>
         )}
       </Stack>
 
@@ -583,11 +606,6 @@ const Header = ({
         </Box> */}
       </Stack>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        {/* <MenuItem
-           onClick={() => seteditProfileModal(true)}
-        >
-          Edit Profile
-        </MenuItem> */}
         <MenuItem
           onClick={() => {
             handleClose();
