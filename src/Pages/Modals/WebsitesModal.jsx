@@ -241,6 +241,8 @@ const WebsitesModal = () => {
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
           width: "600px",
+          overflowY: "auto",
+          overflowX: "hidden",
           backgroundColor: "#F0F1F3",
         },
       }}
@@ -306,11 +308,14 @@ const WebsitesModal = () => {
         >
           <Button
             sx={{
-              background: "#F0F1F3",
+              backgroundColor: "#F0F1F3",
               color: colors.darkText,
               textTransform: "none",
               fontFamily: "Urbanist",
               fontWeight: "bold",
+              ":hover": {
+                backgroundColor: "#F0F1F3",
+              },
             }}
             variant="contained"
             disableElevation

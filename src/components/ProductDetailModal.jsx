@@ -27,7 +27,6 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
           maxHeight: "100%",
           width: "600px",
           overflowY: "auto",
-          overflowX: "hidden",
           backgroundColor: "#F0F1F3",
         },
       }}
@@ -38,7 +37,12 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
         height="100%"
         justifyContent="space-between"
       >
-        <Box>
+        <Box
+          sx={{
+            height: "100%",
+            overflowY: "auto",
+          }}
+        >
           <Box
             sx={{
               backgroundColor: "#fff",

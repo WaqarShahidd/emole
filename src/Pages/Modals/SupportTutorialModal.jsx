@@ -38,7 +38,12 @@ const SupportTutorialModal = () => {
         height="100%"
         justifyContent="space-between"
       >
-        <Box>
+        <Box
+          sx={{
+            height: "100%",
+            overflowY: "auto",
+          }}
+        >
           <Box
             sx={{
               backgroundColor: "#fff",
