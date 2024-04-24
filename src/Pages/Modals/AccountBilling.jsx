@@ -224,6 +224,7 @@ const AccountBilling = () => {
     userPlan,
     GetUserPlan,
     billingHistory,
+    GetBillingHistory,
   } = useUser();
 
   const billingColumns = [
@@ -387,31 +388,18 @@ const AccountBilling = () => {
     setPlanPrice(price);
   };
 
-  const GetPlans = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.get(`${BASE_URL}/getUserBillingInfo`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.data;
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  useEffect(() => {
-    GetPlans();
-  }, []);
-
   const progress =
     (userPlan?.remainingProducts /
       parseInt(userPlan?.subscribedPlane?.NumberOfProducts)) *
     100;
 
-  console.log(userPlan);
+  console.log(billingHistory);
+
+  useEffect(() => {
+    GetBillingHistory();
+    GetUserPlan();
+  }, []);
+
   return (
     <Drawer
       anchor={"right"}
@@ -766,6 +754,7 @@ const AccountBilling = () => {
                       pt: 2,
                       px: 2,
                     }}
+                    onClick={() => console.log(billingHistory)}
                   >
                     Billing History
                   </Typography>

@@ -118,16 +118,23 @@ export const CustomPasswordInput = ({
       <FormControl fullWidth variant="outlined">
         <TextField
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            setValue(e.target.value);
+            setPasswordError(false);
+          }}
           placeholder={label ? `Enter ${label}` : "Enter Password"}
           type={showPassword ? "text" : "password"}
           error={passwordError}
-          helperText={passwordError ? "Minimum 8 characters required" : ""}
+          helperText={
+            passwordError
+              ? value?.length < 8
+                ? "Minimum 8 characters required"
+                : "Passwords do not match"
+              : ""
+          }
           onBlur={(e) => {
-            if (e.target.value.length < 8) {
+            if (value?.length < 8) {
               setPasswordError(true);
-            } else {
-              setPasswordError(false);
             }
           }}
           // endAdornment={

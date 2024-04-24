@@ -27,6 +27,7 @@ const ResetPasswordModal = () => {
   const [error, seterror] = useState(false);
   const [errorMsg, seterrorMsg] = useState("");
 
+  const [oldpasswordError, setoldPasswordError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [confirmPassError, setconfirmPassError] = useState(false);
 
@@ -37,6 +38,8 @@ const ResetPasswordModal = () => {
   const ResetPass = async () => {
     if (newPass !== confirmPass) {
       seterror(true);
+      setconfirmPassError(true);
+      setPasswordError(true);
       seterrorMsg("Passwords do not match");
     } else {
       const token = localStorage.getItem("token");
@@ -45,7 +48,7 @@ const ResetPasswordModal = () => {
         .post(
           `${BASE_URL}/resetPassword`,
           {
-            oldPassword: oldPass,
+            oldpass: oldPass,
             Password: newPass,
           },
           {
@@ -57,6 +60,7 @@ const ResetPasswordModal = () => {
         .then((res) => {
           setloading(false);
           setresetSuccess(true);
+          setresetPass(false);
         })
         .catch((e) => {
           seterror(true);
@@ -111,6 +115,8 @@ const ResetPasswordModal = () => {
               label={"Old Password"}
               value={oldPass}
               setValue={setoldPass}
+              passwordError={oldpasswordError}
+              setPasswordError={setoldPasswordError}
             />
 
             <CustomPasswordInput

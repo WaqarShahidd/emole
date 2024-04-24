@@ -285,12 +285,15 @@ const Header = ({
                     if (slectedGroup === "") {
                       return (
                         <div style={{ display: "flex", alignItems: "center" }}>
-                          <DonutSmall
+                          <img
+                            src={require("../assets/icons/group-o.png")}
                             style={{
                               color: "#858D9D",
-                              fontSize: "18px",
+                              height: "18px",
+                              width: "18px",
                               marginRight: "5px",
                             }}
+                            alt=""
                           />
                           <p
                             style={{
@@ -299,7 +302,7 @@ const Header = ({
                               color: "#858D9D",
                             }}
                           >
-                            Select Group
+                            Choose Group
                           </p>
                         </div>
                       );
@@ -311,6 +314,7 @@ const Header = ({
                     height: "40px",
                     border: "1px solid #E0E2E7",
                     borderRadius: "8px",
+                    width: "200px",
                   }}
                 >
                   {allGroups?.map((item) => (
