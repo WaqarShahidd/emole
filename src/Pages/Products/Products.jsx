@@ -413,9 +413,9 @@ const Products = () => {
   let currentDate = new Date().toLocaleDateString();
 
   const [startDate, setstartDate] = useState(null);
-  const [endDate, setendDate] = useState(
-    dayjs(moment(currentDate).format("YYYY-MM-DD"))
-  );
+  const [endDate, setendDate] = useState(dayjs());
+
+  console.log(endDate);
 
   const [prevPrice, setprevPrice] = useState(null);
   const [currentPrice, setcurrentPrice] = useState(null);
@@ -448,7 +448,7 @@ const Products = () => {
   const FetchProducts = async () => {
     setloading(true);
     const token = localStorage.getItem("token");
-    console.log(stockStatusFilter);
+
     try {
       const response = await axios.post(
         `${BASE_URL}/getProductsByUserId`,
@@ -633,6 +633,8 @@ const Products = () => {
           applyFilter={() => FetchProducts()}
           setstockStatusFilter={setstockStatusFilter}
           stockStatusFilter={stockStatusFilter}
+          currentPage={currentPage}
+          setcurrentPage={setcurrentPage}
         />
 
         <ProductDetailModal
@@ -670,132 +672,160 @@ const Products = () => {
                   mx: 2,
                 }}
               >
-                {/* {startDate && (
-                  <Typography
-                    sx={{
-                      color: colors.blueText,
-                      fontFamily: "Urbanist-bold",
-                      fontSize: 14,
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                    onClick={() => console.log(startDate)}
-                  >
+                {currentPrice !== null && (
+                  <>
                     <Typography
                       sx={{
+                        color: colors.blueText,
                         fontFamily: "Urbanist-bold",
-                        mr: 1,
                         fontSize: 14,
+                        mx: 2,
+                      }}
+                    >
+                      |
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mr: 1,
                         cursor: "pointer",
                       }}
-                      onClick={() => setstartDate(null)}
+                      onClick={() => {
+                        setcurrentPrice(null);
+                        setstockStatusStateUpdate(true);
+                      }}
                     >
                       X
                     </Typography>
-                    Date from {moment(startDate).format("DD.MM.YYYY")}
-                  </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Max Price: {currentPrice}
+                    </Typography>
+                  </>
+                )}
+                {prevPrice !== null && (
+                  <>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mx: 2,
+                      }}
+                    >
+                      |
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mr: 1,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        setprevPrice(null);
+                        setstockStatusStateUpdate(true);
+                      }}
+                    >
+                      X
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Min Price: {prevPrice}
+                    </Typography>
+                  </>
                 )}
                 {startDate && (
-                  <Typography
-                    sx={{
-                      color: colors.blueText,
-                      fontFamily: "Urbanist-bold",
-                      fontSize: 14,
-                      mx: 2,
-                    }}
-                  >
-                    |
-                  </Typography>
-                )}
-                {endDate && (
-                  <Typography
-                    sx={{
-                      color: colors.blueText,
-                      fontFamily: "Urbanist-bold",
-                      fontSize: 14,
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
+                  <>
                     <Typography
                       sx={{
+                        color: colors.blueText,
                         fontFamily: "Urbanist-bold",
-                        mr: 1,
                         fontSize: 14,
+                        mx: 2,
+                      }}
+                    >
+                      |
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mr: 1,
                         cursor: "pointer",
                       }}
-                      onClick={() => setendDate(null)}
+                      onClick={() => {
+                        setstartDate(null);
+                        setstockStatusStateUpdate(true);
+                      }}
                     >
                       X
                     </Typography>
-                    Date till {moment(endDate).format("DD.MM.YYYY")}
-                  </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Date from {dayjs(startDate).format("DD.MM.YYYY")}
+                    </Typography>
+                  </>
                 )}
-                <Typography
-                  sx={{
-                    color: colors.blueText,
-                    fontFamily: "Urbanist-bold",
-                    fontSize: 14,
-                    mx: 2,
-                  }}
-                >
-                  |
-                </Typography>
-                {prevPrice && (
-                  <Typography
-                    sx={{
-                      color: colors.blueText,
-                      fontFamily: "Urbanist-bold",
-                      fontSize: 14,
-                    }}
-                  >
-                    Min Price: {prevPrice}
-                  </Typography>
-                )}
-                <Typography
-                  sx={{
-                    color: colors.blueText,
-                    fontFamily: "Urbanist-bold",
-                    fontSize: 14,
-                    mx: 2,
-                  }}
-                >
-                  |
-                </Typography>
-
-                {currentPrice && (
-                  <Typography
-                    sx={{
-                      color: colors.blueText,
-                      fontFamily: "Urbanist-bold",
-                      fontSize: 14,
-                    }}
-                  >
-                    Max Price: {currentPrice}
-                  </Typography>
-                )}
-                <Typography
-                  sx={{
-                    color: colors.blueText,
-                    fontFamily: "Urbanist-bold",
-                    fontSize: 14,
-                    mx: 2,
-                  }}
-                >
-                  |
-                </Typography>
-                {stockStatusFilter !== null && (
-                  <Typography
-                    sx={{
-                      color: colors.blueText,
-                      fontFamily: "Urbanist-bold",
-                      fontSize: 14,
-                    }}
-                  >
-                    Stock Status:{" "}
-                    {stockStatusFilter ? "In Stock" : "Out of Stock"}
-                  </Typography>
-                )} */}
+                {endDate &&
+                  dayjs().format("DD.MM.YYYY") !==
+                    endDate.format("DD.MM.YYYY") && (
+                    <>
+                      <Typography
+                        sx={{
+                          color: colors.blueText,
+                          fontFamily: "Urbanist-bold",
+                          fontSize: 14,
+                          mx: 2,
+                        }}
+                      >
+                        |
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: colors.blueText,
+                          fontFamily: "Urbanist-bold",
+                          fontSize: 14,
+                          mr: 1,
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          setendDate(dayjs());
+                          setstockStatusStateUpdate(true);
+                        }}
+                      >
+                        X
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: colors.blueText,
+                          fontFamily: "Urbanist-bold",
+                          fontSize: 14,
+                        }}
+                      >
+                        Date till {dayjs(endDate).format("DD.MM.YYYY")}
+                      </Typography>
+                    </>
+                  )}
                 {stockStatusFilter !== null && (
                   <>
                     <Typography
@@ -978,7 +1008,6 @@ const Products = () => {
                     shape="rounded"
                     onChange={(event, value) => {
                       setcurrentPage(value);
-                      console.log(value);
                     }}
                     // sx={(value) => ({
                     //   "& .MuiPaginationItem-root": {

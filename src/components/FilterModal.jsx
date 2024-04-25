@@ -56,6 +56,8 @@ const FilterModal = ({
   applyFilter,
   setstockStatusFilter,
   stockStatusFilter,
+  currentPage,
+  setcurrentPage,
 }) => {
   const [personName, setPersonName] = React.useState([]);
 
@@ -71,6 +73,18 @@ const FilterModal = ({
   };
 
   let currentDate = new Date().toLocaleDateString();
+
+  const formatDateForApi = (date) => {
+    return date.format("YYYY-MM-DD");
+  };
+
+  const handleStartDateChange = (newValue) => {
+    setstartDate(newValue);
+  };
+
+  const handleEndDateChange = (newValue) => {
+    setendDate(newValue);
+  };
 
   return (
     <Drawer
@@ -231,7 +245,7 @@ const FilterModal = ({
                   <DatePicker
                     value={startDate}
                     format="DD.MM.YYYY"
-                    onChange={(newValue) => setstartDate(newValue)}
+                    onChange={handleStartDateChange}
                   />
                 </DemoContainer>
               </LocalizationProvider>
@@ -244,7 +258,7 @@ const FilterModal = ({
                   <DatePicker
                     value={endDate}
                     format="DD.MM.YYYY"
-                    onChange={(newValue) => setendDate(newValue)}
+                    onChange={handleEndDateChange}
                   />
                 </DemoContainer>
               </LocalizationProvider>
@@ -340,7 +354,12 @@ const FilterModal = ({
             fullWidth
             onClick={() => {
               handleClose();
-              applyFilter();
+              if (currentPage !== 1) {
+                setcurrentPage(1);
+                applyFilter();
+              } else {
+                applyFilter();
+              }
             }}
             autoFocus
           >

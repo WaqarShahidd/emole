@@ -537,6 +537,8 @@ const GroupModal = ({ open, handleClose, data }) => {
               backgroundColor: "#fff",
               border: "1px solid #E0E2E7",
               borderRadius: "8px",
+              // maxHeight: "700px",
+              // overflowY: "auto",
             }}
           >
             <Stack
