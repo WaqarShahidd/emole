@@ -468,25 +468,60 @@ export const WebsiteDetailModal = () => {
               }}
             />
 
+            {/*
+
             <Typography
               fontFamily={"Urbanist"}
               fontWeight={"bold"}
               fontSize={14}
               color={colors.subText}
             >
-              Description
+              Description:
             </Typography>
             <Typography
               sx={{
                 color: colors.darkText,
-                fontFamily: "Urbanist",
-                fontSize: 12,
+                fontFamily: "Urbanist-bold",
+                fontSize: 14,
                 fontWeight: "bold",
+                mb: 2,
                 mt: 1,
               }}
             >
               {websiteDetailData?.Description}
             </Typography>
+            */}
+
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              sx={{
+                borderBottom: "1px solid #F0F1F3",
+                mb: 1,
+                pb: 1,
+              }}
+            >
+              <Typography
+                fontFamily={"Urbanist"}
+                fontWeight={"bold"}
+                fontSize={14}
+                color={colors.subText}
+              >
+                Description{" "}
+              </Typography>
+              <Typography
+                sx={{
+                  color: colors.darkText,
+                  fontFamily: "PublicSans",
+                  fontSize: 12,
+                  fontWeight: "bold",
+                  maxWidth: "50%",
+                }}
+              >
+                {websiteDetailData?.Description}
+              </Typography>
+            </Stack>
 
             <Stack
               direction="row"
