@@ -7,25 +7,18 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { useNavigate } from "react-router-dom";
-import {
-  DonutLarge,
-  Language,
-  Notifications,
-  PieChart,
-  QuizOutlined,
-  QuizRounded,
-  ShoppingCart,
-  ThreeP,
-} from "@mui/icons-material";
-import GridViewRoundedIcon from "@mui/icons-material/GridViewRounded";
 import { useEffect } from "react";
 import { colors } from "../theme/theme";
 import { useUser } from "../constants/context";
+import { ListItemText, SwipeableDrawer, useMediaQuery } from "@mui/material";
 
 const drawerWidth = 75;
 
 const SideDrawer = ({ id }) => {
   const navigate = useNavigate();
+
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   const [selected, setselected] = React.useState("");
 
   useEffect(() => {
@@ -44,7 +37,10 @@ const SideDrawer = ({ id }) => {
               : require("../assets/icons/dashboard-o.png")
           }
           alt=""
-          style={{ height: "20px", width: "20px" }}
+          style={{
+            height: smallScreen ? "30px" : "20px",
+            width: smallScreen ? "30px" : "20px",
+          }}
         />
       ),
       route: "/",
@@ -60,7 +56,10 @@ const SideDrawer = ({ id }) => {
               : require("../assets/icons/product-o.png")
           }
           alt=""
-          style={{ height: "20px", width: "20px" }}
+          style={{
+            height: smallScreen ? "30px" : "20px",
+            width: smallScreen ? "30px" : "20px",
+          }}
         />
       ),
       route: "/products",
@@ -82,7 +81,10 @@ const SideDrawer = ({ id }) => {
               : require("../assets/icons/groups-o.png")
           }
           alt=""
-          style={{ height: "20px", width: "20px" }}
+          style={{
+            height: smallScreen ? "30px" : "20px",
+            width: smallScreen ? "30px" : "20px",
+          }}
         />
       ),
     },
@@ -97,7 +99,10 @@ const SideDrawer = ({ id }) => {
               : require("../assets/icons/notification-o.png")
           }
           alt=""
-          style={{ height: "20px", width: "20px" }}
+          style={{
+            height: smallScreen ? "30px" : "20px",
+            width: smallScreen ? "30px" : "20px",
+          }}
         />
       ),
       route: "/notifications",
@@ -113,7 +118,10 @@ const SideDrawer = ({ id }) => {
               : require("../assets/icons/websites-o.png")
           }
           alt=""
-          style={{ height: "20px", width: "20px" }}
+          style={{
+            height: smallScreen ? "30px" : "20px",
+            width: smallScreen ? "30px" : "20px",
+          }}
         />
       ),
     },
@@ -143,7 +151,10 @@ const SideDrawer = ({ id }) => {
               : require("../assets/icons/contact-o.png")
           }
           alt=""
-          style={{ height: "20px", width: "20px" }}
+          style={{
+            height: smallScreen ? "30px" : "20px",
+            width: smallScreen ? "30px" : "20px",
+          }}
         />
       ),
     },
@@ -154,105 +165,182 @@ const SideDrawer = ({ id }) => {
     setwebsiteModalState,
     setaccountBillingModal,
     setsupportTutorialModal,
+    toggleDrawer,
+    state,
   } = useUser();
-  return (
-    <Box sx={{ display: "flex" }}>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-          },
+
+  const list = () => (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+      role="presentation"
+      onClick={toggleDrawer("left", false)}
+      onKeyDown={toggleDrawer("left", false)}
+    >
+      <img
+        src={require("../assets/images/logo.png")}
+        alt=""
+        style={{
+          height: "45px",
+          width: "45px",
+          marginBottom: "20px",
+          marginTop: "20px",
         }}
-        variant="permanent"
-        anchor="left"
-      >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "15px",
-            backgroundColor: "#fff",
-          }}
-        >
-          <img
-            src={require("../assets/images/logo.png")}
-            alt=""
-            style={{ height: "34px", width: "34px" }}
-          />
-        </Box>
-        <Divider />
-        <List
-          sx={{
-            p: 0,
-            m: 0,
-          }}
-        >
-          {listRoutes.map((text, index) => (
-            <ListItem
-              key={text}
-              sx={{
-                borderLeft: selected === text.id ? "4px solid #3250FF" : "none",
-                paddingLeft: selected === text.id ? "5%" : "7.5%",
-                backgroundColor: selected === text.id ? "#F0F1F3" : "#fff",
-                overflow: "hidden",
+      />
+      <List sx={{}}>
+        {listRoutes.map((item) => (
+          <ListItem key={item.text} divider>
+            <ListItemButton
+              sx={{ padding: 0 }}
+              onClick={() => {
+                if (item.route) {
+                  navigate(item.route);
+                } else if (item.name === "Group") {
+                  setgroupModalState(true);
+                } else if (item.name === "Websites") {
+                  setwebsiteModalState(true);
+                } else if (item.name === "Account") {
+                  setaccountBillingModal(true);
+                } else if (item.name === "Tutorial") {
+                  setsupportTutorialModal(true);
+                }
               }}
             >
-              <ListItemButton
-                onClick={() => {
-                  if (text.route) {
-                    navigate(text.route);
-                  } else if (text.name === "Group") {
-                    setgroupModalState(true);
-                  } else if (text.name === "Websites") {
-                    setwebsiteModalState(true);
-                  } else if (text.name === "Account") {
-                    setaccountBillingModal(true);
-                  } else if (text.name === "Tutorial") {
-                    setsupportTutorialModal(true);
-                  }
-                }}
+              <ListItemIcon
                 sx={{
-                  ":hover": {
-                    backgroundColor: "transparent",
-                  },
-                  backgroundColor: "transparent",
+                  color: selected === item.id ? colors.blueText : "#667085",
+                  height: "45px",
+                  width: "45px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               >
-                <ListItemIcon
+                {item.icon}
+              </ListItemIcon>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  return (
+    <Box sx={{ display: "flex" }}>
+      {smallScreen ? (
+        <div>
+          <SwipeableDrawer
+            anchor="left"
+            open={state.left}
+            onClose={toggleDrawer("left", false)}
+            onOpen={toggleDrawer("left", true)}
+          >
+            {list()}
+          </SwipeableDrawer>
+        </div>
+      ) : (
+        <Drawer
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            "& .MuiDrawer-paper": {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+          variant="permanent"
+          anchor="left"
+        >
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "15px",
+              backgroundColor: "#fff",
+            }}
+          >
+            <img
+              src={require("../assets/images/logo.png")}
+              alt=""
+              style={{ height: "34px", width: "34px" }}
+            />
+          </Box>
+          <Divider />
+          <List
+            sx={{
+              p: 0,
+              m: 0,
+            }}
+          >
+            {listRoutes.map((text, index) => (
+              <ListItem
+                key={text}
+                sx={{
+                  borderLeft:
+                    selected === text.id ? "4px solid #3250FF" : "none",
+                  paddingLeft: selected === text.id ? "5%" : "7.5%",
+                  backgroundColor: selected === text.id ? "#F0F1F3" : "#fff",
+                  overflow: "hidden",
+                }}
+              >
+                <ListItemButton
+                  onClick={() => {
+                    if (text.route) {
+                      navigate(text.route);
+                    } else if (text.name === "Group") {
+                      setgroupModalState(true);
+                    } else if (text.name === "Websites") {
+                      setwebsiteModalState(true);
+                    } else if (text.name === "Account") {
+                      setaccountBillingModal(true);
+                    } else if (text.name === "Tutorial") {
+                      setsupportTutorialModal(true);
+                    }
+                  }}
                   sx={{
-                    color: selected === text.id ? colors.blueText : "#667085",
+                    ":hover": {
+                      backgroundColor: "transparent",
+                    },
+                    backgroundColor: "transparent",
                   }}
                 >
-                  {text.icon}
-                </ListItemIcon>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Box
-          sx={{
-            flex: 1,
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "center",
-            mb: 2,
-          }}
-        >
-          <img
-            src={require("../assets/icons/logout.png")}
-            style={{ height: "20px", width: "20px", cursor: "pointer" }}
-            onClick={() => {
-              localStorage.removeItem("token");
-              window.location.reload();
+                  <ListItemIcon
+                    sx={{
+                      color: selected === text.id ? colors.blueText : "#667085",
+                    }}
+                  >
+                    {text.icon}
+                  </ListItemIcon>
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+          <Box
+            sx={{
+              flex: 1,
+              display: "flex",
+              alignItems: "flex-end",
+              justifyContent: "center",
+              mb: 2,
             }}
-            alt=""
-          />
-        </Box>
-      </Drawer>
+          >
+            <img
+              src={require("../assets/icons/logout.png")}
+              style={{ height: "20px", width: "20px", cursor: "pointer" }}
+              onClick={() => {
+                localStorage.removeItem("token");
+                window.location.reload();
+              }}
+              alt=""
+            />
+          </Box>
+        </Drawer>
+      )}
     </Box>
   );
 };

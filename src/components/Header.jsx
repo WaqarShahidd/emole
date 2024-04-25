@@ -4,16 +4,8 @@ import {
   Avatar,
   Backdrop,
   Box,
-  Button,
   Checkbox,
-  CircularProgress,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   FormControl,
-  FormControlLabel,
-  FormGroup,
-  InputAdornment,
   InputBase,
   List,
   ListItemText,
@@ -24,34 +16,18 @@ import {
   Stack,
   TextField,
   Typography,
+  IconButton,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { colors } from "../theme/theme";
-import LogoutIcon from "@mui/icons-material/Logout";
-import {
-  AddOutlined,
-  DeleteForeverOutlined,
-  DonutSmall,
-  ExpandMore,
-  FileDownloadRounded,
-  FilterAlt,
-  FilterAltOutlined,
-  Person,
-  PieChart,
-  PieChartOutlineOutlined,
-  Search,
-  VisibilityOffOutlined,
-  VisibilityOutlined,
-} from "@mui/icons-material";
+import { AddOutlined, FileDownloadRounded } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { BASE_URL } from "../constants/config";
-import { CustomInput } from "./CustomInput";
 import { styled } from "@mui/material/styles";
 import { useUser } from "../constants/context";
-import { ConfirmModal } from "./CustomModals";
 import CreateGroup from "../Pages/Modals/CreateGroup";
 import { deleteGrey, greyExport, greyGroups } from "./ImageImport";
+import { useMediaQuery } from "@mui/material";
+import { MenuOutlined } from "@mui/icons-material";
 
 const BpIcon = styled("span")(({ theme }) => ({
   borderRadius: 3,
@@ -197,6 +173,7 @@ const Header = ({
     seteditProfileModal,
     setshowHideFieldsDrawer,
     setaddProdDrawer,
+    toggleDrawer,
   } = useUser();
 
   const navigate = useNavigate();
@@ -229,6 +206,8 @@ const Header = ({
     GetGroups();
   }, []);
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <div
       style={{
@@ -246,6 +225,11 @@ const Header = ({
       <CreateGroup handleClose={handleCloseGroup} open={createGroupAnchor} />
 
       <Stack direction="row" alignItems="center">
+        {smallScreen && (
+          <IconButton onClick={toggleDrawer("left", true)} sx={{ mr: 2 }}>
+            <MenuOutlined />
+          </IconButton>
+        )}
         <Typography
           sx={{
             color: "#1A1C21",
@@ -256,6 +240,7 @@ const Header = ({
         >
           {title}
         </Typography>
+
         {groupsDropdown && (
           <>
             {allGroups.length === 0 ? (
@@ -304,7 +289,7 @@ const Header = ({
                               color: "#858D9D",
                             }}
                           >
-                            Choose Group
+                            {smallScreen ? "Groups" : "Choose Group"}
                           </p>
                         </div>
                       );
@@ -316,7 +301,7 @@ const Header = ({
                     height: "40px",
                     border: "1px solid #E0E2E7",
                     borderRadius: "8px",
-                    width: "200px",
+                    width: smallScreen ? "125px" : "200px",
                   }}
                 >
                   {allGroups?.map((item) => (
@@ -555,7 +540,12 @@ const Header = ({
         )}
 
         {searchBar && (
-          <SearchContainer>
+          <SearchContainer
+            sx={{
+              width: smallScreen ? "120px" : null,
+              ml: smallScreen ? 2 : 0,
+            }}
+          >
             <SearchIconWrapper>
               <img
                 src={require("../assets/icons/search.png")}
@@ -569,7 +559,7 @@ const Header = ({
               />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search Products"
+              placeholder="Search..."
               inputProps={{
                 style: {
                   color: colors.darkText,

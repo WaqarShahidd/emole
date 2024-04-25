@@ -233,7 +233,7 @@ const Login = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            width: "50%",
+            width: smallScreen ? "100%" : "50%",
           }}
         >
           <Typography

@@ -157,6 +157,21 @@ export function UserProvider({ children }) {
     }
   };
 
+  const [state, setState] = useState({
+    left: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setState({ ...state, [anchor]: open });
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -218,6 +233,8 @@ export function UserProvider({ children }) {
         GetBillingHistory,
         billingHistory,
         setbillingHistory,
+        toggleDrawer,
+        state,
       }}
     >
       {children}
