@@ -68,7 +68,12 @@ const TutorialModal = () => {
         height="100%"
         justifyContent="space-between"
       >
-        <Box>
+        <Box
+          sx={{
+            height: "100%",
+            overflowY: "auto",
+          }}
+        >
           <Box
             sx={{
               backgroundColor: "#fff",
@@ -86,7 +91,7 @@ const TutorialModal = () => {
             </Typography>
           </Box>
 
-          {/* Account Details */}
+          {/* Toggle Btn */}
           <Box
             m={2}
             p={2}

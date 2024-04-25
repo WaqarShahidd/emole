@@ -42,6 +42,7 @@ const AddProduct = () => {
     setconfirmGroupCreate,
     addProdDrawer,
     setaddProdDrawer,
+    userData,
   } = useUser();
 
   const [deleteState, setdeleteState] = useState(false);
@@ -216,11 +217,13 @@ const AddProduct = () => {
 
   const [groupNameSearch, setgroupNameSearch] = useState("");
   const [groupName, setgroupName] = useState("");
-  const [createGroup, setcreateGroup] = useState("");
+  const [addProdFromURL, setaddProdFromURL] = useState("");
   const [error, seterror] = useState(false);
+  const [addProdError, setaddProdError] = useState(false);
 
   const [loading, setloading] = useState(false);
   const [deleteConfirm, setdeleteConfirm] = useState(false);
+  const [addProdConfirm, setaddProdConfirm] = useState(false);
 
   const DeleteGroup = async () => {
     const token = localStorage.getItem("token");
@@ -244,6 +247,7 @@ const AddProduct = () => {
         GetGroups();
       })
       .catch((e) => {
+        setloading(false);
         console.log(e);
       });
   };
@@ -256,9 +260,17 @@ const AddProduct = () => {
     setdeleteConfirm(false);
   };
 
+  const handleCloseAddProdSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setaddProdConfirm(false);
+  };
+
   const CreateGroup = async () => {
     const token = localStorage.getItem("token");
-    if (createGroup === "") {
+    if (groupName === "") {
       seterror(true);
     } else {
       setloading(true);
@@ -268,7 +280,7 @@ const AddProduct = () => {
           `${BASE_URL}/addSegment`,
           {
             segment: {
-              GroupName: createGroup,
+              GroupName: groupName,
               Description: "",
               products: [],
             },
@@ -302,22 +314,28 @@ const AddProduct = () => {
     )
   );
 
-  const handleExportData = () => {
-    const csvContent = filteredGroup
-      .map((row) =>
-        [
-          row?.segment?.GroupID,
-          row?.segment?.GroupName,
-          row?.segment?.Segment_Products?.length,
-          row?.segment?.noStock?.length,
-          row?.alerts,
-        ].join(",")
-      )
-      .join("\n");
+  const AddProd = async () => {
+    console.log(userData);
 
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+    if (addProdFromURL === "") {
+      seterror(true);
+    } else {
+      setloading(true);
 
-    saveAs(blob, "data.csv");
+      await axios
+        .post(`http://flaskscr.us-east-2.elasticbeanstalk.com/scrape`, {
+          product_url: addProdFromURL,
+          user_id: userData?.UserID,
+        })
+        .then((res) => {
+          setloading(false);
+          setdeleteConfirm(true);
+        })
+        .catch((e) => {
+          console.log(e);
+          setloading(false);
+        });
+    }
   };
 
   return (
@@ -347,6 +365,20 @@ const AddProduct = () => {
           sx={{ width: "100%" }}
         >
           Product Group Deleted
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={addProdConfirm}
+        autoHideDuration={4000}
+        onClose={handleCloseAddProdSnackbar}
+      >
+        <Alert
+          onClose={handleCloseAddProdSnackbar}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Produts Added
         </Alert>
       </Snackbar>
       <Backdrop
@@ -434,18 +466,18 @@ const AddProduct = () => {
                   }}
                 >
                   <CustomInput
-                    value={createGroup}
-                    setValue={setcreateGroup}
+                    value={addProdFromURL}
+                    setValue={setaddProdFromURL}
                     placeholder="eg, https://example.com/shop"
-                    emailError={error}
-                    setEmailError={seterror}
+                    emailError={addProdError}
+                    setEmailError={setaddProdError}
                   />
                 </Box>
                 <Box
                   sx={{
                     alignSelf: "flex-end",
                     display: "contents",
-                    width: "30%",
+                    width: "35%",
                   }}
                 >
                   <Button
@@ -458,18 +490,19 @@ const AddProduct = () => {
                       color: "#fff",
                     }}
                     sx={{
-                      fontSize: "10px",
+                      fontSize: "12px",
                       height: "40px",
                       borderRadius: "8px",
                     }}
                     variant="contained"
                     autoFocus
+                    onClick={AddProd}
                   >
-                    Search products
+                    Add products
                   </Button>
                 </Box>
               </Stack>
-              <Divider
+              {/* <Divider
                 sx={{
                   border: 0,
                   borderTop: "1px dashed #AEB7C9",
@@ -501,7 +534,7 @@ const AddProduct = () => {
                 >
                   126
                 </Typography>
-              </Stack>
+              </Stack> */}
             </Box>
           </Box>
           <Box

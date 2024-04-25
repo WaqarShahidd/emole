@@ -45,7 +45,7 @@ const WebsiteModalComp = ({
   setwebsiteModalState,
 }) => (
   <Box
-    my={2}
+    m={2}
     p={2}
     sx={{
       backgroundColor: "#fff",
@@ -136,7 +136,11 @@ const WebsiteModalComp = ({
           </Typography>
         </Stack>
         <Stack direction={"row"} alignItems={"center"}>
-          <Save sx={{ color: "#858d9D" }} />
+          <img
+            src={require("../../assets/icons/save.png")}
+            style={{ height: "18px", width: "18px" }}
+            alt=""
+          />
           <Typography
             sx={{
               fontFamily: "Urbanist-bold",
@@ -184,7 +188,7 @@ const WebsiteModalComp = ({
         </Stack>
       </Stack>
 
-      <Button
+      <Stack
         disableElevation
         style={{
           background: colors.blueText,
@@ -195,11 +199,13 @@ const WebsiteModalComp = ({
         }}
         sx={{
           width: "22.5%",
-
           fontSize: "12px",
           height: "30px",
           borderRadius: "8px",
-          alignContent: "flex-end",
+          cursor: "pointer",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
         variant="contained"
         autoFocus
@@ -210,7 +216,7 @@ const WebsiteModalComp = ({
         }}
       >
         View Products
-      </Button>
+      </Stack>
     </Stack>
   </Box>
 );
@@ -237,6 +243,7 @@ const WebsitesModal = () => {
       anchor={"right"}
       open={websiteModalState}
       onClose={() => setwebsiteModalState(false)}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
@@ -275,25 +282,17 @@ const WebsitesModal = () => {
               Websites
             </Typography>
           </Box>
-          <Box
-            m={2}
-            sx={{
-              backgroundColor: "#fff",
-              border: "1px solid #E0E2E7",
-              borderRadius: "8px",
-            }}
-          >
-            {allWebsites.map((website) => (
-              <WebsiteModalComp
-                setwebsiteDetail={setwebsiteDetail}
-                setwebsiteModalState={setwebsiteModalState}
-                data={website}
-                setwebsiteDetailData={setwebsiteDetailData}
-                websiteViewProductsData={setwebsiteViewProductsData}
-                navigate={navigate}
-              />
-            ))}
-          </Box>
+
+          {allWebsites.map((website) => (
+            <WebsiteModalComp
+              setwebsiteDetail={setwebsiteDetail}
+              setwebsiteModalState={setwebsiteModalState}
+              data={website}
+              setwebsiteDetailData={setwebsiteDetailData}
+              websiteViewProductsData={setwebsiteViewProductsData}
+              navigate={navigate}
+            />
+          ))}
         </Box>
 
         <Stack

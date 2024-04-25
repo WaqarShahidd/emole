@@ -169,3 +169,30 @@ export const getStatusTextColor = (status) => {
       return "#fff";
   }
 };
+
+export const tutorialData = [
+  {
+    id: 1,
+    title: "Tutorial - Products monitor page",
+    description:
+      "Contrary to popular belief, Lorem Ipsum is not simply random text.It has roots in a piece of classical Latin literature from 45 BC,making it over 2000 years old. Richard McClintock, a Latinprofessor at Hampden-Sydney College in Virginia.",
+  },
+  {
+    id: 2,
+    title: "Tutorial - Products groups",
+    description:
+      "Contrary to popular belief, Lorem Ipsum is not simply random text.It has roots in a piece of classical Latin literature from 45 BC,making it over 2000 years old. Richard McClintock, a Latinprofessor at Hampden-Sydney College in Virginia.",
+  },
+  {
+    id: 3,
+    title: "Tutorial -  Products notifications",
+    description:
+      "Contrary to popular belief, Lorem Ipsum is not simply random text.It has roots in a piece of classical Latin literature from 45 BC,making it over 2000 years old. Richard McClintock, a Latinprofessor at Hampden-Sydney College in Virginia.",
+  },
+  {
+    id: 4,
+    title: "Tutorial - Websites overview",
+    description:
+      "Contrary to popular belief, Lorem Ipsum is not simply random text.It has roots in a piece of classical Latin literature from 45 BC,making it over 2000 years old. Richard McClintock, a Latinprofessor at Hampden-Sydney College in Virginia.",
+  },
+];

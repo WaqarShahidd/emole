@@ -183,28 +183,37 @@ const ViewProductsWebsite = () => {
           {params?.colDef?.headerName}
         </Typography>
       ),
-      renderCell: (params) => (
-        <Box className="flex-col flex w-full h-full  justify-center">
-          <Typography
-            fontFamily={"Urbanist"}
-            color={"gray"}
-            fontWeight={"bold"}
-            fontSize={13}
-          >
-            {params?.row?.Category}
-          </Typography>
-          {/* {params?.row?.Category?.length > 1 && (
+      renderCell: (params) => {
+        const categoriesArray = params?.row?.Category?.split(", ");
+
+        return (
+          <Box className="flex-col flex w-full h-full  justify-center">
             <Typography
               fontFamily={"Urbanist"}
+              color={"gray"}
               fontWeight={"bold"}
               fontSize={13}
-              className=" font-bold text-blue-500 cursor-pointer"
+              on
             >
-              {params?.row?.Category?.length - 1} more
+              {categoriesArray ? categoriesArray[0] : ""}
             </Typography>
-          )} */}
-        </Box>
-      ),
+            {categoriesArray?.length > 1 && (
+              <Typography
+                fontFamily={"Urbanist"}
+                fontWeight={"bold"}
+                fontSize={13}
+                className=" font-bold text-blue-500 cursor-pointer"
+                onClick={() => {
+                  handleClickOpen();
+                  setproductDetails(params.row);
+                }}
+              >
+                {categoriesArray?.length - 1} more
+              </Typography>
+            )}
+          </Box>
+        );
+      },
     },
 
     {

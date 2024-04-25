@@ -13,6 +13,86 @@ import {
 import React from "react";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
+import { tutorialData } from "../../assets/DummyData";
+
+const SingleCard = ({
+  title,
+  description,
+  settutorialModal,
+  setsupportTutorialModal,
+}) => {
+  return (
+    <Box
+      m={2}
+      p={2}
+      sx={{
+        backgroundColor: "#fff",
+        borderRadius: "8px",
+      }}
+    >
+      <Stack
+        direction={"row"}
+        justifyContent={"space-between"}
+        alignItems={"flex-start"}
+      >
+        <Typography
+          fontFamily={"Urbanist-bolder"}
+          fontWeight={"bold"}
+          fontSize={18}
+          color={colors.darkText}
+          mb={1}
+        >
+          {title}
+        </Typography>
+
+        <Stack
+          disableElevation
+          style={{
+            background: colors.blueText,
+            fontFamily: "Urbanist",
+            textTransform: "none",
+            fontWeight: "bold",
+            color: "#fff",
+          }}
+          sx={{
+            width: "22.5%",
+            fontSize: "12px",
+            height: "30px",
+            borderRadius: "8px",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
+          variant="contained"
+          autoFocus
+          onClick={() => {
+            settutorialModal(true);
+            setsupportTutorialModal(false);
+          }}
+        >
+          Read Tutorial
+        </Stack>
+      </Stack>
+      <Divider
+        sx={{
+          border: 0,
+          borderTop: "1px dashed #AEB7C9",
+          my: 2,
+        }}
+      />
+      <Typography
+        sx={{
+          fontFamily: "Urbanist",
+          fontSize: 16,
+          color: colors.subText,
+          mb: 1,
+        }}
+      >
+        {description}
+      </Typography>
+    </Box>
+  );
+};
 
 const SupportTutorialModal = () => {
   const { supportTutorialModal, setsupportTutorialModal, settutorialModal } =
@@ -61,290 +141,14 @@ const SupportTutorialModal = () => {
             </Typography>
           </Box>
 
-          <Box
-            m={2}
-            p={2}
-            sx={{
-              backgroundColor: "#fff",
-              borderRadius: "8px",
-            }}
-          >
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"flex-start"}
-            >
-              <Typography
-                fontFamily={"Urbanist-bolder"}
-                fontWeight={"bold"}
-                fontSize={18}
-                color={colors.darkText}
-                mb={1}
-              >
-                Tutorial - Products monitor page
-              </Typography>
-
-              <Button
-                disableElevation
-                style={{
-                  background: colors.blueText,
-                  fontFamily: "Urbanist",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  color: "#fff",
-                }}
-                sx={{
-                  width: "22.5%",
-
-                  fontSize: "12px",
-                  height: "30px",
-                  borderRadius: "8px",
-                  alignContent: "flex-end",
-                }}
-                variant="contained"
-                autoFocus
-                onClick={() => {
-                  settutorialModal(true);
-                  setsupportTutorialModal(false);
-                }}
-              >
-                Read Tutorial
-              </Button>
-            </Stack>
-            <Divider
-              sx={{
-                border: 0,
-                borderTop: "1px dashed #AEB7C9",
-                my: 2,
-              }}
+          {tutorialData.map((tutorial) => (
+            <SingleCard
+              title={tutorial.title}
+              description={tutorial.description}
+              settutorialModal={settutorialModal}
+              setsupportTutorialModal={setsupportTutorialModal}
             />
-            <Typography
-              sx={{
-                fontFamily: "Urbanist",
-                fontSize: 16,
-                color: colors.subText,
-                mb: 1,
-              }}
-            >
-              Contrary to popular belief, Lorem Ipsum is not simply random text.
-              It has roots in a piece of classical Latin literature from 45 BC,
-              making it over 2000 years old. Richard McClintock, a Latin
-              professor at Hampden-Sydney College in Virginia.
-            </Typography>
-          </Box>
-          <Box
-            m={2}
-            p={2}
-            sx={{
-              backgroundColor: "#fff",
-              borderRadius: "8px",
-            }}
-          >
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"flex-start"}
-            >
-              <Typography
-                fontFamily={"Urbanist-bolder"}
-                fontWeight={"bold"}
-                fontSize={18}
-                color={colors.darkText}
-                mb={1}
-              >
-                Tutorial - Products groups
-              </Typography>
-
-              <Button
-                disableElevation
-                style={{
-                  background: colors.blueText,
-                  fontFamily: "Urbanist",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  color: "#fff",
-                }}
-                sx={{
-                  width: "22.5%",
-
-                  fontSize: "12px",
-                  height: "30px",
-                  borderRadius: "8px",
-                  alignContent: "flex-end",
-                }}
-                variant="contained"
-                autoFocus
-                onClick={() => {
-                  settutorialModal(true);
-                  setsupportTutorialModal(false);
-                }}
-              >
-                Read Tutorial
-              </Button>
-            </Stack>
-            <Divider
-              sx={{
-                border: 0,
-                borderTop: "1px dashed #AEB7C9",
-                my: 2,
-              }}
-            />
-            <Typography
-              sx={{
-                fontFamily: "Urbanist",
-                fontSize: 16,
-                color: colors.subText,
-                mb: 1,
-              }}
-            >
-              Contrary to popular belief, Lorem Ipsum is not simply random text.
-              It has roots in a piece of classical Latin literature from 45 BC,
-              making it over 2000 years old. Richard McClintock, a Latin
-              professor at Hampden-Sydney College in Virginia.
-            </Typography>
-          </Box>
-          <Box
-            m={2}
-            p={2}
-            sx={{
-              backgroundColor: "#fff",
-              borderRadius: "8px",
-            }}
-          >
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"flex-start"}
-            >
-              <Typography
-                fontFamily={"Urbanist-bolder"}
-                fontWeight={"bold"}
-                fontSize={18}
-                color={colors.darkText}
-                mb={1}
-              >
-                Tutorial - Products notifications
-              </Typography>
-
-              <Button
-                disableElevation
-                style={{
-                  background: colors.blueText,
-                  fontFamily: "Urbanist",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  color: "#fff",
-                }}
-                sx={{
-                  width: "22.5%",
-
-                  fontSize: "12px",
-                  height: "30px",
-                  borderRadius: "8px",
-                  alignContent: "flex-end",
-                }}
-                variant="contained"
-                autoFocus
-                onClick={() => {
-                  settutorialModal(true);
-                  setsupportTutorialModal(false);
-                }}
-              >
-                Read Tutorial
-              </Button>
-            </Stack>
-            <Divider
-              sx={{
-                border: 0,
-                borderTop: "1px dashed #AEB7C9",
-                my: 2,
-              }}
-            />
-            <Typography
-              sx={{
-                fontFamily: "Urbanist",
-                fontSize: 16,
-                color: colors.subText,
-                mb: 1,
-              }}
-            >
-              Contrary to popular belief, Lorem Ipsum is not simply random text.
-              It has roots in a piece of classical Latin literature from 45 BC,
-              making it over 2000 years old. Richard McClintock, a Latin
-              professor at Hampden-Sydney College in Virginia.
-            </Typography>
-          </Box>
-          <Box
-            m={2}
-            p={2}
-            sx={{
-              backgroundColor: "#fff",
-              borderRadius: "8px",
-            }}
-          >
-            <Stack
-              direction={"row"}
-              justifyContent={"space-between"}
-              alignItems={"flex-start"}
-            >
-              <Typography
-                fontFamily={"Urbanist-bolder"}
-                fontWeight={"bold"}
-                fontSize={18}
-                color={colors.darkText}
-                mb={1}
-              >
-                Tutorial - Websites overview
-              </Typography>
-
-              <Button
-                disableElevation
-                style={{
-                  background: colors.blueText,
-                  fontFamily: "Urbanist",
-                  textTransform: "none",
-                  fontWeight: "bold",
-                  color: "#fff",
-                }}
-                sx={{
-                  width: "22.5%",
-
-                  fontSize: "12px",
-                  height: "30px",
-                  borderRadius: "8px",
-                  alignContent: "flex-end",
-                }}
-                variant="contained"
-                autoFocus
-                onClick={() => {
-                  settutorialModal(true);
-                  setsupportTutorialModal(false);
-                }}
-              >
-                Read Tutorial
-              </Button>
-            </Stack>
-            <Divider
-              sx={{
-                border: 0,
-                borderTop: "1px dashed #AEB7C9",
-                my: 2,
-              }}
-            />
-            <Typography
-              sx={{
-                fontFamily: "Urbanist",
-                fontSize: 16,
-                color: colors.subText,
-                mb: 1,
-              }}
-            >
-              Contrary to popular belief, Lorem Ipsum is not simply random text.
-              It has roots in a piece of classical Latin literature from 45 BC,
-              making it over 2000 years old. Richard McClintock, a Latin
-              professor at Hampden-Sydney College in Virginia.
-            </Typography>
-          </Box>
+          ))}
         </Box>
 
         <Stack
