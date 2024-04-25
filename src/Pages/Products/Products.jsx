@@ -433,6 +433,7 @@ const Products = () => {
   const [stockStatusFilter, setstockStatusFilter] = useState(
     state?.filter === "false" ? false : null
   );
+  const [stockStatusStateUpdate, setstockStatusStateUpdate] = useState(false);
   const [deleteProducts, setdeleteProducts] = useState(false);
 
   const startIndex = (currentPage - 1) * numOfProductPerPage + 1;
@@ -447,6 +448,7 @@ const Products = () => {
   const FetchProducts = async () => {
     setloading(true);
     const token = localStorage.getItem("token");
+    console.log(stockStatusFilter);
     try {
       const response = await axios.post(
         `${BASE_URL}/getProductsByUserId`,
@@ -478,8 +480,11 @@ const Products = () => {
       settotalCount(response.data?.products?.totalCount);
       settotalPages(response.data.products.totalPages);
       setproductsData(data);
+      setstockStatusStateUpdate(false);
     } catch (error) {
       console.error(error);
+      setloading(false);
+      setstockStatusStateUpdate(false);
     } finally {
       setloading(false);
     }
@@ -488,6 +493,12 @@ const Products = () => {
   useEffect(() => {
     FetchProducts();
   }, [numOfProductPerPage, currentPage, slectedGroup]);
+
+  useEffect(() => {
+    if (stockStatusStateUpdate) {
+      FetchProducts();
+    }
+  }, [stockStatusStateUpdate]);
 
   const {
     setselectedProducts,
@@ -645,19 +656,21 @@ const Products = () => {
                   color: "#667085",
                   fontSize: 14,
                   fontFamily: "Urbanist-bold",
+                  mx: 2,
                 }}
               >
                 Showing {startIndex}-{endIndex} from {totalCount}
               </Typography>
-              {/* <Box
+              <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   flexWrap: "wrap",
                   maxWidth: "75%",
+                  mx: 2,
                 }}
               >
-                {startDate && (
+                {/* {startDate && (
                   <Typography
                     sx={{
                       color: colors.blueText,
@@ -782,8 +795,86 @@ const Products = () => {
                     Stock Status:{" "}
                     {stockStatusFilter ? "In Stock" : "Out of Stock"}
                   </Typography>
+                )} */}
+                {stockStatusFilter !== null && (
+                  <>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mx: 2,
+                      }}
+                    >
+                      |
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mr: 1,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        setstockStatusFilter(null);
+                        setstockStatusStateUpdate(true);
+                      }}
+                    >
+                      X
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Stock Status:{" "}
+                      {stockStatusFilter ? "In Stock" : "Out of Stock"}
+                    </Typography>
+                  </>
                 )}
-              </Box> */}
+                {slectedGroup !== "" && (
+                  <>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mx: 2,
+                      }}
+                    >
+                      |
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mr: 1,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        setslectedGroup("");
+                        setselectedGroupId(null);
+                      }}
+                    >
+                      X
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Group:
+                      {slectedGroup}
+                    </Typography>
+                  </>
+                )}
+              </Box>
             </Box>
             <Box
               sx={{
