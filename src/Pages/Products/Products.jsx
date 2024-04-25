@@ -427,6 +427,9 @@ const Products = () => {
   const [currentPage, setcurrentPage] = useState(1);
   const [numOfProductPerPage, setnumOfProductPerPage] = useState(10);
 
+  const [slectedGroup, setslectedGroup] = useState("");
+  const [selectedGroupId, setselectedGroupId] = useState(null);
+
   const [stockStatusFilter, setstockStatusFilter] = useState(
     state?.filter === "false" ? false : null
   );
@@ -444,7 +447,6 @@ const Products = () => {
   const FetchProducts = async () => {
     setloading(true);
     const token = localStorage.getItem("token");
-    console.log(state?.filter);
     try {
       const response = await axios.post(
         `${BASE_URL}/getProductsByUserId`,
@@ -452,6 +454,7 @@ const Products = () => {
           page: currentPage,
           pageSize: numOfProductPerPage,
           filters: {
+            SegmentID: selectedGroupId,
             StockStatus: stockStatusFilter,
             category: [],
             productPrice: {
@@ -484,7 +487,7 @@ const Products = () => {
 
   useEffect(() => {
     FetchProducts();
-  }, [numOfProductPerPage, currentPage]);
+  }, [numOfProductPerPage, currentPage, slectedGroup]);
 
   const {
     setselectedProducts,
@@ -585,6 +588,10 @@ const Products = () => {
           search={search}
           setSearch={setSearch}
           exportOnClick={handleExportData}
+          slectedGroup={slectedGroup}
+          setslectedGroup={setslectedGroup}
+          applyFilter={() => FetchProducts()}
+          setselectedGroupId={setselectedGroupId}
         />
         <ShowHideFields
           columnVisibilityModel={columnVisibilityModel}

@@ -403,7 +403,7 @@ const ViewProducts = () => {
           backgroundColor: "#F9F9FC",
         }}
       >
-        <Header title="" groupsDropdown />
+        <Header title="" />
         <DeleteModal
           open={deleteProducts}
           onClose={() => setdeleteProducts(false)}

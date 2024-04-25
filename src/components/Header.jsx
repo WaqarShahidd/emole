@@ -180,6 +180,10 @@ const Header = ({
   setSearch,
   exportBtn,
   exportOnClick,
+  slectedGroup,
+  setslectedGroup,
+  applyFilter,
+  setselectedGroupId,
 }) => {
   const {
     selectedProducts,
@@ -215,8 +219,6 @@ const Header = ({
   const handleCloseGroup = () => {
     setcreateGroupAnchor(false);
   };
-
-  const [slectedGroup, setslectedGroup] = React.useState("");
 
   const handleChange = (event) => {
     setslectedGroup(event.target.value);
@@ -322,9 +324,8 @@ const Header = ({
                       key={item.id}
                       value={item?.segment?.GroupName}
                       onClick={(e) => {
-                        setslectedGroup(item?.segment?.GroupName);
-                        setviewProductsData(item?.segment?.GroupID);
-                        GetProductBySegment(item?.segment?.GroupID);
+                        setselectedGroupId(item?.segment?.GroupID);
+                        applyFilter();
                       }}
                     >
                       <ListItemText primary={item?.segment?.GroupName} />
