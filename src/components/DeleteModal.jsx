@@ -68,7 +68,11 @@ const DeleteModal = ({
             marginBottom: "20px",
           }}
         >
-          <DeleteForeverRounded sx={{ fontSize: "40px", color: "#EB3D4D" }} />
+          <img
+            src={require("../assets/icons/red-delete.png")}
+            alt=""
+            style={{ height: "38px", width: "34px" }}
+          />
         </Box>
         <Typography
           sx={{

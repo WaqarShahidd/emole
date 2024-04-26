@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SideDrawer from "../../components/SideDrawer";
 import Header from "../../components/Header";
 import { DataGrid } from "@mui/x-data-grid";
@@ -12,6 +12,8 @@ import {
   FormControl,
   Select,
   MenuItem,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import { colors } from "../../theme/theme";
 import {
@@ -21,9 +23,17 @@ import {
 import DeleteForeverRoundedIcon from "@mui/icons-material/DeleteForeverRounded";
 import VisibilityRoundedIcon from "@mui/icons-material/VisibilityRounded";
 import DeleteModal from "../../components/DeleteModal";
+import { useNavigate } from "react-router-dom";
+import { deleteGrey, greyEye } from "../../components/ImageImport";
+import axios from "axios";
+import { BASE_URL } from "../../constants/config";
+import moment from "moment";
+import { useUser } from "../../constants/context";
 
 const Notifications = () => {
   const [deleteState, setdeleteState] = useState(false);
+
+  const navigate = useNavigate();
 
   const notificationColumns = [
     {
@@ -37,7 +47,7 @@ const Notifications = () => {
           sx={{
             fontSize: 14,
             fontWeight: "900",
-            fontFamily: "Urbanist-bold",
+            fontFamily: "Urbanist-bolder",
             color: "#222",
           }}
         >
@@ -54,15 +64,15 @@ const Notifications = () => {
         >
           <Box className="flex-col flex w-full h-full  justify-center">
             <Typography
-              fontFamily={"PublicSans"}
+              fontFamily={"Urbanist-bolder"}
               color={"#222222"}
               fontWeight={"bolder"}
               fontSize={14}
             >
-              {params?.value}
+              Product Name
             </Typography>
             <Typography
-              fontFamily={"PublicSans"}
+              fontFamily={"Urbanist-bold"}
               fontWeight={"bold"}
               fontSize={12}
               className="underline text-blue-500 cursor-pointer"
@@ -86,7 +96,7 @@ const Notifications = () => {
           sx={{
             fontSize: 14,
             fontWeight: "900",
-            fontFamily: "Urbanist-bold",
+            fontFamily: "Urbanist-bolder",
             color: "#222",
           }}
         >
@@ -119,58 +129,18 @@ const Notifications = () => {
       ),
     },
     {
-      field: "data",
-      headerName: "Data",
-      headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
-      headerAlign: "center",
-      align: "center",
-      minWidth: 140,
-      flex: 0.5,
-      renderHeader: (params) => (
-        <Typography
-          sx={{
-            fontSize: 14,
-            fontWeight: "900",
-            fontFamily: "Urbanist-bold",
-            color: "#222",
-          }}
-        >
-          {params?.colDef?.headerName}
-        </Typography>
-      ),
-      renderCell: (params) => (
-        <Box
-          className="w-full h-full"
-          display={"flex"}
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
-          <Typography
-            sx={{
-              fontSize: 14,
-              fontWeight: "500",
-              color: colors.subText,
-              fontFamily: "PublicSans",
-            }}
-          >
-            {params?.value}
-          </Typography>
-        </Box>
-      ),
-    },
-    {
-      field: "value",
+      field: "alert_type",
       headerName: "Value",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       headerAlign: "center",
       align: "center",
-      flex: 0.5,
+      flex: 0.75,
       renderHeader: (params) => (
         <Typography
           sx={{
             fontSize: 14,
             fontWeight: "900",
-            fontFamily: "Urbanist-bold",
+            fontFamily: "Urbanist-bolder",
             color: "#222",
           }}
         >
@@ -192,24 +162,24 @@ const Notifications = () => {
               fontFamily: "PublicSans",
             }}
           >
-            {params?.value}
+            Value
           </Typography>
         </Box>
       ),
     },
     {
-      field: "oldValue",
+      field: "old_value",
       headerName: "Old Value",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       headerAlign: "center",
       align: "center",
-      flex: 0.5,
+      flex: 0.75,
       renderHeader: (params) => (
         <Typography
           sx={{
             fontSize: 14,
             fontWeight: "900",
-            fontFamily: "Urbanist-bold",
+            fontFamily: "Urbanist-bolder",
             color: "#222",
           }}
         >
@@ -237,18 +207,18 @@ const Notifications = () => {
       ),
     },
     {
-      field: "newValue",
+      field: "new_value",
       headerName: "New Value",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       headerAlign: "center",
       align: "center",
-      flex: 0.5,
+      flex: 0.75,
       renderHeader: (params) => (
         <Typography
           sx={{
             fontSize: 14,
             fontWeight: "900",
-            fontFamily: "Urbanist-bold",
+            fontFamily: "Urbanist-bolder",
             color: "#222",
           }}
         >
@@ -276,8 +246,8 @@ const Notifications = () => {
       ),
     },
     {
-      field: "created",
-      headerName: "Created Date",
+      field: "createdAt",
+      headerName: "Date",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
       headerAlign: "center",
@@ -287,7 +257,7 @@ const Notifications = () => {
           sx={{
             fontSize: 14,
             fontWeight: "900",
-            fontFamily: "Urbanist-bold",
+            fontFamily: "Urbanist-bolder",
             color: "#222",
           }}
         >
@@ -309,7 +279,7 @@ const Notifications = () => {
               fontFamily: "PublicSans",
             }}
           >
-            {params?.value}
+            {moment(params?.value).format("DD.MM.YYYY")}
           </Typography>
         </Box>
       ),
@@ -326,7 +296,7 @@ const Notifications = () => {
           sx={{
             fontSize: 14,
             fontWeight: "900",
-            fontFamily: "Urbanist-bold",
+            fontFamily: "Urbanist-bolder",
             color: "#222",
           }}
         >
@@ -340,11 +310,24 @@ const Notifications = () => {
           alignItems={"center"}
           height={"100%"}
         >
-          <IconButton>
-            <VisibilityRoundedIcon fontSize="small" />
+          <IconButton
+            onClick={() => {
+              setalertDetailsData(params.row);
+              setalertDetails(true);
+            }}
+          >
+            <img
+              src={greyEye}
+              alt=""
+              style={{ height: "15px", width: "15px", cursor: "pointer" }}
+            />
           </IconButton>
           <IconButton onClick={() => setdeleteState(true)}>
-            <DeleteForeverRoundedIcon fontSize="small" />
+            <img
+              src={deleteGrey}
+              alt=""
+              style={{ height: "17px", width: "15px", cursor: "pointer" }}
+            />
           </IconButton>
         </Stack>
       ),
@@ -474,16 +457,51 @@ const Notifications = () => {
     },
   ];
 
+  const { setalertDetails, setalertDetailsData } = useUser();
+
+  const [loading, setloading] = useState(false);
+  const [alertsData, setalertsData] = useState([]);
+
+  const FetchAlerts = async () => {
+    setloading(true);
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getAlertByUserID`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data;
+      setalertsData(data);
+    } catch (error) {
+      console.error(error);
+      setloading(false);
+    } finally {
+      setloading(false);
+    }
+  };
+
+  useEffect(() => {
+    FetchAlerts();
+  }, []);
+
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
       <SideDrawer id={4} />
+
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
 
       <DeleteModal
         open={deleteState}
         onClose={() => setdeleteState(false)}
         onClick={() => console.log("Delete")}
-        title="Delete Notification"
-        mainText="Are you sure you want to delete this notification?"
+        title="Delete Alerts"
+        mainText="Are you sure you want to delete these alerts?"
         subText="Do you want to delete this leads? This action can’t be undone"
       />
       <Box
@@ -496,10 +514,71 @@ const Notifications = () => {
           backgroundColor: "#F9F9FC",
         }}
       >
-        <Header title="Notifications" />
+        <Header title="Product Alerts" filter actionBtn searchBar />
 
         <Grid container p={2}>
           <Grid item xs={12}>
+            <Box
+              mb={2}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                sx={{
+                  color: "#667085",
+                  fontSize: 14,
+                  fontFamily: "Urbanist-bold",
+                  mx: 2,
+                }}
+              >
+                Showing 0-10 from 10
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  maxWidth: "75%",
+                  mx: 2,
+                }}
+              >
+                <>
+                  <Typography
+                    sx={{
+                      color: colors.blueText,
+                      fontFamily: "Urbanist-bold",
+                      fontSize: 14,
+                      mx: 2,
+                    }}
+                  >
+                    |
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: colors.blueText,
+                      fontFamily: "Urbanist-bold",
+                      fontSize: 14,
+                      mr: 1,
+                      cursor: "pointer",
+                    }}
+                  >
+                    X
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: colors.blueText,
+                      fontFamily: "Urbanist-bold",
+                      fontSize: 14,
+                    }}
+                  >
+                    Old Price: 10
+                  </Typography>
+                </>
+              </Box>
+            </Box>
             <Box
               sx={{
                 backgroundColor: "white",
@@ -517,7 +596,8 @@ const Notifications = () => {
                 }}
                 showColumnVerticalBorder={false}
                 showCellVerticalBorder={true}
-                rows={notificationData}
+                rows={alertsData}
+                getRowId={(row) => row?.id}
                 columns={notificationColumns}
                 hideFooter={true}
                 checkboxSelection

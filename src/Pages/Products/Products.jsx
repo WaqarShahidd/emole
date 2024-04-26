@@ -552,14 +552,13 @@ const Products = () => {
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
       <SideDrawer id={2} />
 
-      {loading && (
-        <Backdrop
-          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          open={loading}
-        >
-          <CircularProgress color="inherit" />
-        </Backdrop>
-      )}
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
       <Snackbar
         open={confirmGroupCreate}
         autoHideDuration={4000}

@@ -32,6 +32,9 @@ export function UserProvider({ children }) {
   const [viewProductsData, setviewProductsData] = useState("");
   const [websiteViewProductsData, setwebsiteViewProductsData] = useState([]);
 
+  const [alertDetailsData, setalertDetailsData] = useState([]);
+  const [alertDetails, setalertDetails] = useState(false);
+
   const GetWebsites = async () => {
     const token = localStorage.getItem("token");
     try {
@@ -235,6 +238,10 @@ export function UserProvider({ children }) {
         setbillingHistory,
         toggleDrawer,
         state,
+        alertDetailsData,
+        setalertDetailsData,
+        alertDetails,
+        setalertDetails,
       }}
     >
       {children}

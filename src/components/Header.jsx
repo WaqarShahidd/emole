@@ -179,6 +179,7 @@ const Header = ({
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorAction, setanchorAction] = useState(null);
+  const [alertAnchorAction, setalertAnchorAction] = useState(null);
   const [createGroupAnchor, setcreateGroupAnchor] = useState(false);
 
   const handleClick = (event) => {
@@ -570,48 +571,9 @@ const Header = ({
             />
           </SearchContainer>
         )}
-
-        {/* <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            borderLeft: filter ? "1px solid #E6E6E6" : "none",
-            paddingLeft: "20px",
-            ml: 2,
-          }}
-        >
-          <Typography
-            sx={{
-              color: "#080D18",
-              fontWeight: "500",
-              fontSize: "16px",
-              alignItems: "center",
-              justifyContent: "center",
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            {userData?.Username ? userData?.Username : userData?.Email}
-          </Typography>
-
-          <ExpandMore
-            style={{ color: colors.text, cursor: "pointer" }}
-            onClick={handleClick}
-          />
-        </Box> */}
       </Stack>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem
-          onClick={() => {
-            handleClose();
-            localStorage.removeItem("token");
-            window.location.reload();
-          }}
-        >
-          Logout
-        </MenuItem>
-      </Menu>
 
+      {/* Product Actions */}
       <Menu
         anchorEl={anchorAction}
         open={Boolean(anchorAction)}
@@ -672,6 +634,106 @@ const Header = ({
         <MenuItem
           onClick={() => {
             actionBtnFunc();
+            setanchorAction(false);
+          }}
+          sx={{
+            fontFamily: "Urbanist-bold",
+            fontSize: "14px",
+            color: "#777980",
+          }}
+        >
+          <img
+            src={deleteGrey}
+            style={{
+              height: "15px",
+              width: "15px",
+              cursor: "pointer",
+              marginRight: "10px",
+            }}
+            alt=""
+          />
+          Delete selected
+        </MenuItem>
+      </Menu>
+
+      {/* Alert Actions */}
+      <Menu
+        anchorEl={alertAnchorAction}
+        open={Boolean(alertAnchorAction)}
+        onClose={() => setalertAnchorAction(false)}
+      >
+        <MenuItem
+          sx={{
+            borderBottom: "1px solid #EBEFF5",
+            fontFamily: "Urbanist-bold",
+            fontSize: "14px",
+            pb: 1,
+            color: "#777980",
+          }}
+          onClick={() => {
+            setanchorAction(null);
+          }}
+        >
+          <img
+            src={require("../assets/icons/eye.png")}
+            style={{
+              height: "15px",
+              width: "15px",
+              cursor: "pointer",
+              marginRight: "10px",
+            }}
+            alt=""
+          />
+          Mark as unread
+        </MenuItem>
+        <MenuItem
+          sx={{
+            borderBottom: "1px solid #EBEFF5",
+            fontFamily: "Urbanist-bold",
+            fontSize: "14px",
+            pb: 1,
+            color: "#777980",
+          }}
+          onClick={() => {
+            setanchorAction(null);
+          }}
+        >
+          <img
+            src={require("../assets/icons/eye-crossed.png")}
+            style={{
+              height: "15px",
+              width: "15px",
+              cursor: "pointer",
+              marginRight: "10px",
+            }}
+            alt=""
+          />
+          Mark as read
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            setanchorAction(false);
+          }}
+          sx={{
+            fontFamily: "Urbanist-bold",
+            fontSize: "14px",
+            color: "#777980",
+          }}
+        >
+          <img
+            src={require("../assets/icons/export.png")}
+            style={{
+              height: "15px",
+              width: "15px",
+              cursor: "pointer",
+              marginRight: "10px",
+            }}
+            alt=""
+          />
+          Export selected
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
             setanchorAction(false);
           }}
           sx={{

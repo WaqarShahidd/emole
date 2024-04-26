@@ -27,6 +27,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { useUser } from "../constants/context";
 import ProductHistory from "../Pages/Products/ProductHistory";
 import AddProduct from "../Pages/Modals/AddProduct";
+import AlertDetails from "../Pages/Modals/AlertDetails";
 
 export default function Router() {
   const {
@@ -73,6 +74,7 @@ export default function Router() {
       <EditProfile />
       <ResetPasswordModal />
       <AddProduct />
+      <AlertDetails />
 
       <Snackbar
         open={paymentSuccessful}

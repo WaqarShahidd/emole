@@ -26,7 +26,7 @@ export const DeleteModal = ({ open, onClose, onDelete }) => {
         }}
       >
         <IconButton onClick={onClose}>
-          <CloseIcon />
+          <img src={require("../assets/icons/red-delete.png")} alt="" />
         </IconButton>
       </Box>
       <DialogContent
