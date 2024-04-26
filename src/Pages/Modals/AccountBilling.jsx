@@ -389,11 +389,12 @@ const AccountBilling = () => {
   };
 
   const progress =
+    100 -
     (userPlan?.remainingProducts /
       parseInt(userPlan?.subscribedPlane?.NumberOfProducts)) *
-    100;
+      100;
 
-  console.log(billingHistory);
+  const currentProgress = progress > 100 ? 100 : progress;
 
   useEffect(() => {
     GetBillingHistory();
@@ -621,7 +622,7 @@ const AccountBilling = () => {
                 }}
                 onClick={() => console.log(userPlan)}
               >
-                {userPlan?.remainingProducts}/
+                {100 - userPlan?.remainingProducts}/
                 {userPlan?.subscribedPlane?.NumberOfProducts} Products
               </Typography>
               <Typography
@@ -631,10 +632,13 @@ const AccountBilling = () => {
                   fontFamily: "Urbanist-bold",
                 }}
               >
-                {progress}%
+                {currentProgress}%
               </Typography>
             </Stack>
-            <BorderLinearProgress variant="determinate" value={progress} />
+            <BorderLinearProgress
+              variant="determinate"
+              value={currentProgress}
+            />
           </Box>
 
           {userPlan?.subscribedPlane?.PlanName === "Free" ? (
