@@ -490,6 +490,42 @@ const Products = () => {
     }
   };
 
+  const [deleteConfirm, setdeleteConfirm] = useState(false);
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setdeleteConfirm(false);
+  };
+
+  const DeleteProducts = async () => {
+    setloading(true);
+    const token = localStorage.getItem("token");
+
+    await axios
+      .post(
+        `${BASE_URL}/deletProducts`,
+        {
+          id: selectedProducts.map((product) => product?.UserProductID),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setdeleteConfirm(true);
+        FetchProducts();
+        setloading(false);
+      })
+      .catch((e) => {
+        console.error(e);
+        setloading(false);
+      });
+  };
+
   useEffect(() => {
     FetchProducts();
   }, [numOfProductPerPage, currentPage, slectedGroup]);
@@ -551,6 +587,21 @@ const Products = () => {
         <CircularProgress color="inherit" />
       </Backdrop>
 
+      <Snackbar
+        open={deleteConfirm}
+        autoHideDuration={2000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Product Deleted Successfully
+        </Alert>
+      </Snackbar>
+
       <Box
         sx={{
           display: "flex",
@@ -588,7 +639,7 @@ const Products = () => {
         <DeleteModal
           open={deleteProducts}
           onClose={() => setdeleteProducts(false)}
-          onClick={() => console.log("Delete")}
+          onClick={DeleteProducts}
           title="Delete Products"
           mainText="Are you sure you want to delete these products?"
           subText="Are you sure you want to delete these products? This action cannot be undone and historical data will no longer be available."
@@ -918,9 +969,11 @@ const Products = () => {
                 }}
                 onRowSelectionModelChange={(ids) => {
                   const selectedIDs = new Set(ids);
+
                   const selectedRows = productsData?.filter((row) =>
-                    selectedIDs.has(row?.ProductID)
+                    selectedIDs.has(row?.UserProductID)
                   );
+                  console.log(selectedRows);
                   setselectedProducts(selectedRows);
                 }}
                 columnVisibilityModel={columnVisibilityModel}
