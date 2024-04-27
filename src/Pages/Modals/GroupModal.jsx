@@ -28,7 +28,7 @@ import { Delete, Visibility } from "@mui/icons-material";
 import DeleteModal from "../../components/DeleteModal";
 import axios from "axios";
 import { BASE_URL } from "../../constants/config";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { saveAs } from "file-saver";
 import { deleteGrey, greyEye } from "../../components/ImageImport";
 
@@ -46,6 +46,8 @@ const GroupModal = ({ open, handleClose, data }) => {
   const [deleteState, setdeleteState] = useState(false);
 
   const [deleteGroupId, setdeleteGroupId] = useState("");
+
+  const location = useLocation();
 
   const groupColumns = [
     {
@@ -189,7 +191,15 @@ const GroupModal = ({ open, handleClose, data }) => {
             onClick={() => {
               setviewProductsData(params?.row?.segment?.GroupID);
               GetProductBySegment();
-              navigate("/group/view-products");
+              navigate("/products", {
+                state: {
+                  groupID: params?.row?.segment?.GroupID,
+                  groupName: params?.row?.segment?.GroupName,
+                },
+              });
+              if (location.pathname === "/products") {
+                window.location.reload();
+              }
               setgroupModalState(false);
             }}
           >
@@ -278,14 +288,15 @@ const GroupModal = ({ open, handleClose, data }) => {
           }
         )
         .then((res) => {
+          console.log(res.data);
           setloading(false);
           setconfirmGroupCreate(true);
-          handleClose();
           seterror(false);
           GetGroups();
         })
         .catch((e) => {
           seterror(true);
+          console.log(e);
           setloading(false);
         });
     }

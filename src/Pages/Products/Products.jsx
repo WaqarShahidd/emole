@@ -410,12 +410,8 @@ const Products = () => {
   const [loading, setloading] = useState(false);
   const [productsData, setproductsData] = useState([]);
 
-  let currentDate = new Date().toLocaleDateString();
-
   const [startDate, setstartDate] = useState(null);
   const [endDate, setendDate] = useState(dayjs());
-
-  console.log(endDate);
 
   const [prevPrice, setprevPrice] = useState(null);
   const [currentPrice, setcurrentPrice] = useState(null);
@@ -427,8 +423,12 @@ const Products = () => {
   const [currentPage, setcurrentPage] = useState(1);
   const [numOfProductPerPage, setnumOfProductPerPage] = useState(10);
 
-  const [slectedGroup, setslectedGroup] = useState("");
-  const [selectedGroupId, setselectedGroupId] = useState(null);
+  const [slectedGroup, setslectedGroup] = useState(
+    state?.groupName ? state?.groupName : ""
+  );
+  const [selectedGroupId, setselectedGroupId] = useState(
+    state?.groupID ? state?.groupID : null
+  );
 
   const [stockStatusFilter, setstockStatusFilter] = useState(
     state?.filter === "false" ? false : null
@@ -509,14 +509,6 @@ const Products = () => {
     setwebsiteDetail,
   } = useUser();
 
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setconfirmGroupCreate(false);
-  };
-
   const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
     productName: true,
     productPrice: true,
@@ -558,21 +550,6 @@ const Products = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-
-      <Snackbar
-        open={confirmGroupCreate}
-        autoHideDuration={4000}
-        onClose={handleCloseSnackbar}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="success"
-          variant="filled"
-          sx={{ width: "100%" }}
-        >
-          Product Group Created
-        </Alert>
-      </Snackbar>
 
       <Box
         sx={{

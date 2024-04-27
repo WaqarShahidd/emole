@@ -160,6 +160,9 @@ const Header = ({
   setslectedGroup,
   applyFilter,
   setselectedGroupId,
+  readBtn,
+  deleteBtn,
+  setdeleteId,
 }) => {
   const {
     selectedProducts,
@@ -579,32 +582,93 @@ const Header = ({
         open={Boolean(anchorAction)}
         onClose={() => setanchorAction(false)}
       >
-        <MenuItem
-          sx={{
-            borderBottom: "1px solid #EBEFF5",
-            fontFamily: "Urbanist-bold",
-            fontSize: "14px",
-            pb: 1,
-            color: "#777980",
-          }}
-          onClick={() => {
-            handleClose();
-            setanchorAction(null);
-            setcreateGroupAnchor(true);
-          }}
-        >
-          <img
-            src={greyGroups}
-            style={{
-              height: "15px",
-              width: "15px",
-              cursor: "pointer",
-              marginRight: "10px",
+        {title === "Product Alerts" ? (
+          <>
+            <MenuItem
+              sx={{
+                borderBottom: "1px solid #EBEFF5",
+                fontFamily: "Urbanist-bold",
+                fontSize: "14px",
+                pb: 1,
+                color: "#777980",
+              }}
+              onClick={() => {
+                setanchorAction(null);
+                readBtn(
+                  0,
+                  selectedProducts?.map(({ id }) => id)
+                );
+              }}
+            >
+              <img
+                src={require("../assets/icons/eye.png")}
+                style={{
+                  height: "15px",
+                  width: "15px",
+                  cursor: "pointer",
+                  marginRight: "10px",
+                }}
+                alt=""
+              />
+              Mark as unread
+            </MenuItem>
+            <MenuItem
+              sx={{
+                borderBottom: "1px solid #EBEFF5",
+                fontFamily: "Urbanist-bold",
+                fontSize: "14px",
+                pb: 1,
+                color: "#777980",
+              }}
+              onClick={() => {
+                setanchorAction(null);
+                readBtn(
+                  1,
+                  selectedProducts?.map(({ id }) => id)
+                );
+              }}
+            >
+              <img
+                src={require("../assets/icons/eye-crossed.png")}
+                style={{
+                  height: "15px",
+                  width: "15px",
+                  cursor: "pointer",
+                  marginRight: "10px",
+                }}
+                alt=""
+              />
+              Mark as read
+            </MenuItem>
+          </>
+        ) : (
+          <MenuItem
+            sx={{
+              borderBottom: "1px solid #EBEFF5",
+              fontFamily: "Urbanist-bold",
+              fontSize: "14px",
+              pb: 1,
+              color: "#777980",
             }}
-            alt=""
-          />
-          Group selected
-        </MenuItem>
+            onClick={() => {
+              handleClose();
+              setanchorAction(null);
+              setcreateGroupAnchor(true);
+            }}
+          >
+            <img
+              src={greyGroups}
+              style={{
+                height: "15px",
+                width: "15px",
+                cursor: "pointer",
+                marginRight: "10px",
+              }}
+              alt=""
+            />
+            Group selected
+          </MenuItem>
+        )}
         <MenuItem
           sx={{
             borderBottom: "1px solid #EBEFF5",
@@ -633,8 +697,14 @@ const Header = ({
         </MenuItem>
         <MenuItem
           onClick={() => {
-            actionBtnFunc();
-            setanchorAction(false);
+            if (title === "Product Alerts") {
+              setanchorAction(false);
+              deleteBtn();
+              setdeleteId(selectedProducts?.map(({ id }) => id));
+            } else {
+              actionBtnFunc();
+              setanchorAction(false);
+            }
           }}
           sx={{
             fontFamily: "Urbanist-bold",
@@ -662,76 +732,6 @@ const Header = ({
         open={Boolean(alertAnchorAction)}
         onClose={() => setalertAnchorAction(false)}
       >
-        <MenuItem
-          sx={{
-            borderBottom: "1px solid #EBEFF5",
-            fontFamily: "Urbanist-bold",
-            fontSize: "14px",
-            pb: 1,
-            color: "#777980",
-          }}
-          onClick={() => {
-            setanchorAction(null);
-          }}
-        >
-          <img
-            src={require("../assets/icons/eye.png")}
-            style={{
-              height: "15px",
-              width: "15px",
-              cursor: "pointer",
-              marginRight: "10px",
-            }}
-            alt=""
-          />
-          Mark as unread
-        </MenuItem>
-        <MenuItem
-          sx={{
-            borderBottom: "1px solid #EBEFF5",
-            fontFamily: "Urbanist-bold",
-            fontSize: "14px",
-            pb: 1,
-            color: "#777980",
-          }}
-          onClick={() => {
-            setanchorAction(null);
-          }}
-        >
-          <img
-            src={require("../assets/icons/eye-crossed.png")}
-            style={{
-              height: "15px",
-              width: "15px",
-              cursor: "pointer",
-              marginRight: "10px",
-            }}
-            alt=""
-          />
-          Mark as read
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            setanchorAction(false);
-          }}
-          sx={{
-            fontFamily: "Urbanist-bold",
-            fontSize: "14px",
-            color: "#777980",
-          }}
-        >
-          <img
-            src={require("../assets/icons/export.png")}
-            style={{
-              height: "15px",
-              width: "15px",
-              cursor: "pointer",
-              marginRight: "10px",
-            }}
-            alt=""
-          />
-          Export selected
-        </MenuItem>
         <MenuItem
           onClick={() => {
             setanchorAction(false);

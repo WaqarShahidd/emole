@@ -24,7 +24,9 @@ export const WebsiteDetailModal = () => {
     setwebsiteDetailData,
     setwebsiteViewProductsData,
     setwebsiteModalState,
+    allWebsites,
   } = useUser();
+
   return (
     <Drawer
       anchor={"right"}
@@ -115,7 +117,7 @@ export const WebsiteDetailModal = () => {
             />
 
             {/* Website Added Date */}
-            <Stack
+            {/* <Stack
               direction="row"
               alignItems="center"
               justifyContent="space-between"
@@ -138,7 +140,7 @@ export const WebsiteDetailModal = () => {
               >
                 12.12.24{" "}
               </Typography>
-            </Stack>
+            </Stack> */}
 
             {/* Total Products */}
             <Stack
@@ -152,6 +154,15 @@ export const WebsiteDetailModal = () => {
                 fontSize={14}
                 color={colors.subText}
                 mb={1}
+                onClick={() =>
+                  console.log(
+                    allWebsites.find(
+                      (website) =>
+                        website?.WebsiteID === websiteDetailData?.WebsiteID
+                    ),
+                    websiteDetailData
+                  )
+                }
               >
                 Total Products{" "}
               </Typography>
@@ -163,7 +174,12 @@ export const WebsiteDetailModal = () => {
                   textDecorationLine: "underline",
                 }}
               >
-                {websiteDetail ? websiteDetailData?.products?.length : 0}
+                {websiteDetailData?.WebsiteID
+                  ? allWebsites.find(
+                      (website) =>
+                        website?.WebsiteID === websiteDetailData?.WebsiteID
+                    )?.totalProducts
+                  : 0}
               </Typography>
             </Stack>
             <Stack
@@ -189,8 +205,11 @@ export const WebsiteDetailModal = () => {
                   textDecorationLine: "underline",
                 }}
               >
-                {websiteDetailData?.products?.OutOfStockCount
-                  ? websiteDetailData?.products?.OutOfStockCount
+                {websiteDetailData?.WebsiteID
+                  ? allWebsites.find(
+                      (website) =>
+                        website?.WebsiteID === websiteDetailData?.WebsiteID
+                    )?.outOfStockProducts
                   : 0}
               </Typography>
             </Stack>

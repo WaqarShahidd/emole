@@ -27,7 +27,6 @@ import { Alert, Snackbar } from "@mui/material";
 import { useUser } from "../constants/context";
 import ProductHistory from "../Pages/Products/ProductHistory";
 import AddProduct from "../Pages/Modals/AddProduct";
-import AlertDetails from "../Pages/Modals/AlertDetails";
 
 export default function Router() {
   const {
@@ -37,6 +36,8 @@ export default function Router() {
     setprofileUpdateSuccess,
     resetSuccess,
     setresetSuccess,
+    confirmGroupCreate,
+    setconfirmGroupCreate,
   } = useUser();
 
   const handleClose = (event, reason) => {
@@ -61,6 +62,14 @@ export default function Router() {
     setresetSuccess(false);
   };
 
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setconfirmGroupCreate(false);
+  };
+
   return (
     <BrowserRouter>
       <GroupModal />
@@ -74,7 +83,6 @@ export default function Router() {
       <EditProfile />
       <ResetPasswordModal />
       <AddProduct />
-      <AlertDetails />
 
       <Snackbar
         open={paymentSuccessful}
@@ -116,6 +124,20 @@ export default function Router() {
           sx={{ width: "100%" }}
         >
           Password Changed Successfully
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={confirmGroupCreate}
+        autoHideDuration={2000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Product Group Created
         </Alert>
       </Snackbar>
 

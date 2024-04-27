@@ -14,8 +14,11 @@ import {
   MenuItem,
   Backdrop,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { colors } from "../../theme/theme";
+import { saveAs } from "file-saver";
 import {
   getStatusBackgroundColor,
   getStatusTextColor,
@@ -29,11 +32,12 @@ import axios from "axios";
 import { BASE_URL } from "../../constants/config";
 import moment from "moment";
 import { useUser } from "../../constants/context";
+import AlertDetails from "../Modals/AlertDetails";
+import AlertsFilters from "../Modals/AlertsFilters";
+import dayjs from "dayjs";
 
 const Notifications = () => {
   const [deleteState, setdeleteState] = useState(false);
-
-  const navigate = useNavigate();
 
   const notificationColumns = [
     {
@@ -42,6 +46,7 @@ const Notifications = () => {
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
       minWidth: 250,
+
       renderHeader: (params) => (
         <Typography
           sx={{
@@ -69,15 +74,19 @@ const Notifications = () => {
               fontWeight={"bolder"}
               fontSize={14}
             >
-              Product Name
+              {params?.row?.product?.Name}
             </Typography>
             <Typography
               fontFamily={"Urbanist-bold"}
               fontWeight={"bold"}
               fontSize={12}
               className="underline text-blue-500 cursor-pointer"
+              onClick={() => {
+                setwebsiteDetailData(params?.row?.product?.Page?.Website);
+                setwebsiteDetail(true);
+              }}
             >
-              Website Name
+              {params?.row?.product?.Page?.Website?.Name}
             </Typography>
           </Box>
         </Stack>
@@ -314,15 +323,29 @@ const Notifications = () => {
             onClick={() => {
               setalertDetailsData(params.row);
               setalertDetails(true);
+              ChangeReadStatus(params.row.read === 0 ? 1 : 0, [params.row.id]);
             }}
           >
-            <img
-              src={greyEye}
-              alt=""
-              style={{ height: "15px", width: "15px", cursor: "pointer" }}
-            />
+            {params.row.read === 0 ? (
+              <img
+                src={greyEye}
+                alt=""
+                style={{ height: "15px", width: "15px", cursor: "pointer" }}
+              />
+            ) : (
+              <img
+                src={require("../../assets/icons/view-off.png")}
+                alt=""
+                style={{ height: "15px", width: "15px", cursor: "pointer" }}
+              />
+            )}
           </IconButton>
-          <IconButton onClick={() => setdeleteState(true)}>
+          <IconButton
+            onClick={() => {
+              setdeleteState(true);
+              setdeleteId([params.row.id]);
+            }}
+          >
             <img
               src={deleteGrey}
               alt=""
@@ -334,156 +357,173 @@ const Notifications = () => {
     },
   ];
 
-  const notificationData = [
-    {
-      id: 1,
-      notificationName: "Notification A",
-      priority: "High",
-      data: ["Price", "Stock", "Content", "Compare", "Product"][
-        Math.floor(Math.random() * 5)
-      ],
-      value: "Value A",
-      oldValue: `$${(Math.random() * 100).toFixed(2)}`,
-      newValue: `$${(Math.random() * 100).toFixed(2)}`,
-      created: "2024-03-27",
-    },
-    {
-      id: 2,
-      notificationName: "Notification B",
-      priority: "Low",
-      data: ["Price", "Stock", "Content", "Compare", "Product"][
-        Math.floor(Math.random() * 5)
-      ],
-      value: "Value B",
-      oldValue: `$${(Math.random() * 100).toFixed(2)}`,
-      newValue: `$${(Math.random() * 100).toFixed(2)}`,
-      created: "2024-03-26",
-    },
-    {
-      id: 3,
-      notificationName: "Notification C",
-      priority: "Medium",
-      data: ["Price", "Stock", "Content", "Compare", "Product"][
-        Math.floor(Math.random() * 5)
-      ],
-      value: "Value C",
-      oldValue: `$${(Math.random() * 100).toFixed(2)}`,
-      newValue: `$${(Math.random() * 100).toFixed(2)}`,
-      created: "2024-03-25",
-    },
-    {
-      id: 4,
-      notificationName: "Notification D",
-      priority: "High",
-      data: ["Price", "Stock", "Content", "Compare", "Product"][
-        Math.floor(Math.random() * 5)
-      ],
-      value: "Value D",
-      oldValue: `$${(Math.random() * 100).toFixed(2)}`,
-      newValue: `$${(Math.random() * 100).toFixed(2)}`,
-      created: "2024-03-24",
-    },
-    {
-      id: 5,
-      notificationName: "Notification E",
-      priority: "Low",
-      data: ["Price", "Stock", "Content", "Compare", "Product"][
-        Math.floor(Math.random() * 5)
-      ],
-      value: "Value E",
-      oldValue: `$${(Math.random() * 100).toFixed(2)}`,
-      newValue: `$${(Math.random() * 100).toFixed(2)}`,
-      created: "2024-03-23",
-    },
-    {
-      id: 6,
-      notificationName: "Notification F",
-      priority: "Medium",
-      data: ["Price", "Stock", "Content", "Compare", "Product"][
-        Math.floor(Math.random() * 5)
-      ],
-      value: "Value F",
-      oldValue: `$${(Math.random() * 100).toFixed(2)}`,
-      newValue: `$${(Math.random() * 100).toFixed(2)}`,
-      created: "2024-03-22",
-    },
-    {
-      id: 7,
-      notificationName: "Notification G",
-      priority: "High",
-      data: ["Price", "Stock", "Content", "Compare", "Product"][
-        Math.floor(Math.random() * 5)
-      ],
-      value: "Value G",
-      oldValue: `$${(Math.random() * 100).toFixed(2)}`,
-      newValue: `$${(Math.random() * 100).toFixed(2)}`,
-      created: "2024-03-21",
-    },
-    {
-      id: 8,
-      notificationName: "Notification H",
-      priority: "Low",
-      data: ["Price", "Stock", "Content", "Compare", "Product"][
-        Math.floor(Math.random() * 5)
-      ],
-      value: "Value H",
-      oldValue: `$${(Math.random() * 100).toFixed(2)}`,
-      newValue: `$${(Math.random() * 100).toFixed(2)}`,
-      created: "2024-03-20",
-    },
-    {
-      id: 9,
-      notificationName: "Notification I",
-      priority: "Medium",
-      data: ["Price", "Stock", "Content", "Compare", "Product"][
-        Math.floor(Math.random() * 5)
-      ],
-      value: "Value I",
-      oldValue: `$${(Math.random() * 100).toFixed(2)}`,
-      newValue: `$${(Math.random() * 100).toFixed(2)}`,
-      created: "2024-03-19",
-    },
-    {
-      id: 10,
-      notificationName: "Notification J",
-      priority: "High",
-      data: ["Price", "Stock", "Content", "Compare", "Product"][
-        Math.floor(Math.random() * 5)
-      ],
-      value: "Value J",
-      oldValue: `$${(Math.random() * 100).toFixed(2)}`,
-      newValue: `$${(Math.random() * 100).toFixed(2)}`,
-      created: "2024-03-18",
-    },
-  ];
-
-  const { setalertDetails, setalertDetailsData } = useUser();
+  const {
+    setalertDetails,
+    setalertDetailsData,
+    allWebsites,
+    selectedProducts,
+    setselectedProducts,
+    setwebsiteDetailData,
+    setwebsiteDetail,
+  } = useUser();
 
   const [loading, setloading] = useState(false);
   const [alertsData, setalertsData] = useState([]);
 
+  const [search, setSearch] = useState("");
+
+  const [openFilters, setopenFilters] = useState(false);
+
+  const [selectedIds, setSelectedIds] = useState("");
+  const [startDate, setstartDate] = useState(null);
+  const [endDate, setendDate] = useState(dayjs());
+  const [alertPriority, setalertPriority] = useState(null);
+
+  const [totalCount, settotalCount] = useState(0);
+  const [totalPages, settotalPages] = useState(1);
+  const [currentPage, setcurrentPage] = useState(1);
+  const [numOfProductPerPage, setnumOfProductPerPage] = useState(10);
+
+  const startIndex = (currentPage - 1) * numOfProductPerPage + 1;
+  const endIndex = Math.min(startIndex + numOfProductPerPage - 1);
+
+  const [filterChange, setfilterChange] = useState(false);
+
+  const handleChangeAlertsPerPage = (event) => {
+    setnumOfProductPerPage(event.target.value);
+  };
+
   const FetchAlerts = async () => {
     setloading(true);
     const token = localStorage.getItem("token");
+    console.log(selectedIds);
     try {
-      const response = await axios.get(`${BASE_URL}/getAlertByUserID`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.post(
+        `${BASE_URL}/getAlertByUserID`,
+        {
+          page: currentPage,
+          pageSize: numOfProductPerPage,
+          filters: {
+            createdAt: {
+              startDate: startDate ? startDate : null,
+              endDate: endDate ? endDate : null,
+            },
+            priority: alertPriority,
+            alert_type: null,
+            website: selectedIds,
+          },
         },
-      });
-      const data = await response.data;
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.data.alerts;
       setalertsData(data);
+      settotalCount(response.data?.totalCount);
+      settotalPages(response.data?.totalPages);
+      setfilterChange(false);
     } catch (error) {
       console.error(error);
       setloading(false);
+      setfilterChange(false);
     } finally {
       setloading(false);
+      setfilterChange(false);
     }
   };
 
+  const [deleteId, setdeleteId] = useState([]);
+  const [deleteConfirm, setdeleteConfirm] = useState(false);
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setdeleteConfirm(false);
+  };
+
+  const DeleteAlert = async () => {
+    setloading(true);
+    const token = localStorage.getItem("token");
+
+    await axios
+      .post(
+        `${BASE_URL}/deleteAlert`,
+        {
+          id: deleteId,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setdeleteConfirm(true);
+        FetchAlerts();
+        setloading(false);
+      })
+      .catch((e) => {
+        console.error(e);
+        setloading(false);
+      });
+  };
+
+  const ChangeReadStatus = async (read, ids) => {
+    setloading(true);
+    console.log(read, ids);
+    const token = localStorage.getItem("token");
+
+    await axios
+      .post(
+        `${BASE_URL}/readAlert`,
+        {
+          id: ids,
+          read: read,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        FetchAlerts();
+        setloading(false);
+      })
+      .catch((e) => {
+        console.error(e);
+        setloading(false);
+      });
+  };
+
   useEffect(() => {
+    if (filterChange) {
+      FetchAlerts();
+    }
     FetchAlerts();
-  }, []);
+  }, [filterChange]);
+
+  const handleExportData = () => {
+    const csvContent = alertsData
+      .map((row) => [
+        row?.id,
+        row?.product?.Name,
+        row?.product?.Page?.Website?.Name,
+        row?.product?.Page?.Website?.URL,
+        row?.createdAt,
+        row?.new_value,
+        row?.old_value,
+        row?.priority,
+      ])
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+
+    saveAs(blob, "data.csv");
+  };
 
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
@@ -499,11 +539,45 @@ const Notifications = () => {
       <DeleteModal
         open={deleteState}
         onClose={() => setdeleteState(false)}
-        onClick={() => console.log("Delete")}
+        onClick={DeleteAlert}
         title="Delete Alerts"
         mainText="Are you sure you want to delete these alerts?"
         subText="Do you want to delete this leads? This action can’t be undone"
       />
+
+      <AlertDetails deleteBtn={() => setdeleteState(true)} />
+
+      <AlertsFilters
+        open={openFilters}
+        handleClose={() => setopenFilters(false)}
+        setstartDate={setstartDate}
+        setendDate={setendDate}
+        startDate={startDate}
+        endDate={endDate}
+        selectedIds={selectedIds}
+        setSelectedIds={setSelectedIds}
+        alertPriority={alertPriority}
+        setalertPriority={setalertPriority}
+        applyFilter={setfilterChange}
+        currentPage={currentPage}
+        setcurrentPage={setcurrentPage}
+      />
+
+      <Snackbar
+        open={deleteConfirm}
+        autoHideDuration={2000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Alert Deleted Successfully
+        </Alert>
+      </Snackbar>
+
       <Box
         sx={{
           display: "flex",
@@ -514,7 +588,19 @@ const Notifications = () => {
           backgroundColor: "#F9F9FC",
         }}
       >
-        <Header title="Product Alerts" filter actionBtn searchBar />
+        <Header
+          title="Product Alerts"
+          filter
+          actionBtn
+          searchBar
+          search={search}
+          setSearch={setSearch}
+          filterBtn={() => setopenFilters(!openFilters)}
+          readBtn={ChangeReadStatus}
+          deleteBtn={() => setdeleteState(true)}
+          setdeleteId={setdeleteId}
+          exportOnClick={handleExportData}
+        />
 
         <Grid container p={2}>
           <Grid item xs={12}>
@@ -534,7 +620,7 @@ const Notifications = () => {
                   mx: 2,
                 }}
               >
-                Showing 0-10 from 10
+                Showing {startIndex}-{endIndex} from {totalCount}
               </Typography>
               <Box
                 sx={{
@@ -545,38 +631,162 @@ const Notifications = () => {
                   mx: 2,
                 }}
               >
-                <>
-                  <Typography
-                    sx={{
-                      color: colors.blueText,
-                      fontFamily: "Urbanist-bold",
-                      fontSize: 14,
-                      mx: 2,
-                    }}
-                  >
-                    |
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: colors.blueText,
-                      fontFamily: "Urbanist-bold",
-                      fontSize: 14,
-                      mr: 1,
-                      cursor: "pointer",
-                    }}
-                  >
-                    X
-                  </Typography>
-                  <Typography
-                    sx={{
-                      color: colors.blueText,
-                      fontFamily: "Urbanist-bold",
-                      fontSize: 14,
-                    }}
-                  >
-                    Old Price: 10
-                  </Typography>
-                </>
+                {selectedIds && (
+                  <>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mx: 2,
+                      }}
+                    >
+                      |
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mr: 1,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => setSelectedIds("")}
+                    >
+                      X
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Website:{" "}
+                      {
+                        allWebsites.find(
+                          (website) => website?.URL === selectedIds
+                        )?.Name
+                      }
+                    </Typography>
+                  </>
+                )}
+                {startDate && (
+                  <>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mx: 2,
+                      }}
+                    >
+                      |
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mr: 1,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        setstartDate(null);
+                        setfilterChange(true);
+                      }}
+                    >
+                      X
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Date from {dayjs(startDate).format("DD.MM.YYYY")}
+                    </Typography>
+                  </>
+                )}
+                {endDate &&
+                  dayjs().format("DD.MM.YYYY") !==
+                    endDate.format("DD.MM.YYYY") && (
+                    <>
+                      <Typography
+                        sx={{
+                          color: colors.blueText,
+                          fontFamily: "Urbanist-bold",
+                          fontSize: 14,
+                          mx: 2,
+                        }}
+                      >
+                        |
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: colors.blueText,
+                          fontFamily: "Urbanist-bold",
+                          fontSize: 14,
+                          mr: 1,
+                          cursor: "pointer",
+                        }}
+                        onClick={() => {
+                          setendDate(dayjs());
+                          setfilterChange(true);
+                        }}
+                      >
+                        X
+                      </Typography>
+                      <Typography
+                        sx={{
+                          color: colors.blueText,
+                          fontFamily: "Urbanist-bold",
+                          fontSize: 14,
+                        }}
+                      >
+                        Date till {dayjs(endDate).format("DD.MM.YYYY")}
+                      </Typography>
+                    </>
+                  )}
+                {alertPriority && (
+                  <>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mx: 2,
+                      }}
+                    >
+                      |
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mr: 1,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        setalertPriority("");
+                        setfilterChange(true);
+                      }}
+                    >
+                      X
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Priority: {alertPriority}
+                    </Typography>
+                  </>
+                )}
               </Box>
             </Box>
             <Box
@@ -593,26 +803,56 @@ const Notifications = () => {
                     border: "none",
                     borderRight: "none",
                   },
+                  "& .blueRow": {
+                    backgroundColor: "#F5F7FA",
+                  },
                 }}
+                getRowClassName={(params) =>
+                  params.row.read === 0 ? "blueRow" : ""
+                }
                 showColumnVerticalBorder={false}
                 showCellVerticalBorder={true}
-                rows={alertsData}
+                rows={alertsData?.filter((val) =>
+                  val?.product?.Name?.toLocaleLowerCase()?.includes(
+                    search?.toLocaleLowerCase()
+                  )
+                )}
                 getRowId={(row) => row?.id}
                 columns={notificationColumns}
                 hideFooter={true}
                 checkboxSelection
+                onRowSelectionModelChange={(ids) => {
+                  const selectedIDs = new Set(ids);
+                  const selectedRows = alertsData?.filter((row) =>
+                    selectedIDs.has(row?.id)
+                  );
+                  setselectedProducts(selectedRows);
+                }}
               />
             </Box>
             <Box className="mt-4 mx-4">
-              <Stack direction={"row-reverse"}>
-                <Pagination count={10} variant="outlined" shape="rounded" />
-                <Box mx={2} width={200} height={20}>
-                  <FormControl
-                    variant="outlined"
-                    style={{ width: "100%" }}
-                    margin={"1"}
-                  >
-                    {/* <InputLabel
+              <Stack
+                direction={"row"}
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography
+                  sx={{
+                    color: "#667085",
+                    fontSize: 14,
+                    fontFamily: "Urbanist-bold",
+                  }}
+                >
+                  Showing {startIndex}-{endIndex} from {totalCount}
+                </Typography>
+                <Stack direction="row">
+                  <Box mx={2} width={200} height={20}>
+                    <FormControl
+                      variant="outlined"
+                      style={{ width: "100%" }}
+                      margin={"1"}
+                    >
+                      {/* <InputLabel
                       style={{
                         fontSize: 12,
                       }}
@@ -620,23 +860,38 @@ const Notifications = () => {
                     >
                       X-Per page
                     </InputLabel> */}
-                    <Select
-                      fullWidth
-                      defaultValue={10}
-                      // input={<OutlinedInput sx={{ fontSize: 14 }} label="Tag" />}
-                      size="small"
-                      variant="outlined"
-                      // value={num}
+                      <Select
+                        fullWidth
+                        defaultValue={10}
+                        // input={<OutlinedInput sx={{ fontSize: 14 }} label="Tag" />}
+                        size="small"
+                        variant="outlined"
+                        // value={num}
 
-                      style={{ height: 32 }}
-                      // onChange={handleChange}
-                    >
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Box>
+                        style={{ height: 32 }}
+                        onChange={handleChangeAlertsPerPage}
+                      >
+                        <MenuItem value={5}>Five</MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  <Pagination
+                    count={totalPages}
+                    variant="outlined"
+                    // color="primary"
+                    shape="rounded"
+                    onChange={(event, value) => {
+                      setcurrentPage(value);
+                    }}
+                    // sx={(value) => ({
+                    //   "& .MuiPaginationItem-root": {
+                    //     color: "#fff",
+                    //     backgroundColor: colors.blueText,
+                    //   },
+                    // })}
+                  />
+                </Stack>
               </Stack>
             </Box>
           </Grid>

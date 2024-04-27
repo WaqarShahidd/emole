@@ -33,7 +33,7 @@ const RowComp = ({ leftText, rightText, divider }) => (
   </>
 );
 
-const AlertDetails = () => {
+const AlertDetails = ({ deleteBtn }) => {
   const {
     alertDetailsData,
     setalertDetailsData,
@@ -169,6 +169,7 @@ const AlertDetails = () => {
             fullWidth
             onClick={() => {
               setalertDetails(false);
+              deleteBtn();
             }}
             autoFocus
           >

@@ -2,14 +2,8 @@ import {
   Box,
   Button,
   Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
   Drawer,
   FormControl,
-  InputLabel,
   ListItemText,
   MenuItem,
   OutlinedInput,
@@ -18,16 +12,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { colors } from "../../theme/theme";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { useUser } from "../../constants/context";
 import dayjs from "dayjs";
-import moment from "moment";
-import axios from "axios";
-import { BASE_URL } from "../constants/config";
-import { colors } from "../theme/theme";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -40,39 +31,30 @@ const MenuProps = {
   },
 };
 
-const FilterModal = ({
+const AlertsFilters = ({
   open,
   handleClose,
-  startDate,
   setstartDate,
-  endDate,
   setendDate,
-  prevPrice,
-  setprevPrice,
-  currentPrice,
-  setcurrentPrice,
+  startDate,
+  endDate,
   selectedIds,
   setSelectedIds,
+  alertPriority,
   applyFilter,
-  setstockStatusFilter,
-  stockStatusFilter,
   currentPage,
   setcurrentPage,
+  setalertPriority,
 }) => {
-  const [personName, setPersonName] = React.useState([]);
+  const { allWebsites, GetWebsites } = useUser();
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    console.log(event, "e");
-    setPersonName((prevPersonName) => {
-      const newValue = typeof value === "string" ? value.split(",") : value;
-      return newValue;
-    });
-  };
 
-  let currentDate = new Date().toLocaleDateString();
+    setSelectedIds(value);
+  };
 
   const handleStartDateChange = (newValue) => {
     setstartDate(newValue);
@@ -116,10 +98,9 @@ const FilterModal = ({
               fontSize={22}
               textAlign={"center"}
             >
-              Product Filters
+              Alert Filters
             </Typography>
           </Box>
-
           <Box
             sx={{
               backgroundColor: "#fff",
@@ -129,65 +110,6 @@ const FilterModal = ({
             }}
           >
             {/* Website Dropdown */}
-            {/* <Typography
-            sx={{
-              fontSize: "16px",
-              fontWeight: "700",
-              fontFamily: "Urbanist-bold",
-              color: "#222",
-              pb: 1,
-            }}
-            onClick={() => console.log(selectedIds)}
-          >
-            Choose Website
-          </Typography>
-          <FormControl fullWidth>
-            <Select
-              multiple
-              displayEmpty
-              value={personName}
-              onChange={handleChange}
-              input={<OutlinedInput />}
-              renderValue={(selected) => {
-                if (selected.length === 0) {
-                  return <>Select Website</>;
-                }
-
-                return selected.join(", ");
-              }}
-              MenuProps={MenuProps}
-              inputProps={{ "aria-label": "Without label" }}
-            >
-              {allWebsites?.map((name) => (
-                <MenuItem
-                  key={name.id}
-                  value={name.website_name}
-                  onClick={(e) => {
-                    setSelectedIds((prevSelectedIds) => {
-                      const selectedId = allWebsites.find(
-                        (website) => website.id === name.id
-                      )?.id;
-
-                      if (prevSelectedIds.includes(selectedId)) {
-                        return prevSelectedIds.filter(
-                          (id) => id !== selectedId
-                        );
-                      } else {
-                        return [...prevSelectedIds, selectedId];
-                      }
-                    });
-                  }}
-                >
-                  <Checkbox
-                    checked={personName.indexOf(name.website_name) > -1}
-                  />
-                  <ListItemText primary={name.website_name} />
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl> */}
-
-            {/* Stock Status Dropdown */}
             <Typography
               sx={{
                 fontSize: "16px",
@@ -197,25 +119,65 @@ const FilterModal = ({
                 pb: 1,
               }}
             >
-              Stock Status
+              Choose Website
             </Typography>
             <FormControl fullWidth>
               <Select
                 displayEmpty
-                value={stockStatusFilter}
-                onChange={(e) => setstockStatusFilter(e.target.value)}
+                value={
+                  allWebsites.find((website) => website?.URL === selectedIds)
+                    ?.Name || ""
+                }
+                onChange={handleChange}
+                input={<OutlinedInput />}
                 renderValue={(selected) => {
-                  if (selected === null) {
-                    return <>Stock Status</>;
+                  if (selected.length === 0) {
+                    return <>Select Website</>;
                   }
 
-                  return selected ? "In Stock" : "Out of Stock";
+                  return selected;
+                }}
+                inputProps={{ "aria-label": "Without label" }}
+              >
+                {allWebsites?.map((all) => (
+                  <MenuItem key={all.WebsiteID} value={all.URL}>
+                    <ListItemText primary={all.Name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            {/* Stock Status Dropdown */}
+            <Typography
+              sx={{
+                fontSize: "16px",
+                fontWeight: "700",
+                fontFamily: "Urbanist-bold",
+                color: "#222",
+                pb: 1,
+                mt: 3,
+              }}
+            >
+              Alert Priority
+            </Typography>
+            <FormControl fullWidth>
+              <Select
+                displayEmpty
+                value={alertPriority}
+                onChange={(e) => setalertPriority(e.target.value)}
+                renderValue={(selected) => {
+                  if (selected === null) {
+                    return <>Choose Alert Priority</>;
+                  }
+
+                  return selected;
                 }}
                 MenuProps={MenuProps}
                 inputProps={{ "aria-label": "Without label" }}
               >
-                <MenuItem value={true}>In Stock</MenuItem>
-                <MenuItem value={false}>Out of Stock</MenuItem>
+                <MenuItem value={"low"}>Low</MenuItem>
+                <MenuItem value={"medium"}>Medium</MenuItem>
+                <MenuItem value={"high"}>High</MenuItem>
               </Select>
             </FormControl>
 
@@ -259,49 +221,6 @@ const FilterModal = ({
                 </DemoContainer>
               </LocalizationProvider>
             </Stack>
-
-            {/* Price Range */}
-            <Typography
-              sx={{
-                fontSize: "16px",
-                fontWeight: "700",
-                fontFamily: "Urbanist-bold",
-                color: "#222",
-                pb: 1,
-                pt: 3,
-              }}
-            >
-              Choose Created Date Range
-            </Typography>
-            <Stack direction="row" justifyContent="space-between">
-              <TextField
-                id="outlined-number"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                placeholder="Min Price"
-                sx={{ width: "47.5%" }}
-                value={prevPrice}
-                onChange={(e) => setprevPrice(e.target.value)}
-              />
-              <TextField
-                id="outlined-number"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                placeholder="Max Price"
-                sx={{ width: "47.5%" }}
-                value={currentPrice}
-                onChange={(e) => {
-                  if (prevPrice === null) {
-                    setprevPrice(0);
-                  }
-                  setcurrentPrice(e.target.value);
-                }}
-              />
-            </Stack>
           </Box>
         </Box>
         <Stack
@@ -328,11 +247,10 @@ const FilterModal = ({
             fullWidth
             onClick={() => {
               handleClose();
-              setstockStatusFilter(null);
+              setalertPriority(null);
               setstartDate(null);
-              setendDate(dayjs(moment(currentDate).format("YYYY-MM-DD")));
-              setprevPrice(null);
-              setcurrentPrice(null);
+              setendDate(dayjs());
+              setSelectedIds("");
               applyFilter();
             }}
           >
@@ -354,9 +272,9 @@ const FilterModal = ({
               handleClose();
               if (currentPage !== 1) {
                 setcurrentPage(1);
-                applyFilter();
+                applyFilter(true);
               } else {
-                applyFilter();
+                applyFilter(true);
               }
             }}
             autoFocus
@@ -369,4 +287,4 @@ const FilterModal = ({
   );
 };
 
-export default FilterModal;
+export default AlertsFilters;
