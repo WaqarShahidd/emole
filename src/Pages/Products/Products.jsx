@@ -502,12 +502,13 @@ const Products = () => {
   const DeleteProducts = async () => {
     setloading(true);
     const token = localStorage.getItem("token");
-
+    const deleteIds = selectedProducts.map((product) => product?.ProductID);
+    console.log(deleteIds);
     await axios
       .post(
         `${BASE_URL}/deletProducts`,
         {
-          id: selectedProducts.map((product) => product?.UserProductID),
+          ids: deleteIds,
         },
         {
           headers: {
@@ -960,7 +961,7 @@ const Products = () => {
                     search?.toLocaleLowerCase()
                   )
                 )}
-                getRowId={(row) => row?.UserProductID}
+                getRowId={(row) => row?.ProductID}
                 columns={productsColumns}
                 initialState={{
                   pagination: {
@@ -971,9 +972,13 @@ const Products = () => {
                   const selectedIDs = new Set(ids);
 
                   const selectedRows = productsData?.filter((row) =>
-                    selectedIDs.has(row?.UserProductID)
+                    selectedIDs.has(row?.ProductID)
                   );
-                  console.log(selectedRows);
+                  console.log(
+                    productsData?.filter((row) =>
+                      selectedIDs.has(row?.ProductID)
+                    )
+                  );
                   setselectedProducts(selectedRows);
                 }}
                 columnVisibilityModel={columnVisibilityModel}

@@ -480,7 +480,7 @@ const Notifications = () => {
       .post(
         `${BASE_URL}/readAlert`,
         {
-          id: ids,
+          ids: ids,
           read: read,
         },
         {

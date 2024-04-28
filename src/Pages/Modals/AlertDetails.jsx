@@ -103,8 +103,14 @@ const AlertDetails = ({ deleteBtn }) => {
                 "DD.MM.YYYY"
               )}
             />
-            <RowComp leftText={"Website"} rightText={"Website Name"} />
-            <RowComp leftText={"Item"} rightText={"Product Name"} />
+            <RowComp
+              leftText={"Website"}
+              rightText={alertDetailsData?.product?.Page?.Website?.Name}
+            />
+            <RowComp
+              leftText={"Item"}
+              rightText={alertDetailsData?.product?.Name}
+            />
             <RowComp
               leftText={"Notification Type"}
               rightText={alertDetailsData?.alert_type}
