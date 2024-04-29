@@ -660,7 +660,7 @@ const priceUpdateColumns = [
 
 const mostAlertsColumns = [
   {
-    field: "productName",
+    field: "Name",
     headerName: "Product name",
     headerClassName: "super-app-theme--header",
     flex: 0.75,
@@ -669,8 +669,8 @@ const mostAlertsColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -683,23 +683,23 @@ const mostAlertsColumns = [
             fontSize: 13,
             fontWeight: "700",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
           {params?.value}
         </Typography>
-        <Typography
+        {/* <Typography
           fontWeight={"bold"}
           fontSize={13}
           className="underline text-blue-500 cursor-pointer"
         >
           Website Name
-        </Typography>
+        </Typography> */}
       </Box>
     ),
   },
   {
-    field: "oldValue",
+    field: "alertCount",
     headerName: "Alerts",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -710,8 +710,8 @@ const mostAlertsColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -729,7 +729,7 @@ const mostAlertsColumns = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
           {params?.value}
@@ -738,7 +738,7 @@ const mostAlertsColumns = [
     ),
   },
   {
-    field: "newValue",
+    field: "CreatedAt",
     headerName: "Last Alert",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -749,8 +749,8 @@ const mostAlertsColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -768,7 +768,113 @@ const mostAlertsColumns = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
+          }}
+        >
+          {moment(params?.value).format("DD.MM.YYYY")}
+        </Typography>
+      </Box>
+    ),
+  },
+  // {
+  //   field: "View",
+  //   headerName: "View",
+  //   headerClassName: "super-app-theme--header",
+  //   flex: 0.25,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   renderHeader: (params) => (
+  //     <Typography
+  //       sx={{
+  //         fontSize: 14,
+  //         fontWeight: "700",
+  //         fontFamily: "Urbanist",
+  //         color: "#222",
+  //       }}
+  //     >
+  //       {params?.colDef?.headerName}
+  //     </Typography>
+  //   ),
+  //   renderCell: (params) => (
+  //     <IconButton>
+  //       <Visibility />
+  //     </IconButton>
+  //   ),
+  // },
+];
+
+const mostAlertsGroupColumns = [
+  {
+    field: "Name",
+    headerName: "Group name",
+    headerClassName: "super-app-theme--header",
+    flex: 0.75,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box className="flex-col flex w-full h-full  justify-center">
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "700",
+            color: colors.subText,
+            fontFamily: "Urbanist-bold",
+          }}
+        >
+          {params?.row?.Group?.GroupName}
+        </Typography>
+        {/* <Typography
+          fontWeight={"bold"}
+          fontSize={13}
+          className="underline text-blue-500 cursor-pointer"
+        >
+          Website Name
+        </Typography> */}
+      </Box>
+    ),
+  },
+  {
+    field: "alertCount",
+    headerName: "Alerts",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "Urbanist-bold",
           }}
         >
           {params?.value}
@@ -776,30 +882,188 @@ const mostAlertsColumns = [
       </Box>
     ),
   },
-
   {
-    field: "View",
-    headerName: "View",
+    field: "CreatedAt",
+    headerName: "Last Alert",
     headerClassName: "super-app-theme--header",
-    flex: 0.25,
     headerAlign: "center",
     align: "center",
+    flex: 0.5,
     renderHeader: (params) => (
       <Typography
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
       </Typography>
     ),
     renderCell: (params) => (
-      <IconButton>
-        <Visibility />
-      </IconButton>
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "Urbanist-bold",
+          }}
+        >
+          {moment(params?.row?.Group?.createdAt).format("DD.MM.YYYY")}
+        </Typography>
+      </Box>
+    ),
+  },
+  // {
+  //   field: "View",
+  //   headerName: "View",
+  //   headerClassName: "super-app-theme--header",
+  //   flex: 0.25,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   renderHeader: (params) => (
+  //     <Typography
+  //       sx={{
+  //         fontSize: 14,
+  //         fontWeight: "700",
+  //         fontFamily: "Urbanist",
+  //         color: "#222",
+  //       }}
+  //     >
+  //       {params?.colDef?.headerName}
+  //     </Typography>
+  //   ),
+  //   renderCell: (params) => (
+  //     <IconButton>
+  //       <Visibility />
+  //     </IconButton>
+  //   ),
+  // },
+];
+
+const mostAlertsWebsiteColumns = [
+  {
+    field: "Name",
+    headerName: "Website name",
+    headerClassName: "super-app-theme--header",
+    flex: 0.75,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box className="flex-col flex w-full h-full  justify-center">
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "700",
+            color: colors.subText,
+            fontFamily: "Urbanist-bold",
+          }}
+        >
+          {params?.row?.Pages?.WebsiteID}
+        </Typography>
+        {/* <Typography
+          fontWeight={"bold"}
+          fontSize={13}
+          className="underline text-blue-500 cursor-pointer"
+        >
+          Website Name
+        </Typography> */}
+      </Box>
+    ),
+  },
+  {
+    field: "alertCount",
+    headerName: "Alerts",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "Urbanist-bold",
+          }}
+        >
+          {params?.value}
+        </Typography>
+      </Box>
+    ),
+  },
+  {
+    field: "CreatedAt",
+    headerName: "Last Alert",
+    headerClassName: "super-app-theme--header",
+    headerAlign: "center",
+    align: "center",
+    flex: 0.5,
+    renderHeader: (params) => (
+      <Typography
+        sx={{
+          fontSize: 14,
+          fontWeight: "700",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
+        }}
+      >
+        {params?.colDef?.headerName}
+      </Typography>
+    ),
+    renderCell: (params) => (
+      <Box
+        className="w-full h-full"
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Typography
+          sx={{
+            fontSize: 13,
+            fontWeight: "500",
+            color: colors.subText,
+            fontFamily: "Urbanist-bold",
+          }}
+        >
+          {moment(params?.row?.Group?.createdAt).format("DD.MM.YYYY")}
+        </Typography>
+      </Box>
     ),
   },
 ];
@@ -1130,6 +1394,9 @@ const Dashboard = () => {
   const [latestPriceAlerts, setlatestPriceAlerts] = useState([]);
   const [stockAlerts, setstockAlerts] = useState([]);
   const [latestProducts, setlatestProducts] = useState([]);
+  const [mostAlertedProd, setmostAlertedProd] = useState([]);
+  const [mostAlertedSegment, setmostAlertedSegment] = useState([]);
+  const [mostAlertedWebsite, setmostAlertedWebsite] = useState([]);
 
   const GetLatestAlerts = async () => {
     const token = localStorage.getItem("token");
@@ -1194,6 +1461,51 @@ const Dashboard = () => {
     }
   };
 
+  const GetMostAlertedProducts = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getMostAlertedProducts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data;
+      setmostAlertedProd(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const GetMostAlertedSegments = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getMostAlertedSegments`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data;
+      setmostAlertedSegment(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const GetMostAlertedWebsites = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getMostAlertedWebsites`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data;
+      setmostAlertedWebsite(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     // GetWebsites();
     GetGroups();
@@ -1205,6 +1517,9 @@ const Dashboard = () => {
     GetLatestPriceAlerts();
     GetLatestStockAlerts();
     GetLatestProducts();
+    GetMostAlertedProducts();
+    GetMostAlertedSegments();
+    GetMostAlertedWebsites();
   }, []);
 
   return (
@@ -1617,7 +1932,7 @@ const Dashboard = () => {
                       fontSize: "12px",
                       textTransform: "none",
                     }}
-                    onClick={() => navigate("/products")}
+                    onClick={() => navigate("/notifications")}
                   >
                     View All
                   </Button>
@@ -1638,8 +1953,9 @@ const Dashboard = () => {
                     }}
                     showColumnVerticalBorder={false}
                     showCellVerticalBorder={true}
-                    rows={priceUpdateRowData}
-                    columns={mostAlertsColumns}
+                    rows={mostAlertedWebsite}
+                    columns={mostAlertsWebsiteColumns}
+                    getRowId={(row) => row?.WebsiteID}
                     initialState={{
                       pagination: {
                         paginationModel: {
@@ -1692,7 +2008,7 @@ const Dashboard = () => {
                       fontSize: "12px",
                       textTransform: "none",
                     }}
-                    onClick={() => navigate("/products")}
+                    onClick={() => navigate("/notifications")}
                   >
                     View All
                   </Button>
@@ -1713,8 +2029,9 @@ const Dashboard = () => {
                     }}
                     showColumnVerticalBorder={false}
                     showCellVerticalBorder={true}
-                    rows={priceUpdateRowData}
+                    rows={mostAlertedProd}
                     columns={mostAlertsColumns}
+                    getRowId={(row) => row?.ProductID}
                     initialState={{
                       pagination: {
                         paginationModel: {
@@ -1767,7 +2084,7 @@ const Dashboard = () => {
                       fontSize: "12px",
                       textTransform: "none",
                     }}
-                    onClick={() => navigate("/products")}
+                    onClick={() => navigate("/notifications")}
                   >
                     View All
                   </Button>
@@ -1788,8 +2105,9 @@ const Dashboard = () => {
                     }}
                     showColumnVerticalBorder={false}
                     showCellVerticalBorder={true}
-                    rows={priceUpdateRowData}
-                    columns={mostAlertsColumns}
+                    rows={mostAlertedSegment}
+                    columns={mostAlertsGroupColumns}
+                    getRowId={(row) => row?.Group?.GroupID}
                     initialState={{
                       pagination: {
                         paginationModel: {

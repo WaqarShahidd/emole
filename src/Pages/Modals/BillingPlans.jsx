@@ -219,7 +219,7 @@ const BillingPlans = () => {
   };
 
   const filteredPlans = allPlans?.filter((plan) => {
-    const planDuration = planTypeSwitch ? "30" : "356";
+    const planDuration = planTypeSwitch ? "30" : "365";
     return plan?.PlanDuration === planDuration;
   });
 
