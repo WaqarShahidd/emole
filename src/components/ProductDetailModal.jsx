@@ -13,12 +13,48 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import { colors } from "../theme/theme";
 import moment from "moment";
+import { useState } from "react";
+import axios from "axios";
+import { BASE_URL } from "../constants/config";
 
 const ProductDetailModal = ({ open, handleClose, data }) => {
   const smallScreen = useMediaQuery("(max-width:650px)");
+
+  const [loading, setloading] = useState(false);
+
+  const [groupsByProduct, setgroupsByProduct] = useState([]);
+  const GetGroupsByProductId = async () => {
+    setloading(true);
+    const token = localStorage.getItem("token");
+    console.log(data);
+    await axios
+      .post(
+        `${BASE_URL}/getgroupsofproductbyproductid`,
+        {
+          ProductID: data?.ProductID,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setloading(false);
+        setgroupsByProduct(res.data?.Groups);
+      })
+      .catch((e) => {
+        setloading(false);
+      });
+  };
+
+  useEffect(() => {
+    GetGroupsByProductId();
+  }, [data]);
+
   return (
     <Drawer
       anchor={"right"}
@@ -48,7 +84,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
           <Box
             sx={{
               backgroundColor: "#fff",
-              p: 3,
+              p: 2,
               borderBottom: "1px solid #E0E2E7",
             }}
           >
@@ -692,7 +728,9 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         maxWidth: "50%",
                       }}
                     >
-                      Group name, Group name, Seg... 4 more{" "}
+                      {groupsByProduct
+                        ?.map((group) => group?.Group?.GroupName)
+                        .join(", ")}
                     </Typography>
                   </Stack>
                   <Stack
@@ -784,7 +822,9 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         fontWeight: "bold",
                         maxWidth: "50%",
                         overflow: "hidden",
+                        cursor: "pointer",
                       }}
+                      onClick={() => window.open(data?.Images)}
                     >
                       {data?.Images}
                     </Typography>

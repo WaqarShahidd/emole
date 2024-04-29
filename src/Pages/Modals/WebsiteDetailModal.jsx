@@ -89,10 +89,8 @@ export const WebsiteDetailModal = () => {
       .post(
         `${BASE_URL}/editWebsiteName`,
         {
-          user: {
-            id: parseInt(websiteDetailData?.WebsiteID),
-            name: websiteName,
-          },
+          id: parseInt(websiteDetailData?.WebsiteID),
+          name: websiteName,
         },
         {
           headers: {
@@ -103,6 +101,9 @@ export const WebsiteDetailModal = () => {
       .then((res) => {
         setloading(false);
         setwebsiteRenameModal(false);
+        setTimeout(() => {
+          setwebsiteDetail(false);
+        }, 2000);
         GetWebsites();
         setrenameConfirm(true);
       })

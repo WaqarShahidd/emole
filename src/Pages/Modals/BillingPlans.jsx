@@ -71,6 +71,7 @@ const Row = ({
   selected,
   onSelect,
   mB,
+  planDuration,
 }) => {
   return (
     <Box
@@ -178,7 +179,7 @@ const Row = ({
               color: "#fff",
             }}
           >
-            Per Month
+            {planDuration ? "Per month" : "Per year"}
           </Typography>
         </Box>
       </Box>
@@ -210,6 +211,17 @@ const BillingPlans = () => {
   };
 
   const smallScreen = useMediaQuery("(max-width:650px)");
+
+  const [planTypeSwitch, setplanTypeSwitch] = useState(true);
+
+  const handlePlanTypeSwitch = () => {
+    setplanTypeSwitch(!planTypeSwitch);
+  };
+
+  const filteredPlans = allPlans?.filter((plan) => {
+    const planDuration = planTypeSwitch ? "30" : "356";
+    return plan?.PlanDuration === planDuration;
+  });
 
   return (
     <Drawer
@@ -271,6 +283,7 @@ const BillingPlans = () => {
               mt: 1,
               textAlign: "center",
             }}
+            onClick={() => console.log(allPlans.map((i) => i.PlanDuration))}
           >
             more recently with desktop publishing software like Aldus PageMaker
             including versions of Lorem Ipsum.
@@ -288,6 +301,8 @@ const BillingPlans = () => {
             <AntSwitch
               defaultChecked
               inputProps={{ "aria-label": "ant design" }}
+              onChange={handlePlanTypeSwitch}
+              checked={planTypeSwitch}
             />
             <Typography style={{ color: "#fff", fontFamily: "Urbanist" }}>
               Month
@@ -295,15 +310,19 @@ const BillingPlans = () => {
           </Stack>
 
           {/* Rows */}
-          {allPlans?.map((plan) => (
+          {filteredPlans?.map((plan) => (
             <Row
               borderB={
-                plan?.idPlans === allPlans[allPlans.length - 1]?.idPlans
+                plan?.idPlans ===
+                filteredPlans[filteredPlans.length - 1]?.idPlans
                   ? false
                   : true
               }
               mB={
-                plan?.idPlans === allPlans[allPlans.length - 1]?.idPlans ? 9 : 0
+                plan?.idPlans ===
+                filteredPlans[filteredPlans.length - 1]?.idPlans
+                  ? 9
+                  : 0
               }
               leftText1={plan?.PlanName}
               leftText2={plan?.NumberOfProducts}
@@ -311,6 +330,7 @@ const BillingPlans = () => {
               selected={selectedPlanId === plan?.idPlans}
               onSelect={() => handleSelectPlan(plan?.idPlans, plan?.PlanPrice)}
               key={plan?.idPlans}
+              planDuration={planTypeSwitch}
             />
           ))}
         </Box>

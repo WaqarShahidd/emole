@@ -96,6 +96,7 @@ const Row = ({
   borderB,
   selected,
   onSelect,
+  planDuration,
 }) => {
   return (
     <Box
@@ -203,7 +204,7 @@ const Row = ({
               color: "#fff",
             }}
           >
-            Per Month
+            {planDuration === "30" ? "Per month" : "Per year"}
           </Typography>
         </Box>
       </Box>
@@ -403,6 +404,17 @@ const AccountBilling = () => {
   }, []);
 
   const smallScreen = useMediaQuery("(max-width:650px)");
+
+  const [planTypeSwitch, setplanTypeSwitch] = useState(true);
+
+  const handlePlanTypeSwitch = () => {
+    setplanTypeSwitch(!planTypeSwitch);
+  };
+
+  const filteredPlans = allPlans?.filter((plan) => {
+    const planDuration = planTypeSwitch ? "30" : "356";
+    return plan?.PlanDuration === planDuration;
+  });
 
   return (
     <Drawer
@@ -644,7 +656,7 @@ const AccountBilling = () => {
             />
           </Box>
 
-          {userPlan?.subscribedPlane?.PlanName === "Free" ? (
+          {userPlan?.subscribedPlane?.PlanName !== "Free" ? (
             <>
               {/* Packages */}
               <Box
@@ -686,16 +698,19 @@ const AccountBilling = () => {
                   <AntSwitch
                     defaultChecked
                     inputProps={{ "aria-label": "ant design" }}
+                    onChange={handlePlanTypeSwitch}
+                    checked={planTypeSwitch}
                   />
                   <Typography style={{ color: "#fff", fontFamily: "Urbanist" }}>
                     Month
                   </Typography>
                 </Stack>
 
-                {allPlans?.map((plan) => (
+                {filteredPlans?.map((plan) => (
                   <Row
                     borderB={
-                      plan?.idPlans !== allPlans[allPlans.length - 1]?.idPlans
+                      plan?.idPlans !==
+                      filteredPlans[filteredPlans.length - 1]?.idPlans
                         ? true
                         : false
                     }
@@ -707,6 +722,7 @@ const AccountBilling = () => {
                       handleSelectPlan(plan?.idPlans, plan?.PlanPrice)
                     }
                     key={plan?.idPlans}
+                    planDuration={plan?.PlanDuration}
                   />
                 ))}
               </Box>
