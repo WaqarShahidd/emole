@@ -607,6 +607,9 @@ const GroupModal = ({ open, handleClose, data }) => {
                 borderRadius: "12px",
                 border: "none",
                 mt: 1,
+                "& .MuiDataGrid-overlayWrapper": {
+                  minHeight: "100px",
+                },
               }}
               getRowId={(row) => row?.segment?.GroupID}
               hideFooter={true}

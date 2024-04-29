@@ -1,6 +1,9 @@
 import {
+  Alert,
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -8,6 +11,8 @@ import {
   Divider,
   Drawer,
   Grid,
+  IconButton,
+  Snackbar,
   Stack,
   Typography,
   useMediaQuery,
@@ -17,6 +22,10 @@ import { colors } from "../../theme/theme";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { useState } from "react";
+import axios from "axios";
+import { BASE_URL } from "../../constants/config";
+import EditWebsiteName from "./EditWebsiteName";
+import { Edit, EditOutlined } from "@mui/icons-material";
 
 export const WebsiteDetailModal = () => {
   const navigate = useNavigate();
@@ -28,6 +37,7 @@ export const WebsiteDetailModal = () => {
     setwebsiteViewProductsData,
     setwebsiteModalState,
     allWebsites,
+    GetWebsites,
   } = useUser();
 
   const categories =
@@ -64,6 +74,52 @@ export const WebsiteDetailModal = () => {
 
   const smallScreen = useMediaQuery("(max-width:650px)");
 
+  const [websiteRenameModal, setwebsiteRenameModal] = useState(false);
+  const [websiteName, setwebsiteName] = useState("");
+
+  const [loading, setloading] = useState(false);
+
+  const [renameConfirm, setrenameConfirm] = useState(false);
+
+  const UpdateWebsiteName = async () => {
+    setloading(true);
+    const token = localStorage.getItem("token");
+
+    await axios
+      .post(
+        `${BASE_URL}/editWebsiteName`,
+        {
+          user: {
+            id: parseInt(websiteDetailData?.WebsiteID),
+            name: websiteName,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        setloading(false);
+        setwebsiteRenameModal(false);
+        GetWebsites();
+        setrenameConfirm(true);
+      })
+      .catch((e) => {
+        setrenameConfirm(false);
+        setloading(false);
+      });
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setrenameConfirm(false);
+  };
+
   return (
     <Drawer
       anchor={"right"}
@@ -80,6 +136,29 @@ export const WebsiteDetailModal = () => {
         },
       }}
     >
+      <EditWebsiteName
+        RenameWebsite={UpdateWebsiteName}
+        setwebsiteName={setwebsiteName}
+        websiteName={websiteName}
+        websiteRenameModal={websiteRenameModal}
+        setwebsiteRenameModal={setwebsiteRenameModal}
+        loading={loading}
+      />
+
+      <Snackbar
+        open={renameConfirm}
+        autoHideDuration={2000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          Website name updated successfully!
+        </Alert>
+      </Snackbar>
       <Box
         display="flex"
         flexDirection="column"
@@ -123,14 +202,28 @@ export const WebsiteDetailModal = () => {
               alignItems="center"
               justifyContent="space-between"
             >
-              <Typography
-                fontFamily={"Urbanist-bolder"}
-                fontWeight={"bold"}
-                fontSize={16}
-                color={colors.darkText}
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
               >
-                {websiteDetailData?.Name}
-              </Typography>
+                <Typography
+                  fontFamily={"Urbanist-bolder"}
+                  fontWeight={"bold"}
+                  fontSize={16}
+                  color={colors.darkText}
+                >
+                  {websiteDetailData?.Name}
+                </Typography>
+                <IconButton
+                  onClick={() => {
+                    setwebsiteRenameModal(true);
+                    setwebsiteName(websiteDetailData?.Name);
+                  }}
+                >
+                  <Edit sx={{ fontSize: "18px", color: colors.darkText }} />
+                </IconButton>
+              </Stack>
               <Typography
                 sx={{
                   color: colors.blueText,

@@ -340,32 +340,32 @@ const newProductUpdatesColumnsData = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
       </Typography>
     ),
     renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full  justify-center">
+      <Box className="flex-col flex w-full h-full justify-center">
         <Typography
           sx={{
             fontSize: 13,
             fontWeight: "700",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {params?.row?.Product?.Name}
         </Typography>
-        <Typography
+        {/* <Typography
           fontWeight={"bold"}
           fontSize={13}
           className="underline text-blue-500 cursor-pointer"
         >
           Website Name
-        </Typography>
+        </Typography> */}
       </Box>
     ),
   },
@@ -381,8 +381,8 @@ const newProductUpdatesColumnsData = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -400,10 +400,10 @@ const newProductUpdatesColumnsData = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {params?.row?.Product?.Price}
         </Typography>
       </Box>
     ),
@@ -420,8 +420,8 @@ const newProductUpdatesColumnsData = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -439,72 +439,39 @@ const newProductUpdatesColumnsData = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {moment(params?.row?.Product?.createdAt).format("DD.MM.YYYY")}
         </Typography>
       </Box>
     ),
   },
-  {
-    field: "View",
-    headerName: "View",
-    headerClassName: "super-app-theme--header",
-    flex: 0.25,
-    headerAlign: "center",
-    align: "center",
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <IconButton>
-        <Visibility />
-      </IconButton>
-    ),
-  },
-];
-
-const newProductUpdatesRowsData = [
-  {
-    id: 1,
-    productName: "Product A",
-    price: "$50",
-    date: "2024-03-27",
-  },
-  {
-    id: 2,
-    productName: "Product B",
-    price: "$30",
-    date: "2024-03-26",
-  },
-  {
-    id: 3,
-    productName: "Product C",
-    price: "$70",
-    date: "2024-03-25",
-  },
-  {
-    id: 4,
-    productName: "Product D",
-    price: "$20",
-    date: "2024-03-24",
-  },
-  {
-    id: 5,
-    productName: "Product E",
-    price: "$45",
-    date: "2024-03-23",
-  },
+  // {
+  //   field: "View",
+  //   headerName: "View",
+  //   headerClassName: "super-app-theme--header",
+  //   flex: 0.25,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   renderHeader: (params) => (
+  //     <Typography
+  //       sx={{
+  //         fontSize: 14,
+  //         fontWeight: "700",
+  //         fontFamily: "Urbanist",
+  //         color: "#222",
+  //       }}
+  //     >
+  //       {params?.colDef?.headerName}
+  //     </Typography>
+  //   ),
+  //   renderCell: (params) => (
+  //     <IconButton>
+  //       <Visibility />
+  //     </IconButton>
+  //   ),
+  // },
 ];
 
 const priceUpdateColumns = [
@@ -1162,6 +1129,7 @@ const Dashboard = () => {
   const [latestAlerts, setlatestAlerts] = useState([]);
   const [latestPriceAlerts, setlatestPriceAlerts] = useState([]);
   const [stockAlerts, setstockAlerts] = useState([]);
+  const [latestProducts, setlatestProducts] = useState([]);
 
   const GetLatestAlerts = async () => {
     const token = localStorage.getItem("token");
@@ -1208,6 +1176,24 @@ const Dashboard = () => {
     }
   };
 
+  const GetLatestProducts = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/getRecentlyUpdatedProducts`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.data?.products;
+      setlatestProducts(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     // GetWebsites();
     GetGroups();
@@ -1218,6 +1204,7 @@ const Dashboard = () => {
     GetLatestAlerts();
     GetLatestPriceAlerts();
     GetLatestStockAlerts();
+    GetLatestProducts();
   }, []);
 
   return (
@@ -1329,7 +1316,7 @@ const Dashboard = () => {
                       fontSize: "12px",
                       textTransform: "none",
                     }}
-                    onClick={() => navigate("/products")}
+                    onClick={() => navigate("/notifications")}
                   >
                     View All
                   </Button>
@@ -1389,7 +1376,7 @@ const Dashboard = () => {
                     fontFamily={"Urbanist"}
                     fontSize={18}
                   >
-                    Most Alerted Websites
+                    New Product Updates
                   </Typography>
                   <Button
                     disableElevation
@@ -1425,8 +1412,9 @@ const Dashboard = () => {
                     }}
                     showColumnVerticalBorder={false}
                     showCellVerticalBorder={true}
-                    rows={newProductUpdatesRowsData}
+                    rows={latestProducts}
                     columns={newProductUpdatesColumnsData}
+                    getRowId={(row) => row?.ProductID}
                     initialState={{
                       pagination: {
                         paginationModel: {
@@ -1479,7 +1467,7 @@ const Dashboard = () => {
                       fontSize: "12px",
                       textTransform: "none",
                     }}
-                    onClick={() => navigate("/products")}
+                    onClick={() => navigate("/notifications")}
                   >
                     View All
                   </Button>
@@ -1554,7 +1542,7 @@ const Dashboard = () => {
                       fontSize: "12px",
                       textTransform: "none",
                     }}
-                    onClick={() => navigate("/products")}
+                    onClick={() => navigate("/notifications")}
                   >
                     View All
                   </Button>
