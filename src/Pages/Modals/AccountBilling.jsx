@@ -13,6 +13,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import LinearProgress, {
@@ -401,6 +402,8 @@ const AccountBilling = () => {
     GetUserPlan();
   }, []);
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Drawer
       anchor={"right"}
@@ -409,7 +412,7 @@ const AccountBilling = () => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: "600px",
+          width: smallScreen ? "450px" : "600px",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F0F1F3",
@@ -426,7 +429,7 @@ const AccountBilling = () => {
           <Box
             sx={{
               backgroundColor: "#fff",
-              p: 3,
+              p: 2,
               borderBottom: "1px solid #E0E2E7",
             }}
           >

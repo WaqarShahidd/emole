@@ -196,3 +196,12 @@ export const tutorialData = [
       "Contrary to popular belief, Lorem Ipsum is not simply random text.It has roots in a piece of classical Latin literature from 45 BC,making it over 2000 years old. Richard McClintock, a Latinprofessor at Hampden-Sydney College in Virginia.",
   },
 ];
+
+export const alertTypeOptions = [
+  { id: 1, value: "Price Change" },
+  { id: 2, value: "Stock Status Change" },
+  { id: 3, value: "Product Removed" },
+  { id: 4, value: "Description Change" },
+  { id: 5, value: "Category Change" },
+  { id: 6, value: "Image Change" },
+];

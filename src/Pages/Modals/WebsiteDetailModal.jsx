@@ -10,10 +10,13 @@ import {
   Grid,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { useState } from "react";
 
 export const WebsiteDetailModal = () => {
   const navigate = useNavigate();
@@ -27,6 +30,40 @@ export const WebsiteDetailModal = () => {
     allWebsites,
   } = useUser();
 
+  const categories =
+    Array.from(
+      new Set(
+        websiteDetailData?.products?.flatMap((product) =>
+          product?.Category?.split(",").map((category) => category?.trim())
+        )
+      )
+    ) || [];
+
+  const tags =
+    Array.from(
+      new Set(
+        websiteDetailData?.products?.flatMap((product) =>
+          product?.Tags.split(",").map((tag) => tag.trim())
+        )
+      )
+    ) || [];
+
+  const [expanded, setExpanded] = useState(false);
+  const visibleCategories = expanded ? categories : categories?.slice(0, 2);
+
+  const handleToggle = () => {
+    setExpanded(!expanded);
+  };
+
+  const [tagsExpanded, settagsExpanded] = useState(false);
+  const visibleTags = tagsExpanded ? tags : tags?.slice(0, 4);
+
+  const handleTagsToggle = () => {
+    settagsExpanded(!tagsExpanded);
+  };
+
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Drawer
       anchor={"right"}
@@ -38,8 +75,7 @@ export const WebsiteDetailModal = () => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: "600px",
-
+          width: smallScreen ? "450px" : "600px",
           backgroundColor: "#F0F1F3",
         },
       }}
@@ -154,15 +190,6 @@ export const WebsiteDetailModal = () => {
                 fontSize={14}
                 color={colors.subText}
                 mb={1}
-                onClick={() =>
-                  console.log(
-                    allWebsites.find(
-                      (website) =>
-                        website?.WebsiteID === websiteDetailData?.WebsiteID
-                    ),
-                    websiteDetailData
-                  )
-                }
               >
                 Total Products{" "}
               </Typography>
@@ -174,12 +201,7 @@ export const WebsiteDetailModal = () => {
                   textDecorationLine: "underline",
                 }}
               >
-                {websiteDetailData?.WebsiteID
-                  ? allWebsites.find(
-                      (website) =>
-                        website?.WebsiteID === websiteDetailData?.WebsiteID
-                    )?.totalProducts
-                  : 0}
+                {websiteDetailData?.totalProducts}
               </Typography>
             </Stack>
             <Stack
@@ -193,7 +215,6 @@ export const WebsiteDetailModal = () => {
                 fontSize={14}
                 color={colors.subText}
                 mb={1}
-                onClick={() => console.log(websiteDetailData?.products)}
               >
                 Total out of stock products{" "}
               </Typography>
@@ -205,12 +226,7 @@ export const WebsiteDetailModal = () => {
                   textDecorationLine: "underline",
                 }}
               >
-                {websiteDetailData?.WebsiteID
-                  ? allWebsites.find(
-                      (website) =>
-                        website?.WebsiteID === websiteDetailData?.WebsiteID
-                    )?.outOfStockProducts
-                  : 0}
+                {websiteDetailData?.outOfStockProducts}
               </Typography>
             </Stack>
           </Box>
@@ -286,7 +302,7 @@ export const WebsiteDetailModal = () => {
                         textDecorationLine: "underline",
                       }}
                     >
-                      12
+                      {websiteDetailData?.alerts?.length}
                     </Typography>
                   </Stack>
                 </Grid>
@@ -317,7 +333,11 @@ export const WebsiteDetailModal = () => {
                         textDecorationLine: "underline",
                       }}
                     >
-                      12{" "}
+                      {
+                        websiteDetailData?.alerts?.filter(
+                          (alert) => alert?.alert_type === "Price Change"
+                        )?.length
+                      }
                     </Typography>
                   </Stack>
                 </Grid>
@@ -348,7 +368,11 @@ export const WebsiteDetailModal = () => {
                         textDecorationLine: "underline",
                       }}
                     >
-                      52{" "}
+                      {
+                        websiteDetailData?.alerts?.filter(
+                          (alert) => alert?.alert_type === "Stock Status Change"
+                        )?.length
+                      }
                     </Typography>
                   </Stack>
                 </Grid>
@@ -387,7 +411,15 @@ export const WebsiteDetailModal = () => {
                         fontSize: 12,
                       }}
                     >
-                      12.12.24{" "}
+                      {websiteDetailData?.alerts?.length === 0
+                        ? "N/A"
+                        : moment(
+                            websiteDetailData?.alerts?.sort(
+                              (alert, alert2) =>
+                                new Date(alert.createdAt) -
+                                new Date(alert2?.createdAt)
+                            )?.[0]?.createdAt
+                          ).format("DD.MM.YYYY")}
                     </Typography>
                   </Stack>
                 </Grid>
@@ -416,8 +448,35 @@ export const WebsiteDetailModal = () => {
                         fontFamily: "PublicSans",
                         fontSize: 12,
                       }}
+                      onClick={() =>
+                        console.log(
+                          websiteDetailData?.alerts
+                            ?.filter(
+                              (alert) => alert?.alert_type === "Price Change"
+                            )
+                            ?.sort(
+                              (alert, alert2) =>
+                                new Date(alert.createdAt) -
+                                new Date(alert2?.createdAt)
+                            )?.[0]?.createdAt
+                        )
+                      }
                     >
-                      12.12.24{" "}
+                      {websiteDetailData?.alerts?.filter(
+                        (alert) => alert?.alert_type === "Price Change"
+                      )?.length === 0
+                        ? "N/A"
+                        : moment(
+                            websiteDetailData?.alerts
+                              ?.filter(
+                                (alert) => alert?.alert_type === "Price Change"
+                              )
+                              ?.sort(
+                                (alert, alert2) =>
+                                  new Date(alert.createdAt) -
+                                  new Date(alert2?.createdAt)
+                              )?.[0]?.createdAt
+                          ).format("DD.MM.YYYY")}
                     </Typography>
                   </Stack>
                 </Grid>
@@ -447,7 +506,22 @@ export const WebsiteDetailModal = () => {
                         fontSize: 12,
                       }}
                     >
-                      12.12.24{" "}
+                      {websiteDetailData?.alerts?.filter(
+                        (alert) => alert?.alert_type === "Stock Status Change"
+                      )?.length === 0
+                        ? "N/A"
+                        : moment(
+                            websiteDetailData?.alerts
+                              ?.filter(
+                                (alert) =>
+                                  alert?.alert_type === "Stock Status Change"
+                              )
+                              ?.sort(
+                                (alert, alert2) =>
+                                  new Date(alert.createdAt) -
+                                  new Date(alert2?.createdAt)
+                              )?.[0]?.createdAt
+                          ).format("DD.MM.YYYY")}
                     </Typography>
                   </Stack>
                 </Grid>
@@ -487,30 +561,7 @@ export const WebsiteDetailModal = () => {
               }}
             />
 
-            {/*
-
-            <Typography
-              fontFamily={"Urbanist"}
-              fontWeight={"bold"}
-              fontSize={14}
-              color={colors.subText}
-            >
-              Description:
-            </Typography>
-            <Typography
-              sx={{
-                color: colors.darkText,
-                fontFamily: "Urbanist-bold",
-                fontSize: 14,
-                fontWeight: "bold",
-                mb: 2,
-                mt: 1,
-              }}
-            >
-              {websiteDetailData?.Description}
-            </Typography>
-            */}
-
+            {}
             <Stack
               direction="row"
               alignItems="center"
@@ -538,7 +589,7 @@ export const WebsiteDetailModal = () => {
                   maxWidth: "50%",
                 }}
               >
-                {websiteDetailData?.Description}
+                {websiteDetailData?.Description || "N/A"}
               </Typography>
             </Stack>
 
@@ -562,16 +613,27 @@ export const WebsiteDetailModal = () => {
               </Typography>
               <Typography
                 sx={{
-                  color: colors.blueText,
+                  color:
+                    websiteDetailData?.segments?.length === 0
+                      ? colors.subText
+                      : colors.blueText,
+                  textDecorationLine:
+                    websiteDetailData?.segments?.length === 0
+                      ? "none"
+                      : "underline",
                   fontFamily: "PublicSans",
                   fontSize: 12,
-                  textDecorationLine: "underline",
                   fontWeight: "bold",
                 }}
               >
-                Segment name, Segment name, Seg... 4 more{" "}
+                {websiteDetailData?.segments?.length === 0
+                  ? "N/A"
+                  : websiteDetailData?.segments?.map(
+                      (segment) => segment?.Name
+                    )}
               </Typography>
             </Stack>
+
             <Stack
               direction="row"
               alignItems="center"
@@ -592,14 +654,38 @@ export const WebsiteDetailModal = () => {
               </Typography>
               <Typography
                 sx={{
-                  color: colors.blueText,
+                  color:
+                    categories?.length === 0 ? colors.subText : colors.blueText,
+                  textDecorationLine:
+                    categories?.length === 0 ? "none" : "underline",
                   fontFamily: "PublicSans",
                   fontSize: 12,
-                  textDecorationLine: "underline",
                   fontWeight: "bold",
+                  maxWidth: "60%",
+                  whiteSpace: expanded ? "wrap" : "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
               >
-                Segment name, Segment name, Seg... 4 more{" "}
+                {categories?.length === 0
+                  ? "N/A"
+                  : visibleCategories?.join(", ")}
+                {visibleCategories?.length > 1 && (
+                  <span
+                    onClick={handleToggle}
+                    style={{
+                      cursor: "pointer",
+                      marginLeft: "5px",
+                      textDecorationColor: "white",
+                      textDecorationLine: "inherit",
+                      color: colors.darkText,
+                    }}
+                  >
+                    {expanded
+                      ? " (Collapse)"
+                      : ` (+${categories?.length - 2} more)`}
+                  </span>
+                )}
               </Typography>
             </Stack>
             <Stack
@@ -622,14 +708,34 @@ export const WebsiteDetailModal = () => {
               </Typography>
               <Typography
                 sx={{
-                  color: colors.blueText,
+                  color: tags?.length === 0 ? colors.subText : colors.blueText,
+                  textDecorationLine: tags?.length === 0 ? "none" : "underline",
                   fontFamily: "PublicSans",
                   fontSize: 12,
-                  textDecorationLine: "underline",
                   fontWeight: "bold",
+                  maxWidth: "60%",
+                  whiteSpace: tagsExpanded ? "wrap" : "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
                 }}
               >
-                Tag name, Tag name, Tag name, Tag n... 4 more{" "}
+                {tags?.length === 0 ? "N/A" : visibleTags?.join(", ")}
+                {visibleTags?.length > 1 && (
+                  <span
+                    onClick={handleTagsToggle}
+                    style={{
+                      cursor: "pointer",
+                      color: colors.darkText,
+                      marginLeft: "5px",
+                      textDecorationColor: "white",
+                      textDecorationLine: "inherit",
+                    }}
+                  >
+                    {tagsExpanded
+                      ? " (Collapse)"
+                      : ` (+${tags?.length - 3} more)`}
+                  </span>
+                )}
               </Typography>
             </Stack>
           </Box>

@@ -11,12 +11,14 @@ import {
   Grid,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React from "react";
 import { colors } from "../theme/theme";
 import moment from "moment";
 
 const ProductDetailModal = ({ open, handleClose, data }) => {
+  const smallScreen = useMediaQuery("(max-width:650px)");
   return (
     <Drawer
       anchor={"right"}
@@ -25,7 +27,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: "600px",
+          width: smallScreen ? "450px" : "600px",
           overflowY: "auto",
           backgroundColor: "#F0F1F3",
         },

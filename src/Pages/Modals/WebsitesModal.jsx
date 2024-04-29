@@ -12,22 +12,11 @@ import {
   IconButton,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
-import { CustomInput } from "../../components/CustomInput";
-import { DataGrid } from "@mui/x-data-grid";
-import { billingRows } from "../../assets/DummyData";
-import {
-  Delete,
-  NotificationAdd,
-  Notifications,
-  PieChart,
-  Save,
-  ShoppingCart,
-  Visibility,
-} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import {
   greyEye,
@@ -132,7 +121,7 @@ const WebsiteModalComp = ({
               ml: 1,
             }}
           >
-            {data?.products?.length}
+            {data?.totalProducts}
           </Typography>
         </Stack>
         <Stack direction={"row"} alignItems={"center"}>
@@ -166,7 +155,7 @@ const WebsiteModalComp = ({
               ml: 1,
             }}
           >
-            1
+            {data?.segments?.length}
           </Typography>
         </Stack>
         <Stack direction={"row"} alignItems={"center"}>
@@ -183,7 +172,7 @@ const WebsiteModalComp = ({
               ml: 1,
             }}
           >
-            5
+            {data?.alerts?.length}
           </Typography>
         </Stack>
       </Stack>
@@ -238,6 +227,8 @@ const WebsitesModal = () => {
     GetWebsites();
   }, []);
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Drawer
       anchor={"right"}
@@ -247,7 +238,7 @@ const WebsitesModal = () => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: "600px",
+          width: smallScreen ? "450px" : "600px",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F0F1F3",

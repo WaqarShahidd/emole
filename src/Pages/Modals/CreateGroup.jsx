@@ -14,6 +14,7 @@ import {
   FormControlLabel,
   FormGroup,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { colors } from "../../theme/theme";
 import { CustomInput } from "../../components/CustomInput";
@@ -120,6 +121,8 @@ const CreateGroup = ({ handleClose, open }) => {
     )
   );
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Drawer
       anchor={"right"}
@@ -128,7 +131,7 @@ const CreateGroup = ({ handleClose, open }) => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          minWidth: "500px",
+          width: smallScreen ? "350px" : "500px",
           overflowY: "hidden",
           overflowX: "hidden",
           backgroundColor: "#F0F1F3",

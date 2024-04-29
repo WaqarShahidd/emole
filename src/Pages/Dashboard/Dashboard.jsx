@@ -21,11 +21,12 @@ import {
 import axios from "axios";
 import { BASE_URL } from "../../constants/config";
 import { useUser } from "../../constants/context";
+import moment from "moment";
 
 const latestUpdatesColumnsData = [
   {
-    field: "TagName",
-    headerName: "Tag name",
+    field: "product",
+    headerName: "Product name",
     headerClassName: "super-app-theme--header",
     flex: 0.85,
     renderHeader: (params) => (
@@ -33,37 +34,37 @@ const latestUpdatesColumnsData = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
       </Typography>
     ),
     renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full  justify-center">
+      <Box className="flex-col flex w-full h-full justify-center">
         <Typography
           sx={{
             fontSize: 13,
             fontWeight: "700",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {params?.row?.product?.Name}
         </Typography>
-        <Typography
+        {/* <Typography
           fontWeight={"bold"}
           fontSize={13}
           className="underline text-blue-500 cursor-pointer"
         >
           Website Name
-        </Typography>
+        </Typography> */}
       </Box>
     ),
   },
   {
-    field: "Priority",
+    field: "priority",
     headerName: "Priority",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -74,8 +75,8 @@ const latestUpdatesColumnsData = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -92,13 +93,13 @@ const latestUpdatesColumnsData = [
           fontSize={13}
           px={1}
           py={0.1}
-          // className="w-full"
           style={{
             textAlign: "center",
             backgroundColor: getStatusBackgroundColor(params?.value),
             color: getStatusTextColor(params?.value),
             fontWeight: "bold",
             borderRadius: "8px",
+            fontFamily: "Urbanist-bold",
           }}
         >
           {params?.value}
@@ -107,7 +108,7 @@ const latestUpdatesColumnsData = [
     ),
   },
   {
-    field: "Data",
+    field: "alert_type",
     headerName: "Data",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -118,8 +119,8 @@ const latestUpdatesColumnsData = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -137,59 +138,18 @@ const latestUpdatesColumnsData = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {params?.value === "" ? "N/A" : params?.value}
         </Typography>
       </Box>
     ),
   },
   {
-    field: "Value",
-    headerName: "Value",
-    headerClassName: "super-app-theme--header",
-
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "PublicSans",
-          }}
-        >
-          {params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "Old_Value",
+    field: "old_value",
     headerName: "Old Value",
     headerClassName: "super-app-theme--header",
-
     headerAlign: "center",
     align: "center",
     flex: 0.5,
@@ -198,8 +158,8 @@ const latestUpdatesColumnsData = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -217,7 +177,7 @@ const latestUpdatesColumnsData = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
           {params?.value}
@@ -226,10 +186,9 @@ const latestUpdatesColumnsData = [
     ),
   },
   {
-    field: "New_Value",
+    field: "new_value",
     headerName: "New Value",
     headerClassName: "super-app-theme--header",
-
     headerAlign: "center",
     align: "center",
     flex: 0.5,
@@ -238,8 +197,8 @@ const latestUpdatesColumnsData = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -257,7 +216,7 @@ const latestUpdatesColumnsData = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
           {params?.value}
@@ -266,10 +225,9 @@ const latestUpdatesColumnsData = [
     ),
   },
   {
-    field: "Date",
+    field: "createdAt",
     headerName: "Date",
     headerClassName: "super-app-theme--header",
-
     headerAlign: "center",
     align: "center",
     flex: 0.5,
@@ -278,8 +236,8 @@ const latestUpdatesColumnsData = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -297,16 +255,16 @@ const latestUpdatesColumnsData = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {moment(params?.value).format("DD.MM.YYYY")}
         </Typography>
       </Box>
     ),
   },
   {
-    field: "Status",
+    field: "read",
     headerName: "Status",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -317,8 +275,8 @@ const latestUpdatesColumnsData = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -336,150 +294,39 @@ const latestUpdatesColumnsData = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {params?.value === 0 ? "Unread" : "Read"}
         </Typography>
       </Box>
     ),
   },
-  {
-    field: "View",
-    headerName: "View",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <IconButton>
-        <Visibility />
-      </IconButton>
-    ),
-  },
-];
-
-const latestUpdatesRowsData = [
-  {
-    id: 1,
-    TagName: "TagName",
-    Priority: "Low",
-    Data: "Product",
-    Value: "New",
-    Old_Value: "Old_Value",
-    New_Value: "New_Value",
-    Date: "Date",
-    Status: "Status",
-    View: "View",
-  },
-  {
-    id: 2,
-    TagName: "TagName",
-    Priority: "Medium",
-    Data: "Price",
-    Value: "Increase",
-    Old_Value: "Old_Value",
-    New_Value: "New_Value",
-    Date: "Date",
-    Status: "Status",
-    View: "View",
-  },
-  {
-    id: 3,
-    TagName: "TagName",
-    Priority: "High",
-    Data: "Stock",
-    Value: "In stock",
-    Old_Value: "Old_Value",
-    New_Value: "New_Value",
-    Date: "Date",
-    Status: "Status",
-    View: "View",
-  },
-  {
-    id: 4,
-    TagName: "TagName",
-    Priority: "Out of stock",
-    Data: "Product",
-    Value: "$158",
-    Old_Value: "Old_Value",
-    New_Value: "New_Value",
-    Date: "Date",
-    Status: "Status",
-    View: "View",
-  },
-  {
-    id: 5,
-    TagName: "TagName",
-    Priority: "Low",
-    Data: "N/A",
-    Value: "Updated",
-    Old_Value: "Old_Value",
-    New_Value: "New_Value",
-    Date: "Date",
-    Status: "Status",
-    View: "View",
-  },
-  {
-    id: 6,
-    TagName: "TagName",
-    Priority: "Priority",
-    Data: "Data",
-    Value: "Value",
-    Old_Value: "Old_Value",
-    New_Value: "New_Value",
-    Date: "Date",
-    Status: "Status",
-    View: "View",
-  },
-  {
-    id: 7,
-    TagName: "TagName",
-    Priority: "Priority",
-    Data: "Data",
-    Value: "Value",
-    Old_Value: "Old_Value",
-    New_Value: "New_Value",
-    Date: "Date",
-    Status: "Status",
-    View: "View",
-  },
-  {
-    id: 8,
-    TagName: "TagName",
-    Priority: "Priority",
-    Data: "Data",
-    Value: "Value",
-    Old_Value: "Old_Value",
-    New_Value: "New_Value",
-    Date: "Date",
-    Status: "Status",
-    View: "View",
-  },
-  {
-    id: 9,
-    TagName: "TagName",
-    Priority: "Priority",
-    Data: "Data",
-    Value: "Value",
-    Old_Value: "Old_Value",
-    New_Value: "New_Value",
-    Date: "Date",
-    Status: "Status",
-    View: "View",
-  },
+  // {
+  //   field: "View",
+  //   headerName: "View",
+  //   headerClassName: "super-app-theme--header",
+  //   headerAlign: "center",
+  //   align: "center",
+  //   flex: 0.5,
+  //   renderHeader: (params) => (
+  //     <Typography
+  //       sx={{
+  //         fontSize: 14,
+  //         fontWeight: "700",
+  //         fontFamily: "Urbanist",
+  //         color: "#222",
+  //       }}
+  //     >
+  //       {params?.colDef?.headerName}
+  //     </Typography>
+  //   ),
+  //   renderCell: (params) => (
+  //     <IconButton>
+  //       <Visibility />
+  //     </IconButton>
+  //   ),
+  // },
 ];
 
 const newProductUpdatesColumnsData = [
@@ -671,37 +518,37 @@ const priceUpdateColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
       </Typography>
     ),
     renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full  justify-center">
+      <Box className="flex-col flex w-full h-full justify-center">
         <Typography
           sx={{
             fontSize: 13,
             fontWeight: "700",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {params?.row?.product?.Name}
         </Typography>
-        <Typography
+        {/* <Typography
           fontWeight={"bold"}
           fontSize={13}
           className="underline text-blue-500 cursor-pointer"
         >
           Website Name
-        </Typography>
+        </Typography> */}
       </Box>
     ),
   },
   {
-    field: "oldValue",
+    field: "old_value",
     headerName: "Old Value",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -712,8 +559,8 @@ const priceUpdateColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -731,7 +578,7 @@ const priceUpdateColumns = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
           ${params?.value}
@@ -740,7 +587,7 @@ const priceUpdateColumns = [
     ),
   },
   {
-    field: "newValue",
+    field: "new_value",
     headerName: "New Value",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -751,8 +598,8 @@ const priceUpdateColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -770,7 +617,7 @@ const priceUpdateColumns = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
           ${params?.value}
@@ -779,7 +626,7 @@ const priceUpdateColumns = [
     ),
   },
   {
-    field: "date",
+    field: "createdAt",
     headerName: "Date",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -790,8 +637,8 @@ const priceUpdateColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -809,39 +656,39 @@ const priceUpdateColumns = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {moment(params?.value).format("DD.MM.YYYY")}
         </Typography>
       </Box>
     ),
   },
-  {
-    field: "View",
-    headerName: "View",
-    headerClassName: "super-app-theme--header",
-    flex: 0.25,
-    headerAlign: "center",
-    align: "center",
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <IconButton>
-        <Visibility />
-      </IconButton>
-    ),
-  },
+  // {
+  //   field: "View",
+  //   headerName: "View",
+  //   headerClassName: "super-app-theme--header",
+  //   flex: 0.25,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   renderHeader: (params) => (
+  //     <Typography
+  //       sx={{
+  //         fontSize: 14,
+  //         fontWeight: "700",
+  //         fontFamily: "Urbanist",
+  //         color: "#222",
+  //       }}
+  //     >
+  //       {params?.colDef?.headerName}
+  //     </Typography>
+  //   ),
+  //   renderCell: (params) => (
+  //     <IconButton>
+  //       <Visibility />
+  //     </IconButton>
+  //   ),
+  // },
 ];
 
 const mostAlertsColumns = [
@@ -1039,37 +886,37 @@ const stockUpdateColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
       </Typography>
     ),
     renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full  justify-center">
+      <Box className="flex-col flex w-full h-full justify-center">
         <Typography
           sx={{
             fontSize: 13,
             fontWeight: "700",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {params?.row?.product?.Name}
         </Typography>
-        <Typography
+        {/* <Typography
           fontWeight={"bold"}
           fontSize={13}
           className="underline text-blue-500 cursor-pointer"
         >
           Website Name
-        </Typography>
+        </Typography> */}
       </Box>
     ),
   },
   {
-    field: "oldValue",
+    field: "old_value",
     headerName: "Old Value",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -1080,8 +927,8 @@ const stockUpdateColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -1104,6 +951,7 @@ const stockUpdateColumns = [
             color: getStatusTextColor(params?.value),
             fontWeight: "bold",
             borderRadius: "8px",
+            fontFamily: "Urbanist-bold",
           }}
         >
           {params?.value}
@@ -1112,7 +960,7 @@ const stockUpdateColumns = [
     ),
   },
   {
-    field: "newValue",
+    field: "new_value",
     headerName: "New Value",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -1123,8 +971,8 @@ const stockUpdateColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -1148,6 +996,7 @@ const stockUpdateColumns = [
             color: getStatusTextColor(params?.value),
             fontWeight: "bold",
             borderRadius: "8px",
+            fontFamily: "Urbanist-bold",
           }}
         >
           {params?.value}
@@ -1156,7 +1005,7 @@ const stockUpdateColumns = [
     ),
   },
   {
-    field: "date",
+    field: "createdAt",
     headerName: "Date",
     headerClassName: "super-app-theme--header",
     headerAlign: "center",
@@ -1167,8 +1016,8 @@ const stockUpdateColumns = [
         sx={{
           fontSize: 14,
           fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
+          fontFamily: "Urbanist-bolder",
+          color: colors.darkText,
         }}
       >
         {params?.colDef?.headerName}
@@ -1186,77 +1035,39 @@ const stockUpdateColumns = [
             fontSize: 13,
             fontWeight: "500",
             color: colors.subText,
-            fontFamily: "PublicSans",
+            fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.value}
+          {moment(params?.value).format("DD.MM.YYYY")}
         </Typography>
       </Box>
     ),
   },
-  {
-    field: "View",
-    headerName: "View",
-    headerClassName: "super-app-theme--header",
-    flex: 0.25,
-    headerAlign: "center",
-    align: "center",
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist",
-          color: "#222",
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <IconButton>
-        <Visibility />
-      </IconButton>
-    ),
-  },
-];
-
-const stockUpdateRowData = [
-  {
-    id: 1,
-    productName: "Product A",
-    oldValue: "Low",
-    newValue: "Out of stock",
-    date: "2024-03-27",
-  },
-  {
-    id: 2,
-    productName: "Product B",
-    oldValue: "Out of stock",
-    newValue: "Low",
-    date: "2024-03-26",
-  },
-  {
-    id: 3,
-    productName: "Product C",
-    oldValue: "Out of stock",
-    newValue: "Low",
-    date: "2024-03-25",
-  },
-  {
-    id: 4,
-    productName: "Product D",
-    oldValue: "Out of stock",
-    newValue: "Low",
-    date: "2024-03-24",
-  },
-  {
-    id: 5,
-    productName: "Product E",
-    oldValue: "Low",
-    newValue: "Out of stock",
-    date: "2024-03-23",
-  },
+  // {
+  //   field: "View",
+  //   headerName: "View",
+  //   headerClassName: "super-app-theme--header",
+  //   flex: 0.25,
+  //   headerAlign: "center",
+  //   align: "center",
+  //   renderHeader: (params) => (
+  //     <Typography
+  //       sx={{
+  //         fontSize: 14,
+  //         fontWeight: "700",
+  //         fontFamily: "Urbanist",
+  //         color: "#222",
+  //       }}
+  //     >
+  //       {params?.colDef?.headerName}
+  //     </Typography>
+  //   ),
+  //   renderCell: (params) => (
+  //     <IconButton>
+  //       <Visibility />
+  //     </IconButton>
+  //   ),
+  // },
 ];
 
 const DashboardBox = ({ title, productCount, Icon, onClick, btnText }) => (
@@ -1331,6 +1142,7 @@ const Dashboard = () => {
   } = useUser();
 
   const [countData, setcountData] = useState({});
+
   const GetCount = async () => {
     const token = localStorage.getItem("token");
     try {
@@ -1347,13 +1159,65 @@ const Dashboard = () => {
     }
   };
 
+  const [latestAlerts, setlatestAlerts] = useState([]);
+  const [latestPriceAlerts, setlatestPriceAlerts] = useState([]);
+  const [stockAlerts, setstockAlerts] = useState([]);
+
+  const GetLatestAlerts = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getLatestAlerts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data;
+      setlatestAlerts(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const GetLatestPriceAlerts = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getLatestPriceAlerts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data;
+      setlatestPriceAlerts(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const GetLatestStockAlerts = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${BASE_URL}/getLatestStockAlerts`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.data;
+      setstockAlerts(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    GetWebsites();
+    // GetWebsites();
     GetGroups();
     GetCount();
     GetPlans();
     GetUserPlan();
     GetBillingHistory();
+    GetLatestAlerts();
+    GetLatestPriceAlerts();
+    GetLatestStockAlerts();
   }, []);
 
   return (
@@ -1486,7 +1350,7 @@ const Dashboard = () => {
                     }}
                     showColumnVerticalBorder={false}
                     showCellVerticalBorder={true}
-                    rows={latestUpdatesRowsData}
+                    rows={latestAlerts}
                     columns={latestUpdatesColumnsData}
                     initialState={{
                       pagination: {
@@ -1636,7 +1500,7 @@ const Dashboard = () => {
                     }}
                     showColumnVerticalBorder={false}
                     showCellVerticalBorder={true}
-                    rows={priceUpdateRowData}
+                    rows={latestPriceAlerts}
                     columns={priceUpdateColumns}
                     initialState={{
                       pagination: {
@@ -1711,7 +1575,7 @@ const Dashboard = () => {
                     }}
                     showColumnVerticalBorder={false}
                     showCellVerticalBorder={true}
-                    rows={stockUpdateRowData}
+                    rows={stockAlerts}
                     columns={stockUpdateColumns}
                     initialState={{
                       pagination: {

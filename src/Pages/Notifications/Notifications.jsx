@@ -171,7 +171,7 @@ const Notifications = () => {
               fontFamily: "PublicSans",
             }}
           >
-            Value
+            {params?.value === "" ? "N/A" : params?.value}
           </Typography>
         </Box>
       ),
@@ -378,6 +378,7 @@ const Notifications = () => {
   const [startDate, setstartDate] = useState(null);
   const [endDate, setendDate] = useState(dayjs());
   const [alertPriority, setalertPriority] = useState(null);
+  const [alertType, setalertType] = useState(null);
 
   const [totalCount, settotalCount] = useState(0);
   const [totalPages, settotalPages] = useState(1);
@@ -409,7 +410,7 @@ const Notifications = () => {
               endDate: endDate ? endDate : null,
             },
             priority: alertPriority,
-            alert_type: null,
+            alert_type: alertType,
             website: selectedIds,
           },
         },
@@ -561,6 +562,8 @@ const Notifications = () => {
         applyFilter={setfilterChange}
         currentPage={currentPage}
         setcurrentPage={setcurrentPage}
+        alertType={alertType}
+        setalertType={setalertType}
       />
 
       <Snackbar
@@ -631,6 +634,44 @@ const Notifications = () => {
                   mx: 2,
                 }}
               >
+                {alertType && (
+                  <>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mx: 2,
+                      }}
+                    >
+                      |
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mr: 1,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        setalertType("");
+                        setfilterChange(true);
+                      }}
+                    >
+                      X
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Alert Type: {alertType}
+                    </Typography>
+                  </>
+                )}
                 {selectedIds && (
                   <>
                     <Typography
@@ -651,7 +692,10 @@ const Notifications = () => {
                         mr: 1,
                         cursor: "pointer",
                       }}
-                      onClick={() => setSelectedIds("")}
+                      onClick={() => {
+                        setSelectedIds("");
+                        setfilterChange(true);
+                      }}
                     >
                       X
                     </Typography>
@@ -793,6 +837,7 @@ const Notifications = () => {
               sx={{
                 backgroundColor: "white",
                 borderRadius: 4,
+                minHeight: "50vh",
               }}
             >
               <DataGrid

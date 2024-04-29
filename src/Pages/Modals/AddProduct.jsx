@@ -16,6 +16,7 @@ import {
   Snackbar,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useUser } from "../../constants/context";
@@ -338,6 +339,8 @@ const AddProduct = () => {
     }
   };
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Drawer
       anchor={"right"}
@@ -346,7 +349,7 @@ const AddProduct = () => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: "600px",
+          width: smallScreen ? "450px" : "600px",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F0F1F3",
@@ -406,7 +409,7 @@ const AddProduct = () => {
           <Box
             sx={{
               backgroundColor: "#fff",
-              p: 3,
+              p: 2,
               borderBottom: "1px solid #E0E2E7",
             }}
           >

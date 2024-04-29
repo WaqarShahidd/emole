@@ -11,6 +11,7 @@ import {
   Stack,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React from "react";
 import { colors } from "../../theme/theme";
@@ -19,6 +20,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useUser } from "../../constants/context";
 import dayjs from "dayjs";
+import { alertType, alertTypeOptions } from "../../assets/DummyData";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -45,6 +47,8 @@ const AlertsFilters = ({
   currentPage,
   setcurrentPage,
   setalertPriority,
+  alertType,
+  setalertType,
 }) => {
   const { allWebsites, GetWebsites } = useUser();
 
@@ -64,6 +68,8 @@ const AlertsFilters = ({
     setendDate(newValue);
   };
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Drawer
       anchor={"right"}
@@ -72,6 +78,7 @@ const AlertsFilters = ({
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
+          width: smallScreen ? "450px" : "600px",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F0F1F3",
@@ -88,7 +95,7 @@ const AlertsFilters = ({
           <Box
             sx={{
               backgroundColor: "#fff",
-              p: 3,
+              p: 2,
               borderBottom: "1px solid #E0E2E7",
             }}
           >
@@ -178,6 +185,41 @@ const AlertsFilters = ({
                 <MenuItem value={"low"}>Low</MenuItem>
                 <MenuItem value={"medium"}>Medium</MenuItem>
                 <MenuItem value={"high"}>High</MenuItem>
+              </Select>
+            </FormControl>
+
+            {/* Alert Type Dropdown */}
+            <Typography
+              sx={{
+                fontSize: "16px",
+                fontWeight: "700",
+                fontFamily: "Urbanist-bold",
+                color: "#222",
+                pb: 1,
+                mt: 3,
+              }}
+            >
+              Alert Type
+            </Typography>
+            <FormControl fullWidth>
+              <Select
+                displayEmpty
+                value={alertType}
+                onChange={(e) => setalertType(e.target.value)}
+                renderValue={(selected) => {
+                  if (selected === null) {
+                    return <>Choose Alert Type</>;
+                  }
+
+                  return selected;
+                }}
+                inputProps={{ "aria-label": "Without label" }}
+              >
+                {alertTypeOptions.map((type) => (
+                  <MenuItem value={type.value} key={type.id}>
+                    {type.value}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
 

@@ -1,6 +1,14 @@
 import React from "react";
 import { useUser } from "../../constants/context";
-import { Box, Button, Divider, Drawer, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Drawer,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { colors } from "../../theme/theme";
 import moment from "moment";
 
@@ -41,6 +49,8 @@ const AlertDetails = ({ deleteBtn }) => {
     setalertDetails,
   } = useUser();
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Drawer
       anchor={"right"}
@@ -52,8 +62,7 @@ const AlertDetails = ({ deleteBtn }) => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: "600px",
-
+          width: smallScreen ? "450px" : "600px",
           backgroundColor: "#F0F1F3",
         },
       }}

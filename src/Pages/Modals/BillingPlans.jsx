@@ -10,6 +10,7 @@ import {
   Stack,
   Switch,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useUser } from "../../constants/context";
@@ -208,6 +209,8 @@ const BillingPlans = () => {
     setPlanPrice(price);
   };
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Drawer
       anchor={"right"}
@@ -216,7 +219,7 @@ const BillingPlans = () => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: "600px",
+          width: smallScreen ? "450px" : "600px",
           overflowY: "auto",
           overflowX: "hidden",
           background: "linear-gradient(180deg, #2D60FF 0%, #2F33A1 100%)",

@@ -6,6 +6,7 @@ import {
   Drawer,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React from "react";
 import { useUser } from "../../constants/context";
@@ -26,6 +27,9 @@ const ShowHideFields = ({
   setColumnVisibilityModel,
 }) => {
   const { showHideFieldsDrawer, setshowHideFieldsDrawer } = useUser();
+
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Drawer
       anchor={"right"}
@@ -33,7 +37,7 @@ const ShowHideFields = ({
       onClose={() => setshowHideFieldsDrawer(false)}
       sx={{
         "& .MuiDrawer-paper": {
-          width: "500px",
+          width: smallScreen ? "350px" : "500px",
           padding: "0px",
           top: "0px",
           height: "100%",

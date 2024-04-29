@@ -17,6 +17,7 @@ import {
   Stack,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -82,6 +83,8 @@ const FilterModal = ({
     setendDate(newValue);
   };
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Drawer
       anchor={"right"}
@@ -90,6 +93,7 @@ const FilterModal = ({
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
+          width: smallScreen ? "450px" : "600px",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F0F1F3",

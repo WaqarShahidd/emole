@@ -9,6 +9,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React from "react";
 import { useUser } from "../../constants/context";
@@ -38,6 +39,8 @@ const TermsPolicy = () => {
     },
   ];
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
     <Box
       sx={{
@@ -52,7 +55,7 @@ const TermsPolicy = () => {
         aria-describedby="alert-dialog-description"
         PaperProps={{
           style: {
-            width: 700,
+            width: smallScreen ? "450px" : "600px",
             backgroundColor: "#FAFAFA",
           },
         }}
