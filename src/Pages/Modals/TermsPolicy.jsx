@@ -167,9 +167,10 @@ const TermsPolicy = () => {
         <DialogActions sx={{ bgcolor: "#fff" }}>
           <Stack direction={"row"} spacing={2} width={"100%"}>
             <Button
+              disableElevation
               style={{
-                background: "#f1f1f1",
-                color: "black",
+                background: "#F0F1F3",
+                color: colors.darkText,
                 textTransform: "none",
                 fontFamily: "Urbanist",
                 fontWeight: "bold",

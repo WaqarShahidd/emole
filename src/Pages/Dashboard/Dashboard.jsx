@@ -42,7 +42,16 @@ const latestUpdatesColumnsData = [
       </Typography>
     ),
     renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full justify-center">
+      <Box
+        className="flex-col flex w-full h-full justify-center"
+        sx={{
+          whiteSpace: "nowrap",
+          overflow: "auto",
+          scrollbarWidth: "none",
+          textOverflow: "ellipsis",
+          maxWidth: "95%",
+        }}
+      >
         <Typography
           sx={{
             fontSize: 13,
@@ -132,6 +141,7 @@ const latestUpdatesColumnsData = [
         display={"flex"}
         justifyContent={"center"}
         alignItems={"center"}
+        sx={{ whiteSpace: "pre-line" }}
       >
         <Typography
           sx={{
@@ -348,7 +358,16 @@ const newProductUpdatesColumnsData = [
       </Typography>
     ),
     renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full justify-center">
+      <Box
+        className="flex-col flex w-full h-full justify-center"
+        sx={{
+          whiteSpace: "nowrap",
+          overflow: "auto",
+          scrollbarWidth: "none",
+          textOverflow: "ellipsis",
+          maxWidth: "95%",
+        }}
+      >
         <Typography
           sx={{
             fontSize: 13,
@@ -493,7 +512,16 @@ const priceUpdateColumns = [
       </Typography>
     ),
     renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full justify-center">
+      <Box
+        className="flex-col flex w-full h-full justify-center"
+        sx={{
+          whiteSpace: "nowrap",
+          overflow: "auto",
+          scrollbarWidth: "none",
+          textOverflow: "ellipsis",
+          maxWidth: "95%",
+        }}
+      >
         <Typography
           sx={{
             fontSize: 13,
@@ -677,7 +705,16 @@ const mostAlertsColumns = [
       </Typography>
     ),
     renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full  justify-center">
+      <Box
+        className="flex-col flex w-full h-full  justify-center"
+        sx={{
+          whiteSpace: "nowrap",
+          overflow: "auto",
+          scrollbarWidth: "none",
+          textOverflow: "ellipsis",
+          maxWidth: "95%",
+        }}
+      >
         <Typography
           sx={{
             fontSize: 13,
@@ -967,7 +1004,16 @@ const mostAlertsWebsiteColumns = [
       </Typography>
     ),
     renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full  justify-center">
+      <Box
+        className="flex-col flex w-full h-full  justify-center"
+        sx={{
+          whiteSpace: "nowrap",
+          overflow: "auto",
+          scrollbarWidth: "none",
+          textOverflow: "ellipsis",
+          maxWidth: "95%",
+        }}
+      >
         <Typography
           sx={{
             fontSize: 13,
@@ -976,7 +1022,7 @@ const mostAlertsWebsiteColumns = [
             fontFamily: "Urbanist-bold",
           }}
         >
-          {params?.row?.Pages?.WebsiteID}
+          {params?.value}
         </Typography>
         {/* <Typography
           fontWeight={"bold"}
@@ -1068,44 +1114,6 @@ const mostAlertsWebsiteColumns = [
   },
 ];
 
-const priceUpdateRowData = [
-  {
-    id: 1,
-    productName: "Product A",
-    oldValue: "50",
-    newValue: "60",
-    date: "2024-03-27",
-  },
-  {
-    id: 2,
-    productName: "Product B",
-    oldValue: "30",
-    newValue: "60",
-    date: "2024-03-26",
-  },
-  {
-    id: 3,
-    productName: "Product C",
-    oldValue: "70",
-    newValue: "60",
-    date: "2024-03-25",
-  },
-  {
-    id: 4,
-    productName: "Product D",
-    oldValue: "20",
-    newValue: "60",
-    date: "2024-03-24",
-  },
-  {
-    id: 5,
-    productName: "Product E",
-    oldValue: "45",
-    newValue: "60",
-    date: "2024-03-23",
-  },
-];
-
 const stockUpdateColumns = [
   {
     field: "productName",
@@ -1125,7 +1133,16 @@ const stockUpdateColumns = [
       </Typography>
     ),
     renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full justify-center">
+      <Box
+        className="flex-col flex w-full h-full justify-center"
+        sx={{
+          whiteSpace: "nowrap",
+          overflow: "auto",
+          scrollbarWidth: "none",
+          textOverflow: "ellipsis",
+          maxWidth: "95%",
+        }}
+      >
         <Typography
           sx={{
             fontSize: 13,
@@ -1598,7 +1615,6 @@ const Dashboard = () => {
           <Grid item xs={12} sm={8}>
             <Box
               sx={{
-                height: "50vh",
                 backgroundColor: "#fff",
                 borderRadius: "8px",
               }}
@@ -1643,7 +1659,6 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
-                    height: "calc(50vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1673,7 +1688,6 @@ const Dashboard = () => {
           <Grid item xs={12} sm={4}>
             <Box
               sx={{
-                height: "50vh",
                 backgroundColor: "#fff",
                 borderRadius: "8px",
               }}
@@ -1718,7 +1732,6 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
-                    height: "calc(50vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1749,7 +1762,6 @@ const Dashboard = () => {
           <Grid item xs={12} sm={6}>
             <Box
               sx={{
-                height: "50vh",
                 backgroundColor: "#fff",
                 borderRadius: "8px",
               }}
@@ -1794,7 +1806,6 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
-                    height: "calc(50vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1824,7 +1835,6 @@ const Dashboard = () => {
           <Grid item xs={12} sm={6}>
             <Box
               sx={{
-                height: "50vh",
                 backgroundColor: "#fff",
                 borderRadius: "8px",
               }}
@@ -1869,7 +1879,6 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
-                    height: "calc(50vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1899,7 +1908,6 @@ const Dashboard = () => {
           <Grid item xs={12} sm={4}>
             <Box
               sx={{
-                height: "50vh",
                 backgroundColor: "#fff",
                 borderRadius: "8px",
               }}
@@ -1944,7 +1952,6 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
-                    height: "calc(50vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1975,7 +1982,6 @@ const Dashboard = () => {
           <Grid item xs={12} sm={4}>
             <Box
               sx={{
-                height: "50vh",
                 backgroundColor: "#fff",
                 borderRadius: "8px",
               }}
@@ -2020,7 +2026,6 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
-                    height: "calc(50vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -2051,7 +2056,6 @@ const Dashboard = () => {
           <Grid item xs={12} sm={4}>
             <Box
               sx={{
-                height: "50vh",
                 backgroundColor: "#fff",
                 borderRadius: "8px",
               }}
@@ -2096,7 +2100,6 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
-                    height: "calc(50vh - 50px)",
                   }}
                 >
                   <DataGrid

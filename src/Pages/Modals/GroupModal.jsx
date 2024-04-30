@@ -106,7 +106,7 @@ const GroupModal = ({ open, handleClose, data }) => {
       ),
     },
     {
-      field: "noStock",
+      field: "outOfStockProducts",
       headerName: "Out of Stock",
       width: 90,
       headerAlign: "center",
@@ -129,17 +129,12 @@ const GroupModal = ({ open, handleClose, data }) => {
             fontFamily: "Urbanist",
           }}
         >
-          {
-            params?.row?.segment?.Segment_Products?.filter(
-              (val) => val?.Product?.StockStatus === false
-            )?.length
-          }
+          {params?.value}
         </div>
       ),
     },
-
     {
-      field: "countofalerts",
+      field: "countOfTotalProductsAlerts",
       headerName: "Alerts",
       headerAlign: "center",
       align: "center",
