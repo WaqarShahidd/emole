@@ -150,7 +150,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         fontFamily={"Urbanist-bold"}
                         fontSize={"14px"}
                       >
-                        {data?.Price}
+                        {data?.currency + data?.Price}
                       </Typography>
                     </Stack>
                     <Stack
@@ -172,7 +172,9 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                         fontFamily={"Urbanist-bold"}
                         fontSize={"14px"}
                       >
-                        {data?.LastPrice ? data?.LastPrice : "N/A"}
+                        {data?.LastPrice
+                          ? data?.currency + data?.LastPrice
+                          : "N/A"}
                       </Typography>
                     </Stack>
                     <Stack
@@ -565,6 +567,16 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                           </Typography>
                         </Stack>
                       </Grid>
+                    </Grid>
+                    <Grid
+                      container
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        width: "45%",
+                        alignSelf: "flex-start",
+                      }}
+                    >
                       <Grid item xs={12}>
                         <Stack
                           direction="row"
@@ -595,17 +607,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                           </Typography>
                         </Stack>
                       </Grid>
-                    </Grid>
-                    <Grid
-                      container
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "45%",
-                        alignSelf: "flex-start",
-                      }}
-                    >
-                      <Grid item xs={12}>
+                      {/* <Grid item xs={12}>
                         <Stack
                           direction="row"
                           alignItems="center"
@@ -664,7 +666,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                             12.12.24{" "}
                           </Typography>
                         </Stack>
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   </Stack>
                 </Box>

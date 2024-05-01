@@ -39,8 +39,13 @@ const CreateGroup = ({ handleClose, open }) => {
 
   const [error, seterror] = useState(false);
 
-  const { selectedProducts, setconfirmGroupCreate, allGroups, GetGroups } =
-    useUser();
+  const {
+    selectedProducts,
+    setselectedProducts,
+    setconfirmGroupCreate,
+    allGroups,
+    GetGroups,
+  } = useUser();
 
   const CreateGroup = async () => {
     const token = localStorage.getItem("token");
@@ -69,6 +74,7 @@ const CreateGroup = ({ handleClose, open }) => {
           setconfirmGroupCreate(true);
           handleClose();
           GetGroups();
+          setselectedProducts([]);
         })
         .catch((e) => {
           seterror(true);
@@ -105,6 +111,7 @@ const CreateGroup = ({ handleClose, open }) => {
           setconfirmGroupCreate(true);
           handleClose();
           GetGroups();
+          setselectedProducts([]);
         })
         .catch((e) => {
           seterror(true);

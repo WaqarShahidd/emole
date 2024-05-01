@@ -1810,12 +1810,21 @@ const Dashboard = () => {
                 >
                   <DataGrid
                     sx={{
-                      "&, [class^=MuiDataGrid-main]": { border: "none" },
+                      "&, [class^=MuiDataGrid-main]": {
+                        border: "none",
+                      },
                     }}
                     showColumnVerticalBorder={false}
                     showCellVerticalBorder={true}
                     rows={latestPriceAlerts}
                     columns={priceUpdateColumns}
+                    components={{
+                      NoRowsOverlay: () => (
+                        <div style={{ textAlign: "center", marginTop: "20px" }}>
+                          <span>No rows</span>
+                        </div>
+                      ),
+                    }}
                     initialState={{
                       pagination: {
                         paginationModel: {

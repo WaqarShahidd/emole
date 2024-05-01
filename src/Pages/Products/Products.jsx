@@ -133,7 +133,7 @@ const Products = () => {
               fontWeight={"bold"}
               fontSize={13}
             >
-              {params?.row?.Product?.Price}
+              {params?.row?.Product?.currency + params?.row?.Product?.Price}
             </Typography>
             {params?.row?.Product?.LastPrice ? (
               <>
@@ -148,7 +148,8 @@ const Products = () => {
                       : "red"
                   }
                 >
-                  {params?.row?.Product?.LastPrice}
+                  {params?.row?.Product?.currency +
+                    params?.row?.Product?.LastPrice}
                 </Typography>
                 {parseFloat(params?.row?.Product?.Price) <
                 parseFloat(params?.row?.Product?.LastPrice) ? (

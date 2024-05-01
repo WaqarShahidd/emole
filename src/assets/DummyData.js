@@ -144,6 +144,8 @@ export const getStatusBackgroundColor = (status) => {
       return "#FEECEE";
     case "Out of stock":
       return "#FEECEE";
+    case "Out of Stock":
+      return "#FEECEE";
     case "Medium":
       return "#FFF0EA";
     default:
@@ -162,6 +164,8 @@ export const getStatusTextColor = (status) => {
     case "High":
       return "#EB3D4D";
     case "Out of stock":
+      return "#EB3D4D";
+    case "Out of Stock":
       return "#EB3D4D";
     case "Medium":
       return "#F86624";

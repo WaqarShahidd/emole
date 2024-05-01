@@ -390,11 +390,13 @@ const AccountBilling = () => {
     setPlanPrice(price);
   };
 
+  const usedProducts =
+    parseInt(userPlan?.subscribedPlane?.NumberOfProducts) -
+    userPlan?.remainingProducts;
+
   const progress =
-    100 -
-    (userPlan?.remainingProducts /
-      parseInt(userPlan?.subscribedPlane?.NumberOfProducts)) *
-      100;
+    (usedProducts / parseInt(userPlan?.subscribedPlane?.NumberOfProducts)) *
+    100;
 
   const currentProgress = progress > 100 ? 100 : progress;
 
@@ -637,8 +639,9 @@ const AccountBilling = () => {
                 }}
                 onClick={() => console.log(userPlan)}
               >
-                {100 - userPlan?.remainingProducts}/
-                {userPlan?.subscribedPlane?.NumberOfProducts} Products
+                {parseInt(userPlan?.subscribedPlane?.NumberOfProducts) -
+                  userPlan?.remainingProducts}
+                /{userPlan?.subscribedPlane?.NumberOfProducts} Products
               </Typography>
               <Typography
                 sx={{
