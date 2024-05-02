@@ -46,7 +46,6 @@ const Notifications = () => {
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
       minWidth: 250,
-
       renderHeader: (params) => (
         <Typography
           sx={{
@@ -144,6 +143,7 @@ const Notifications = () => {
       headerAlign: "center",
       align: "center",
       flex: 0.75,
+      minWidth: 140,
       renderHeader: (params) => (
         <Typography
           sx={{
@@ -162,6 +162,7 @@ const Notifications = () => {
           display={"flex"}
           justifyContent={"center"}
           alignItems={"center"}
+          sx={{ whiteSpace: "pre-line" }}
         >
           <Typography
             sx={{
@@ -183,6 +184,7 @@ const Notifications = () => {
       headerAlign: "center",
       align: "center",
       flex: 0.75,
+      minWidth: 140,
       renderHeader: (params) => (
         <Typography
           sx={{
@@ -222,6 +224,7 @@ const Notifications = () => {
       headerAlign: "center",
       align: "center",
       flex: 0.75,
+      minWidth: 140,
       renderHeader: (params) => (
         <Typography
           sx={{
@@ -259,6 +262,7 @@ const Notifications = () => {
       headerName: "Date",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
+      minWidth: 140,
       headerAlign: "center",
       align: "center",
       renderHeader: (params) => (
@@ -298,6 +302,7 @@ const Notifications = () => {
       headerName: "View",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
+      minWidth: 140,
       headerAlign: "center",
       align: "center",
       renderHeader: (params) => (
@@ -583,12 +588,12 @@ const Notifications = () => {
 
       <Box
         sx={{
-          display: "flex",
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
           flex: 1,
           backgroundColor: "#F9F9FC",
+          overflowY: "auto",
         }}
       >
         <Header
@@ -838,6 +843,8 @@ const Notifications = () => {
                 backgroundColor: "white",
                 borderRadius: 4,
                 minHeight: "50vh",
+                width: "100%",
+                overflowX: "auto",
               }}
             >
               <DataGrid

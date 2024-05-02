@@ -17,11 +17,12 @@ import {
   TextField,
   Typography,
   IconButton,
+  SwipeableDrawer,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { colors } from "../theme/theme";
-import { AddOutlined, FileDownloadRounded } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { AddOutlined, FileDownloadRounded, Tune } from "@mui/icons-material";
+import { useLocation, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import { useUser } from "../constants/context";
 import CreateGroup from "../Pages/Modals/CreateGroup";
@@ -180,6 +181,9 @@ const Header = ({
   } = useUser();
 
   const navigate = useNavigate();
+
+  const location = useLocation();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [anchorAction, setanchorAction] = useState(null);
   const [alertAnchorAction, setalertAnchorAction] = useState(null);
@@ -211,6 +215,22 @@ const Header = ({
   }, []);
 
   const smallScreen = useMediaQuery("(max-width:650px)");
+  const mdScreen = useMediaQuery("(max-width:880px)");
+
+  const [state, setState] = useState({
+    right: false,
+  });
+
+  const toggleOptionsDrawer = (anchor, open) => (event) => {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setState({ ...state, [anchor]: open });
+  };
 
   return (
     <div
@@ -218,7 +238,7 @@ const Header = ({
         height: "65px",
         backgroundColor: "#fff",
         width: "100%",
-        padding: "15px 25px",
+        padding: "15px",
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
@@ -228,12 +248,24 @@ const Header = ({
     >
       <CreateGroup handleClose={handleCloseGroup} open={createGroupAnchor} />
 
-      <Stack direction="row" alignItems="center">
+      <Stack
+        direction="row"
+        alignItems="center"
+        sx={{
+          width: mdScreen ? "100%" : "auto",
+          justifyContent:
+            (mdScreen && location.pathname === "/products") ||
+            location.pathname === "/notifications"
+              ? "space-between"
+              : "flex-start",
+        }}
+      >
         {smallScreen && (
           <IconButton onClick={toggleDrawer("left", true)} sx={{ mr: 2 }}>
             <MenuOutlined />
           </IconButton>
         )}
+
         <Typography
           sx={{
             color: "#1A1C21",
@@ -245,7 +277,299 @@ const Header = ({
           {title}
         </Typography>
 
-        {groupsDropdown && (
+        {mdScreen && (
+          <>
+            {location.pathname === "/products" ||
+            location.pathname === "/notifications" ? (
+              <IconButton onClick={toggleOptionsDrawer("right", true)}>
+                <Tune />
+              </IconButton>
+            ) : null}
+            <SwipeableDrawer
+              anchor="right"
+              open={state.right}
+              onClose={toggleOptionsDrawer("right", false)}
+              onOpen={toggleOptionsDrawer("right", true)}
+            >
+              <Stack
+                direction="column"
+                sx={{
+                  p: 2,
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: colors.darkText,
+                    fontSize: "24px",
+                    fontWeight: "700",
+                    fontFamily: "Urbanist-bold",
+                    mb: 2,
+                    mt: 1,
+                  }}
+                >
+                  Options
+                </Typography>
+
+                {searchBar && (
+                  <SearchContainer
+                    sx={{
+                      mb: 2,
+                    }}
+                  >
+                    <SearchIconWrapper>
+                      <img
+                        src={require("../assets/icons/search.png")}
+                        style={{
+                          height: "18px",
+                          width: "18px",
+                          cursor: "pointer",
+                          color: colors.blueText,
+                        }}
+                        alt=""
+                      />
+                    </SearchIconWrapper>
+                    <StyledInputBase
+                      placeholder="Search..."
+                      inputProps={{
+                        style: {
+                          color: colors.darkText,
+                        },
+                      }}
+                      onChange={(e) => setSearch(e.target.value)}
+                      value={search}
+                    />
+                  </SearchContainer>
+                )}
+
+                {filter && (
+                  <Box
+                    sx={{
+                      height: "40px",
+                      width: "100%",
+                      mb: 2,
+                      padding: "5px 10px",
+                      borderRadius: "8px",
+                      backgroundColor: "#FFF",
+                      border: "1px solid #E0E2E7",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
+                    onClick={filterBtn}
+                  >
+                    <img
+                      src={require("../assets/icons/filter.png")}
+                      style={{
+                        height: "15px",
+                        width: "15px",
+                        cursor: "pointer",
+                        color: colors.blueText,
+                      }}
+                      alt=""
+                    />
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontSize: "14px",
+                        fontWeight: "700",
+                        fontFamily: "Urbanist-bold",
+                        ml: 1,
+                      }}
+                    >
+                      Filters{" "}
+                    </Typography>
+                  </Box>
+                )}
+
+                {hideColumns && (
+                  <Box
+                    sx={{
+                      height: "40px",
+                      width: "100%",
+                      mb: 2,
+                      padding: "5px 10px",
+                      borderRadius: "8px",
+                      backgroundColor: "#FFF",
+                      border: "1px solid #E0E2E7",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => setshowHideFieldsDrawer(true)}
+                  >
+                    {/* <VisibilityOutlined
+              sx={{
+                color: colors.blueText,
+                fontSize: "20px",
+              }}
+            /> */}
+                    <img
+                      src={require("../assets/icons/view-o.png")}
+                      style={{
+                        height: "15px",
+                        width: "15px",
+                        cursor: "pointer",
+                        color: colors.blueText,
+                      }}
+                      alt=""
+                    />
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontSize: "14px",
+                        fontWeight: "700",
+                        fontFamily: "Urbanist-bold",
+                        ml: 1,
+                      }}
+                    >
+                      Show/Hide Columns
+                    </Typography>
+                  </Box>
+                )}
+
+                {exportBtn && (
+                  <Box
+                    sx={{
+                      height: "40px",
+                      padding: "5px 10px",
+                      borderRadius: "8px",
+                      backgroundColor: "#FFF",
+                      border: "1px solid #E0E2E7",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      width: "100%",
+                      mb: 2,
+                    }}
+                  >
+                    <FileDownloadRounded
+                      sx={{
+                        color: colors.blueText,
+                        fontSize: "20px",
+                        mt: 0.75,
+                      }}
+                    />
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontSize: "14px",
+                        fontWeight: "700",
+                        fontFamily: "Urbanist-bold",
+                      }}
+                    >
+                      Export{" "}
+                    </Typography>
+                  </Box>
+                )}
+
+                {actionBtn && (
+                  <Box
+                    sx={{
+                      height: "40px",
+                      padding: "5px 10px",
+                      borderRadius: "8px",
+                      backgroundColor: "#FFF",
+                      border: "1px solid #E0E2E7",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor:
+                        selectedProducts.length === 0 ? "default" : "pointer",
+                      width: "100%",
+                      mb: 2,
+                    }}
+                    onClick={(e) => {
+                      if (selectedProducts.length !== 0) {
+                        handleClickAction(e);
+                      }
+                    }}
+                  >
+                    {/* <LogoutIcon
+              sx={{
+                color: selectedProducts.length === 0 ? "grey" : colors.blueText,
+                fontSize: "20px",
+              }}
+            /> */}
+                    {selectedProducts.length === 0 ? (
+                      <img
+                        src={require("../assets/icons/actions-o.png")}
+                        style={{
+                          height: "18px",
+                        }}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        src={require("../assets/icons/actions.png")}
+                        style={{
+                          height: "18px",
+                          cursor: "pointer",
+                        }}
+                        alt=""
+                      />
+                    )}
+
+                    <Typography
+                      sx={{
+                        color:
+                          selectedProducts.length === 0
+                            ? colors.dsds
+                            : colors.blueText,
+                        fontSize: "14px",
+                        fontWeight: "700",
+                        fontFamily: "Urbanist-bold",
+                        ml: 1,
+                      }}
+                    >
+                      Action{" "}
+                    </Typography>
+                  </Box>
+                )}
+
+                {addProducts && (
+                  <Box
+                    sx={{
+                      height: "40px",
+                      padding: "5px 10px",
+                      borderRadius: "8px",
+                      backgroundColor: colors.blueText,
+                      border: "1px solid #E0E2E7",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      width: "100%",
+                      mb: 2,
+                    }}
+                    onClick={() => setaddProdDrawer(true)}
+                  >
+                    <AddOutlined
+                      sx={{
+                        color: "#fff",
+                        fontSize: "20px",
+                      }}
+                    />
+                    <Typography
+                      sx={{
+                        color: "#fff",
+                        fontSize: "14px",
+                        fontFamily: "Urbanist",
+                        ml: 0.5,
+                      }}
+                    >
+                      Add Products
+                    </Typography>
+                  </Box>
+                )}
+              </Stack>
+            </SwipeableDrawer>
+          </>
+        )}
+
+        {!smallScreen && groupsDropdown && (
           <>
             {allGroups.length === 0 ? (
               <Typography
@@ -327,254 +651,258 @@ const Header = ({
         )}
       </Stack>
 
-      <Stack direction="row" alignItems="center">
-        {filter && (
-          <Box
-            sx={{
-              height: "40px",
-              padding: "5px 10px",
-              borderRadius: "8px",
-              backgroundColor: "#FFF",
-              border: "1px solid #E0E2E7",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
-            onClick={filterBtn}
-          >
-            <img
-              src={require("../assets/icons/filter.png")}
-              style={{
-                height: "15px",
-                width: "15px",
+      {!mdScreen && (
+        <Stack direction="row" alignItems="center">
+          {filter && (
+            <Box
+              sx={{
+                height: "40px",
+                padding: "5px 10px",
+                borderRadius: "8px",
+                backgroundColor: "#FFF",
+                border: "1px solid #E0E2E7",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
                 cursor: "pointer",
-                color: colors.blueText,
               }}
-              alt=""
-            />
-            <Typography
-              sx={{
-                color: colors.blueText,
-                fontSize: "14px",
-                fontWeight: "700",
-                fontFamily: "Urbanist-bold",
-                ml: 1,
-              }}
+              onClick={filterBtn}
             >
-              Filters{" "}
-            </Typography>
-          </Box>
-        )}
-
-        {hideColumns && (
-          <Box
-            sx={{
-              height: "40px",
-              padding: "5px 10px",
-              borderRadius: "8px",
-              backgroundColor: "#FFF",
-              border: "1px solid #E0E2E7",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: "pointer",
-              ml: 2,
-            }}
-            onClick={() => setshowHideFieldsDrawer(true)}
-          >
-            {/* <VisibilityOutlined
-              sx={{
-                color: colors.blueText,
-                fontSize: "20px",
-              }}
-            /> */}
-            <img
-              src={require("../assets/icons/view-o.png")}
-              style={{
-                height: "15px",
-                width: "15px",
-                cursor: "pointer",
-                color: colors.blueText,
-              }}
-              alt=""
-            />
-            <Typography
-              sx={{
-                color: colors.blueText,
-                fontSize: "14px",
-                fontWeight: "700",
-                fontFamily: "Urbanist-bold",
-                ml: 1,
-              }}
-            >
-              Show/Hide Columns
-            </Typography>
-          </Box>
-        )}
-
-        {exportBtn && (
-          <Box
-            sx={{
-              height: "40px",
-              padding: "5px 10px",
-              borderRadius: "8px",
-              backgroundColor: "#FFF",
-              border: "1px solid #E0E2E7",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: "pointer",
-              ml: 2,
-            }}
-          >
-            <FileDownloadRounded
-              sx={{
-                color: colors.blueText,
-                fontSize: "20px",
-                mt: 0.75,
-              }}
-            />
-            <Typography
-              sx={{
-                color: colors.blueText,
-                fontSize: "14px",
-                fontWeight: "700",
-                fontFamily: "Urbanist-bold",
-              }}
-            >
-              Export{" "}
-            </Typography>
-          </Box>
-        )}
-
-        {actionBtn && (
-          <Box
-            sx={{
-              height: "40px",
-              padding: "5px 10px",
-              borderRadius: "8px",
-              backgroundColor: "#FFF",
-              border: "1px solid #E0E2E7",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: selectedProducts.length === 0 ? "default" : "pointer",
-              ml: 2,
-            }}
-            onClick={(e) => {
-              if (selectedProducts.length !== 0) {
-                handleClickAction(e);
-              }
-            }}
-          >
-            {/* <LogoutIcon
-              sx={{
-                color: selectedProducts.length === 0 ? "grey" : colors.blueText,
-                fontSize: "20px",
-              }}
-            /> */}
-            {selectedProducts.length === 0 ? (
               <img
-                src={require("../assets/icons/actions-o.png")}
+                src={require("../assets/icons/filter.png")}
                 style={{
-                  height: "18px",
-                }}
-                alt=""
-              />
-            ) : (
-              <img
-                src={require("../assets/icons/actions.png")}
-                style={{
-                  height: "18px",
-                  cursor: "pointer",
-                }}
-                alt=""
-              />
-            )}
-
-            <Typography
-              sx={{
-                color:
-                  selectedProducts.length === 0 ? colors.dsds : colors.blueText,
-                fontSize: "14px",
-                fontWeight: "700",
-                fontFamily: "Urbanist-bold",
-                ml: 1,
-              }}
-            >
-              Action{" "}
-            </Typography>
-          </Box>
-        )}
-
-        {addProducts && (
-          <Box
-            sx={{
-              height: "40px",
-              padding: "5px 10px",
-              borderRadius: "8px",
-              backgroundColor: colors.blueText,
-              border: "1px solid #E0E2E7",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: "pointer",
-              ml: 2,
-            }}
-            onClick={() => setaddProdDrawer(true)}
-          >
-            <AddOutlined
-              sx={{
-                color: "#fff",
-                fontSize: "20px",
-              }}
-            />
-            <Typography
-              sx={{
-                color: "#fff",
-                fontSize: "14px",
-                fontFamily: "Urbanist",
-                ml: 0.5,
-              }}
-            >
-              Add Products
-            </Typography>
-          </Box>
-        )}
-
-        {searchBar && (
-          <SearchContainer
-            sx={{
-              width: smallScreen ? "120px" : null,
-              ml: smallScreen ? 2 : 0,
-            }}
-          >
-            <SearchIconWrapper>
-              <img
-                src={require("../assets/icons/search.png")}
-                style={{
-                  height: "18px",
-                  width: "18px",
+                  height: "15px",
+                  width: "15px",
                   cursor: "pointer",
                   color: colors.blueText,
                 }}
                 alt=""
               />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search..."
-              inputProps={{
-                style: {
-                  color: colors.darkText,
-                },
+              <Typography
+                sx={{
+                  color: colors.blueText,
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  fontFamily: "Urbanist-bold",
+                  ml: 1,
+                }}
+              >
+                Filters{" "}
+              </Typography>
+            </Box>
+          )}
+
+          {hideColumns && (
+            <Box
+              sx={{
+                height: "40px",
+                padding: "5px 10px",
+                borderRadius: "8px",
+                backgroundColor: "#FFF",
+                border: "1px solid #E0E2E7",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
+                ml: 2,
               }}
-              onChange={(e) => setSearch(e.target.value)}
-              value={search}
-            />
-          </SearchContainer>
-        )}
-      </Stack>
+              onClick={() => setshowHideFieldsDrawer(true)}
+            >
+              {/* <VisibilityOutlined
+              sx={{
+                color: colors.blueText,
+                fontSize: "20px",
+              }}
+            /> */}
+              <img
+                src={require("../assets/icons/view-o.png")}
+                style={{
+                  height: "15px",
+                  width: "15px",
+                  cursor: "pointer",
+                  color: colors.blueText,
+                }}
+                alt=""
+              />
+              <Typography
+                sx={{
+                  color: colors.blueText,
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  fontFamily: "Urbanist-bold",
+                  ml: 1,
+                }}
+              >
+                Show/Hide Columns
+              </Typography>
+            </Box>
+          )}
+
+          {exportBtn && (
+            <Box
+              sx={{
+                height: "40px",
+                padding: "5px 10px",
+                borderRadius: "8px",
+                backgroundColor: "#FFF",
+                border: "1px solid #E0E2E7",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
+                ml: 2,
+              }}
+            >
+              <FileDownloadRounded
+                sx={{
+                  color: colors.blueText,
+                  fontSize: "20px",
+                  mt: 0.75,
+                }}
+              />
+              <Typography
+                sx={{
+                  color: colors.blueText,
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  fontFamily: "Urbanist-bold",
+                }}
+              >
+                Export{" "}
+              </Typography>
+            </Box>
+          )}
+
+          {actionBtn && (
+            <Box
+              sx={{
+                height: "40px",
+                padding: "5px 10px",
+                borderRadius: "8px",
+                backgroundColor: "#FFF",
+                border: "1px solid #E0E2E7",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: selectedProducts.length === 0 ? "default" : "pointer",
+                ml: 2,
+              }}
+              onClick={(e) => {
+                if (selectedProducts.length !== 0) {
+                  handleClickAction(e);
+                }
+              }}
+            >
+              {/* <LogoutIcon
+              sx={{
+                color: selectedProducts.length === 0 ? "grey" : colors.blueText,
+                fontSize: "20px",
+              }}
+            /> */}
+              {selectedProducts.length === 0 ? (
+                <img
+                  src={require("../assets/icons/actions-o.png")}
+                  style={{
+                    height: "18px",
+                  }}
+                  alt=""
+                />
+              ) : (
+                <img
+                  src={require("../assets/icons/actions.png")}
+                  style={{
+                    height: "18px",
+                    cursor: "pointer",
+                  }}
+                  alt=""
+                />
+              )}
+
+              <Typography
+                sx={{
+                  color:
+                    selectedProducts.length === 0
+                      ? colors.dsds
+                      : colors.blueText,
+                  fontSize: "14px",
+                  fontWeight: "700",
+                  fontFamily: "Urbanist-bold",
+                  ml: 1,
+                }}
+              >
+                Action{" "}
+              </Typography>
+            </Box>
+          )}
+
+          {addProducts && (
+            <Box
+              sx={{
+                height: "40px",
+                padding: "5px 10px",
+                borderRadius: "8px",
+                backgroundColor: colors.blueText,
+                border: "1px solid #E0E2E7",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                cursor: "pointer",
+                ml: 2,
+              }}
+              onClick={() => setaddProdDrawer(true)}
+            >
+              <AddOutlined
+                sx={{
+                  color: "#fff",
+                  fontSize: "20px",
+                }}
+              />
+              <Typography
+                sx={{
+                  color: "#fff",
+                  fontSize: "14px",
+                  fontFamily: "Urbanist",
+                  ml: 0.5,
+                }}
+              >
+                Add Products
+              </Typography>
+            </Box>
+          )}
+
+          {searchBar && (
+            <SearchContainer
+              sx={{
+                width: smallScreen ? "120px" : null,
+                ml: smallScreen ? 2 : 0,
+              }}
+            >
+              <SearchIconWrapper>
+                <img
+                  src={require("../assets/icons/search.png")}
+                  style={{
+                    height: "18px",
+                    width: "18px",
+                    cursor: "pointer",
+                    color: colors.blueText,
+                  }}
+                  alt=""
+                />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search..."
+                inputProps={{
+                  style: {
+                    color: colors.darkText,
+                  },
+                }}
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
+              />
+            </SearchContainer>
+          )}
+        </Stack>
+      )}
 
       {/* Product Actions */}
       <Menu

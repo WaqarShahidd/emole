@@ -29,6 +29,7 @@ const latestUpdatesColumnsData = [
     headerName: "Product name",
     headerClassName: "super-app-theme--header",
     flex: 0.85,
+    minWidth: 250,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -79,6 +80,7 @@ const latestUpdatesColumnsData = [
     headerAlign: "center",
     align: "center",
     flex: 0.75,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -123,6 +125,7 @@ const latestUpdatesColumnsData = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -163,6 +166,7 @@ const latestUpdatesColumnsData = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -202,6 +206,7 @@ const latestUpdatesColumnsData = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -241,6 +246,7 @@ const latestUpdatesColumnsData = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -280,6 +286,7 @@ const latestUpdatesColumnsData = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -312,31 +319,6 @@ const latestUpdatesColumnsData = [
       </Box>
     ),
   },
-  // {
-  //   field: "View",
-  //   headerName: "View",
-  //   headerClassName: "super-app-theme--header",
-  //   headerAlign: "center",
-  //   align: "center",
-  //   flex: 0.5,
-  //   renderHeader: (params) => (
-  //     <Typography
-  //       sx={{
-  //         fontSize: 14,
-  //         fontWeight: "700",
-  //         fontFamily: "Urbanist",
-  //         color: "#222",
-  //       }}
-  //     >
-  //       {params?.colDef?.headerName}
-  //     </Typography>
-  //   ),
-  //   renderCell: (params) => (
-  //     <IconButton>
-  //       <Visibility />
-  //     </IconButton>
-  //   ),
-  // },
 ];
 
 const newProductUpdatesColumnsData = [
@@ -345,6 +327,7 @@ const newProductUpdatesColumnsData = [
     headerName: "Product name",
     headerClassName: "super-app-theme--header",
     flex: 0.75,
+    minWidth: 250,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -395,6 +378,7 @@ const newProductUpdatesColumnsData = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -434,6 +418,7 @@ const newProductUpdatesColumnsData = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -466,31 +451,6 @@ const newProductUpdatesColumnsData = [
       </Box>
     ),
   },
-  // {
-  //   field: "View",
-  //   headerName: "View",
-  //   headerClassName: "super-app-theme--header",
-  //   flex: 0.25,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   renderHeader: (params) => (
-  //     <Typography
-  //       sx={{
-  //         fontSize: 14,
-  //         fontWeight: "700",
-  //         fontFamily: "Urbanist",
-  //         color: "#222",
-  //       }}
-  //     >
-  //       {params?.colDef?.headerName}
-  //     </Typography>
-  //   ),
-  //   renderCell: (params) => (
-  //     <IconButton>
-  //       <Visibility />
-  //     </IconButton>
-  //   ),
-  // },
 ];
 
 const priceUpdateColumns = [
@@ -499,6 +459,7 @@ const priceUpdateColumns = [
     headerName: "Product name",
     headerClassName: "super-app-theme--header",
     flex: 0.75,
+    minWidth: 250,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -549,6 +510,7 @@ const priceUpdateColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -588,6 +550,7 @@ const priceUpdateColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -627,6 +590,7 @@ const priceUpdateColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -659,31 +623,6 @@ const priceUpdateColumns = [
       </Box>
     ),
   },
-  // {
-  //   field: "View",
-  //   headerName: "View",
-  //   headerClassName: "super-app-theme--header",
-  //   flex: 0.25,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   renderHeader: (params) => (
-  //     <Typography
-  //       sx={{
-  //         fontSize: 14,
-  //         fontWeight: "700",
-  //         fontFamily: "Urbanist",
-  //         color: "#222",
-  //       }}
-  //     >
-  //       {params?.colDef?.headerName}
-  //     </Typography>
-  //   ),
-  //   renderCell: (params) => (
-  //     <IconButton>
-  //       <Visibility />
-  //     </IconButton>
-  //   ),
-  // },
 ];
 
 const mostAlertsColumns = [
@@ -692,6 +631,7 @@ const mostAlertsColumns = [
     headerName: "Product name",
     headerClassName: "super-app-theme--header",
     flex: 0.75,
+    minWidth: 250,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -742,6 +682,7 @@ const mostAlertsColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -781,6 +722,7 @@ const mostAlertsColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -813,31 +755,6 @@ const mostAlertsColumns = [
       </Box>
     ),
   },
-  // {
-  //   field: "View",
-  //   headerName: "View",
-  //   headerClassName: "super-app-theme--header",
-  //   flex: 0.25,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   renderHeader: (params) => (
-  //     <Typography
-  //       sx={{
-  //         fontSize: 14,
-  //         fontWeight: "700",
-  //         fontFamily: "Urbanist",
-  //         color: "#222",
-  //       }}
-  //     >
-  //       {params?.colDef?.headerName}
-  //     </Typography>
-  //   ),
-  //   renderCell: (params) => (
-  //     <IconButton>
-  //       <Visibility />
-  //     </IconButton>
-  //   ),
-  // },
 ];
 
 const mostAlertsGroupColumns = [
@@ -846,6 +763,7 @@ const mostAlertsGroupColumns = [
     headerName: "Group name",
     headerClassName: "super-app-theme--header",
     flex: 0.75,
+    minWidth: 250,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -887,6 +805,7 @@ const mostAlertsGroupColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -926,6 +845,7 @@ const mostAlertsGroupColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -958,31 +878,6 @@ const mostAlertsGroupColumns = [
       </Box>
     ),
   },
-  // {
-  //   field: "View",
-  //   headerName: "View",
-  //   headerClassName: "super-app-theme--header",
-  //   flex: 0.25,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   renderHeader: (params) => (
-  //     <Typography
-  //       sx={{
-  //         fontSize: 14,
-  //         fontWeight: "700",
-  //         fontFamily: "Urbanist",
-  //         color: "#222",
-  //       }}
-  //     >
-  //       {params?.colDef?.headerName}
-  //     </Typography>
-  //   ),
-  //   renderCell: (params) => (
-  //     <IconButton>
-  //       <Visibility />
-  //     </IconButton>
-  //   ),
-  // },
 ];
 
 const mostAlertsWebsiteColumns = [
@@ -991,6 +886,7 @@ const mostAlertsWebsiteColumns = [
     headerName: "Website name",
     headerClassName: "super-app-theme--header",
     flex: 0.75,
+    minWidth: 250,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -1041,6 +937,7 @@ const mostAlertsWebsiteColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -1080,6 +977,7 @@ const mostAlertsWebsiteColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -1120,6 +1018,7 @@ const stockUpdateColumns = [
     headerName: "Product name",
     headerClassName: "super-app-theme--header",
     flex: 0.75,
+    minWidth: 250,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -1170,6 +1069,7 @@ const stockUpdateColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -1214,6 +1114,7 @@ const stockUpdateColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -1259,6 +1160,7 @@ const stockUpdateColumns = [
     headerAlign: "center",
     align: "center",
     flex: 0.5,
+    minWidth: 150,
     renderHeader: (params) => (
       <Typography
         sx={{
@@ -1291,31 +1193,6 @@ const stockUpdateColumns = [
       </Box>
     ),
   },
-  // {
-  //   field: "View",
-  //   headerName: "View",
-  //   headerClassName: "super-app-theme--header",
-  //   flex: 0.25,
-  //   headerAlign: "center",
-  //   align: "center",
-  //   renderHeader: (params) => (
-  //     <Typography
-  //       sx={{
-  //         fontSize: 14,
-  //         fontWeight: "700",
-  //         fontFamily: "Urbanist",
-  //         color: "#222",
-  //       }}
-  //     >
-  //       {params?.colDef?.headerName}
-  //     </Typography>
-  //   ),
-  //   renderCell: (params) => (
-  //     <IconButton>
-  //       <Visibility />
-  //     </IconButton>
-  //   ),
-  // },
 ];
 
 const DashboardBox = ({ title, productCount, Icon, onClick, btnText }) => (
@@ -1545,12 +1422,12 @@ const Dashboard = () => {
 
       <Box
         sx={{
-          display: "flex",
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
           flex: 1,
           backgroundColor: "#F9F9FC",
+          overflowY: "auto",
         }}
       >
         <Header title="Dashboard" />

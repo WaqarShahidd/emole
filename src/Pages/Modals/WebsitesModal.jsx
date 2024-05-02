@@ -32,6 +32,7 @@ const WebsiteModalComp = ({
   websiteViewProductsData,
   navigate,
   setwebsiteModalState,
+  smallScreen,
 }) => (
   <Box
     m={2}
@@ -94,7 +95,7 @@ const WebsiteModalComp = ({
       }}
     />
     <Stack
-      direction={"row"}
+      direction={smallScreen ? "column" : "row"}
       alignItems={"center"}
       justifyContent={"space-between"}
     >
@@ -103,7 +104,7 @@ const WebsiteModalComp = ({
         alignItems={"center"}
         justifyContent={"space-between"}
         sx={{
-          width: "70%",
+          width: smallScreen ? "100%" : "70%",
         }}
       >
         <Stack direction={"row"} alignItems={"center"}>
@@ -187,7 +188,8 @@ const WebsiteModalComp = ({
           color: "#fff",
         }}
         sx={{
-          width: "22.5%",
+          width: smallScreen ? "100%" : "22.5%",
+          mt: smallScreen ? 2 : 0,
           fontSize: "12px",
           height: "30px",
           borderRadius: "8px",
@@ -234,11 +236,10 @@ const WebsitesModal = () => {
       anchor={"right"}
       open={websiteModalState}
       onClose={() => setwebsiteModalState(false)}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: smallScreen ? "450px" : "600px",
+          width: smallScreen ? "350px" : "600px",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F0F1F3",
@@ -282,6 +283,7 @@ const WebsitesModal = () => {
               setwebsiteDetailData={setwebsiteDetailData}
               websiteViewProductsData={setwebsiteViewProductsData}
               navigate={navigate}
+              smallScreen={smallScreen}
             />
           ))}
         </Box>

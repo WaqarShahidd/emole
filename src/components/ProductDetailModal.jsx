@@ -63,7 +63,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: smallScreen ? "450px" : "600px",
+          width: smallScreen ? "350px" : "600px",
           overflowY: "auto",
           backgroundColor: "#F0F1F3",
         },
@@ -112,7 +112,10 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                     className="rounded-md"
                     src={data?.Images}
                     alt="new"
-                    style={{ width: "200px", height: "200px" }}
+                    style={{
+                      width: smallScreen ? "100px" : "200px",
+                      height: smallScreen ? "100px" : "200px",
+                    }}
                   />
                   <Box
                     sx={{
@@ -703,7 +706,7 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                   />
 
                   <Stack
-                    direction="row"
+                    direction={"row"}
                     alignItems="center"
                     justifyContent="space-between"
                     sx={{

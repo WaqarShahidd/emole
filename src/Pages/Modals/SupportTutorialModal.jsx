@@ -22,6 +22,7 @@ const SingleCard = ({
   settutorialModal,
   setsupportTutorialModal,
 }) => {
+  const smallScreen = useMediaQuery("(max-width:650px)");
   return (
     <Box
       m={2}
@@ -32,7 +33,7 @@ const SingleCard = ({
       }}
     >
       <Stack
-        direction={"row"}
+        direction={smallScreen ? "column" : "row"}
         justifyContent={"space-between"}
         alignItems={"flex-start"}
       >
@@ -56,7 +57,7 @@ const SingleCard = ({
             color: "#fff",
           }}
           sx={{
-            width: "22.5%",
+            width: smallScreen ? "100%" : "22.5%",
             fontSize: "12px",
             height: "30px",
             borderRadius: "8px",
@@ -109,7 +110,7 @@ const SupportTutorialModal = () => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: smallScreen ? "450px" : "600px",
+          width: smallScreen ? "350px" : "600px",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F0F1F3",

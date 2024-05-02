@@ -19,6 +19,7 @@ import {
   Snackbar,
   Stack,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import ProductDetailModal from "../../components/ProductDetailModal";
@@ -299,6 +300,7 @@ const Products = () => {
       headerName: "Total no stock",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
+      minWidth: 140,
       headerAlign: "center",
       renderHeader: (params) => (
         <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
@@ -318,24 +320,12 @@ const Products = () => {
         </Box>
       ),
     },
-    // {
-    //   field: "New_Value",
-    //   headerName: "Notification",
-    //   headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
-    //   flex: 1,
-    //   headerAlign: "center",
-    //   align: "center",
-    //   renderHeader: (params) => (
-    //     <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-    //       {params?.colDef?.headerName}
-    //     </Typography>
-    //   ),
-    // },
     {
       field: "createdDate",
       headerName: "Created Date",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
+      minWidth: 140,
       headerAlign: "center",
       align: "center",
       renderHeader: (params) => (
@@ -361,6 +351,7 @@ const Products = () => {
       headerName: "View",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
+      minWidth: 140,
       headerAlign: "center",
       align: "center",
       renderHeader: (params) => (
@@ -578,8 +569,16 @@ const Products = () => {
     saveAs(blob, "data.csv");
   };
 
+  const smallScreen = useMediaQuery("(max-width:650px)");
+
   return (
-    <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
+    <Box
+      style={{
+        display: "flex",
+        backgroundColor: "#F9F9FC",
+        minHeight: "100vh",
+      }}
+    >
       <SideDrawer id={2} />
 
       <Backdrop
@@ -606,16 +605,16 @@ const Products = () => {
 
       <Box
         sx={{
-          display: "flex",
           justifyContent: "center",
           alignItems: "center",
           flexDirection: "column",
           flex: 1,
           backgroundColor: "#F9F9FC",
+          overflowY: "auto",
         }}
       >
         <Header
-          title=""
+          title={smallScreen ? "Products" : ""}
           groupsDropdown
           filter
           filterBtn={() => setopenFilters(!openFilters)}
@@ -939,12 +938,11 @@ const Products = () => {
               sx={{
                 backgroundColor: "white",
                 borderRadius: 4,
+                width: "100%",
+                overflowX: "auto",
               }}
             >
               <DataGrid
-                disableColumnMenu
-                disableColumnFilter
-                disableColumnSorting
                 sx={{
                   "&, [class^=MuiDataGrid-main]": { borderRadius: 4 },
                   ".MuiDataGrid-columnHeaderTitleContainer": {

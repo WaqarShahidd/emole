@@ -58,7 +58,7 @@ const TutorialModal = () => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: smallScreen ? "450px" : "600px",
+          width: smallScreen ? "350px" : "600px",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F0F1F3",

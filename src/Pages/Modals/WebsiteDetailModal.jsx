@@ -132,7 +132,7 @@ export const WebsiteDetailModal = () => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: smallScreen ? "450px" : "600px",
+          width: smallScreen ? "350px" : "600px",
           backgroundColor: "#F0F1F3",
         },
       }}

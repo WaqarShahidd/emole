@@ -54,7 +54,7 @@ const AddProduct = () => {
     {
       field: "name",
       headerName: "Group Name",
-      // width: 125,
+      minWidth: 150,
       flex: 1,
       renderHeader: (params) => (
         <Typography
@@ -81,7 +81,7 @@ const AddProduct = () => {
     {
       field: "amount",
       headerName: "Products",
-      width: 90,
+      width: 150,
       headerAlign: "center",
       align: "center",
       renderHeader: (params) => (
@@ -107,9 +107,9 @@ const AddProduct = () => {
       ),
     },
     {
-      field: "noStock",
+      field: "outOfStockProducts",
       headerName: "No Stock",
-      width: 90,
+      minWidth: 150,
       headerAlign: "center",
       align: "center",
       renderHeader: (params) => (
@@ -130,16 +130,16 @@ const AddProduct = () => {
             fontFamily: "Urbanist",
           }}
         >
-          {params?.row?.segment?.noStock?.length}
+          {params?.value}
         </div>
       ),
     },
-
     {
-      field: "alerts",
+      field: "countOfTotalProductsAlerts",
       headerName: "Alerts",
       headerAlign: "center",
       align: "center",
+      minWidth: 150,
       renderHeader: (params) => (
         <Typography
           fontSize={13}
@@ -166,7 +166,7 @@ const AddProduct = () => {
     {
       field: "view",
       headerName: "View",
-      width: 90,
+      minWidth: 150,
       headerAlign: "center",
       align: "center",
       renderHeader: (params) => (
@@ -349,7 +349,7 @@ const AddProduct = () => {
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
-          width: smallScreen ? "450px" : "600px",
+          width: smallScreen ? "350px" : "600px",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#F0F1F3",
