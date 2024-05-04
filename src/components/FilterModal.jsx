@@ -110,7 +110,7 @@ const FilterModal = ({
           <Box
             sx={{
               backgroundColor: "#fff",
-              p: 3,
+              p: 2,
               borderBottom: "1px solid #E0E2E7",
             }}
           >
