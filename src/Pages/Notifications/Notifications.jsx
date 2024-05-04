@@ -79,7 +79,11 @@ const Notifications = () => {
               fontFamily={"Urbanist-bold"}
               fontWeight={"bold"}
               fontSize={12}
-              className="underline text-blue-500 cursor-pointer"
+              sx={{
+                color: colors.blueText,
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
               onClick={() => {
                 setwebsiteDetailData(params?.row?.product?.Page?.Website);
                 setwebsiteDetail(true);

@@ -12,19 +12,10 @@ import React from "react";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
 
-const productColumns = [
-  { id: 1, name: "Product Name", fieldName: "productName", checked: true },
-  { id: 2, name: "Product Price", fieldName: "productPrice", checked: true },
-  { id: 3, name: "Category", fieldName: "category", checked: true },
-  { id: 4, name: "Stock Status", fieldName: "stockStatus", checked: true },
-  { id: 5, name: "Number of Stock", fieldName: "noOfStock", checked: true },
-  { id: 6, name: "Created Date", fieldName: "createdDate", checked: true },
-  { id: 7, name: "View", fieldName: "view", checked: true },
-];
-
 const ShowHideFields = ({
   columnVisibilityModel,
   setColumnVisibilityModel,
+  productColumns,
 }) => {
   const { showHideFieldsDrawer, setshowHideFieldsDrawer } = useUser();
 
@@ -58,7 +49,7 @@ const ShowHideFields = ({
           <Box
             sx={{
               backgroundColor: "#fff",
-              p: 3,
+              p: 2,
               borderBottom: "1px solid #E0E2E7",
             }}
           >
@@ -84,12 +75,13 @@ const ShowHideFields = ({
               <Stack key={col.id} direction="row" mb={2} alignItems="center">
                 <Checkbox
                   checked={columnVisibilityModel[col.fieldName]}
-                  onChange={() =>
+                  onChange={() => {
                     setColumnVisibilityModel({
                       ...columnVisibilityModel,
                       [col.fieldName]: !columnVisibilityModel[col.fieldName],
-                    })
-                  }
+                    });
+                    console.log(!columnVisibilityModel[col.fieldName]);
+                  }}
                   sx={{
                     padding: 0,
                     borderRadius: "8px",

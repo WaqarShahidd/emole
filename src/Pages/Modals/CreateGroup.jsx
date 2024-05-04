@@ -75,6 +75,7 @@ const CreateGroup = ({ handleClose, open }) => {
           handleClose();
           GetGroups();
           setselectedProducts([]);
+          setSelectedIds([]);
         })
         .catch((e) => {
           seterror(true);
@@ -112,6 +113,7 @@ const CreateGroup = ({ handleClose, open }) => {
           handleClose();
           GetGroups();
           setselectedProducts([]);
+          setSelectedIds([]);
         })
         .catch((e) => {
           seterror(true);
@@ -188,7 +190,6 @@ const CreateGroup = ({ handleClose, open }) => {
           </Typography>
           <Box
             mt={1}
-            pb={2}
             sx={{
               display: "flex",
               justifyContent: "space-between",
@@ -237,6 +238,7 @@ const CreateGroup = ({ handleClose, open }) => {
             mx: 3,
             borderRadius: "8px",
             p: 2,
+            mb: 2,
           }}
         >
           <Typography

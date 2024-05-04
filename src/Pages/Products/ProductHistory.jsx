@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SideDrawer from "../../components/SideDrawer";
 import {
   Box,
@@ -21,15 +21,19 @@ import {
   getStatusTextColor,
 } from "../../assets/DummyData";
 import { colors } from "../../theme/theme";
+import axios from "axios";
+import { BASE_URL } from "../../constants/config";
+import { useLocation } from "react-router-dom";
+import { saveAs } from "file-saver";
+import ShowHideFields from "../Modals/ShowHideFields";
 
 const ProductHistory = () => {
   const productsColumns = [
     {
-      field: "CreatedDate",
+      field: "Date",
       headerName: "Date",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 3,
-
       renderHeader: (params) => (
         <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
           {params?.colDef?.headerName}
@@ -43,7 +47,7 @@ const ProductHistory = () => {
             fontWeight={"bold"}
             fontSize={13}
           >
-            {moment(params?.row?.Product?.createdAt).format("DD-MM-YYYY")}
+            {moment(params?.value).format("DD-MM-YYYY")}
           </Typography>
         </Box>
       ),
@@ -71,25 +75,25 @@ const ProductHistory = () => {
               fontWeight={"bold"}
               fontSize={13}
             >
-              {params?.row?.Product?.LastPrice}
+              {params?.row?.OldPrice}
             </Typography>
-            {params?.row?.Product?.Price ? (
+            {params?.row?.NewPrice ? (
               <>
                 <Typography
                   fontFamily={"Urbanist"}
                   fontWeight={"bold"}
                   fontSize={13}
                   color={
-                    parseFloat(params?.row?.Product?.LastPrice) <
-                    parseFloat(params?.row?.Product?.Price)
+                    parseFloat(params?.row?.OldPrice) <
+                    parseFloat(params?.row?.NewPrice)
                       ? "green"
                       : "red"
                   }
                 >
-                  {params?.row?.Product?.Price}
+                  {params?.row?.NewPrice}
                 </Typography>
-                {parseFloat(params?.row?.Product?.LastPrice) <
-                parseFloat(params?.row?.Product?.Price) ? (
+                {parseFloat(params?.row?.OldPrice) <
+                parseFloat(params?.row?.NewPrice) ? (
                   <ArrowDropUp fontSize="small" color="success" />
                 ) : (
                   <ArrowDropDown fontSize="small" color="error" />
@@ -109,7 +113,6 @@ const ProductHistory = () => {
         </Box>
       ),
     },
-
     {
       field: "stockStatus",
       headerName: "Stock Status",
@@ -154,7 +157,7 @@ const ProductHistory = () => {
     },
     {
       field: "noStock",
-      headerName: "Times no stock",
+      headerName: "Total no stock",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
       headerAlign: "center",
@@ -189,31 +192,35 @@ const ProductHistory = () => {
           {params?.colDef?.headerName}
         </Typography>
       ),
-      renderCell: (params) => (
-        <Box className="flex-col flex w-full h-full  justify-center">
-          <Typography
-            fontFamily={"Urbanist"}
-            color={"gray"}
-            fontWeight={"bold"}
-            fontSize={13}
-          >
-            {params?.row?.Product?.Category}
-          </Typography>
-          {params?.row?.category?.length > 1 && (
+      renderCell: (params) => {
+        const categoriesArray = params?.value?.split(", ");
+        return (
+          <Box className="flex-col flex w-full h-full  justify-center">
             <Typography
               fontFamily={"Urbanist"}
+              color={"gray"}
               fontWeight={"bold"}
               fontSize={13}
-              className=" font-bold text-blue-500 cursor-pointer"
             >
-              {params?.row?.category?.length - 1} more
+              {categoriesArray}
             </Typography>
-          )}
-        </Box>
-      ),
+            {categoriesArray.length > 1 && (
+              <Typography
+                fontFamily={"Urbanist"}
+                fontWeight={"bold"}
+                fontSize={13}
+                className=" font-bold cursor-pointer"
+                sx={{ color: colors.blueText }}
+              >
+                {categoriesArray.length - 1} more
+              </Typography>
+            )}
+          </Box>
+        );
+      },
     },
     {
-      field: "totalAlerts",
+      field: "TotalAlerts",
       headerName: "Total alerts",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
@@ -231,13 +238,13 @@ const ProductHistory = () => {
             fontWeight={"bold"}
             fontSize={13}
           >
-            {params?.row?.Product?.totalAlerts}
+            {params?.value}
           </Typography>
         </Box>
       ),
     },
     {
-      field: "lastAlert",
+      field: "LastAlert",
       headerName: "Last alert",
       headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
       flex: 1,
@@ -256,80 +263,32 @@ const ProductHistory = () => {
             fontWeight={"bold"}
             fontSize={13}
           >
-            {moment(params?.row?.Product?.lastAlert).format("DD-MM-YYYY")}
+            {moment(params?.value).format("DD-MM-YYYY")}
           </Typography>
         </Box>
       ),
     },
   ];
 
-  const dummyData = [
-    {
-      id: 1,
-      Product: {
-        CreatedDate: new Date(),
-        Price: "$15",
-        LastPrice: "$10",
-        stockStatus: true,
-        noStock: new Date(),
-        Category: "Electronics",
-        totalAlerts: 5,
-        lastAlert: new Date(),
-      },
-    },
-    {
-      id: 2,
-      Product: {
-        CreatedDate: new Date(),
-        Price: "$25",
-        LastPrice: "$20",
-        stockStatus: false,
-        noStock: new Date(),
-        Category: "Clothing",
-        totalAlerts: 3,
-        lastAlert: new Date(),
-      },
-    },
-    {
-      id: 3,
-      Product: {
-        CreatedDate: new Date(),
-        Price: "$35",
-        LastPrice: "$30",
-        stockStatus: true,
-        noStock: new Date(),
-        Category: "Furniture",
-        totalAlerts: 2,
-        lastAlert: new Date(),
-      },
-    },
-    {
-      id: 4,
-      Product: {
-        CreatedDate: new Date(),
-        Price: "$45",
-        LastPrice: "$40",
-        stockStatus: false,
-        noStock: new Date(),
-        Category: "Books",
-        totalAlerts: 1,
-        lastAlert: new Date(),
-      },
-    },
-    {
-      id: 5,
-      Product: {
-        CreatedDate: new Date(),
-        Price: "$55",
-        LastPrice: "$50",
-        stockStatus: true,
-        noStock: new Date(),
-        Category: "Toys",
-        totalAlerts: 0,
-        lastAlert: new Date(),
-      },
-    },
+  const productColumns = [
+    { id: 1, name: "Date", fieldName: "Date", checked: true },
+    { id: 2, name: "Product Price", fieldName: "productPrice", checked: true },
+    { id: 2, name: "Stock Status", fieldName: "stockStatus", checked: true },
+    { id: 4, name: "Total no stock", fieldName: "noStock", checked: true },
+    { id: 3, name: "Category", fieldName: "Category", checked: true },
+    { id: 6, name: "Total alerts", fieldName: "TotalAlerts", checked: true },
+    { id: 7, name: "Last alert", fieldName: "LastAlert", checked: true },
   ];
+
+  const [columnVisibilityModel, setColumnVisibilityModel] = React.useState({
+    Date: true,
+    productPrice: true,
+    stockStatus: true,
+    noStock: true,
+    Category: true,
+    TotalAlerts: true,
+    LastAlert: true,
+  });
 
   const [alignment, setAlignment] = React.useState("12 Months");
 
@@ -364,10 +323,97 @@ const ProductHistory = () => {
     },
   ];
 
+  const { state } = useLocation();
+
+  const [loading, setloading] = useState(false);
+  const [productHistory, setproductHistory] = useState([]);
+
+  const [totalCount, settotalCount] = useState(0);
+  const [totalPages, settotalPages] = useState(1);
+  const [currentPage, setcurrentPage] = useState(1);
+  const [numOfProductPerPage, setnumOfProductPerPage] = useState(10);
+
+  const startIndex = (currentPage - 1) * numOfProductPerPage + 1;
+  const endIndex = Math.min(startIndex + numOfProductPerPage - 1);
+
+  const FetchProductHistory = async () => {
+    setloading(true);
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.post(
+        `${BASE_URL}/getProductsHistory`,
+        {
+          id: state?.productId,
+          page: currentPage,
+          pageSize: numOfProductPerPage,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await response.data.products.history;
+      settotalCount(response.data?.products?.totalCount);
+      settotalPages(response.data.products.totalPages);
+      setproductHistory(data);
+    } catch (error) {
+      console.error(error);
+      setloading(false);
+    } finally {
+      setloading(false);
+    }
+  };
+
+  useEffect(() => {
+    FetchProductHistory();
+  }, [currentPage, numOfProductPerPage]);
+
+  const handleExportData = () => {
+    const csvContent = productHistory
+      ?.map((row) =>
+        [
+          row?.ID,
+          row?.Date,
+          row?.NewPrice,
+          row?.OldPrice,
+          row?.Category,
+          row?.LastAlert,
+          row?.product?.Name,
+        ].join(",")
+      )
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+
+    saveAs(blob, "data.csv");
+  };
+
+  const filteredProductHistory = productHistory?.filter((item) => {
+    if (alignment === "12 Months") {
+      return moment(item?.Date).isAfter(moment().subtract(1, "years"));
+    } else if (alignment === "6 Months") {
+      return moment(item?.Date).isAfter(moment().subtract(6, "months"));
+    } else if (alignment === "3 Months") {
+      return moment(item?.Date).isAfter(moment().subtract(3, "months"));
+    } else if (alignment === "1 Month") {
+      return moment(item?.Date).isAfter(moment().subtract(1, "months"));
+    } else if (alignment === "7 Days") {
+      return moment(item?.Date).isAfter(moment().subtract(7, "days"));
+    } else if (alignment === "24 Hours") {
+      return moment(item?.Date).isAfter(moment().subtract(1, "day"));
+    }
+  });
+
   return (
     <Box style={{ display: "flex", backgroundColor: "#F9F9FC" }}>
       <SideDrawer id={2} />
-
+      <ShowHideFields
+        columnVisibilityModel={columnVisibilityModel}
+        setColumnVisibilityModel={setColumnVisibilityModel}
+        productColumns={productColumns}
+      />
       <Box
         sx={{
           display: "flex",
@@ -378,7 +424,12 @@ const ProductHistory = () => {
           backgroundColor: "#F9F9FC",
         }}
       >
-        <Header title="Historical - Product name" hideColumns exportBtn />
+        <Header
+          title={`Historical - ${state?.productName}`}
+          hideColumns
+          exportBtn
+          exportOnClick={handleExportData}
+        />
 
         <Stack
           direction={"row"}
@@ -395,13 +446,13 @@ const ProductHistory = () => {
               fontFamily: "Urbanist",
               fontSize: "14px",
               fontWeight: "700",
-              color: colors.darkText,
+              color: "#667085",
               textAlign: "center",
               display: "inline-block",
               marginRight: "10px",
             }}
           >
-            1-10 of 100
+            Showing {startIndex}-{endIndex} from {totalCount}
           </Typography>
           <Box
             sx={{
@@ -456,24 +507,57 @@ const ProductHistory = () => {
                     border: "none",
                     borderRight: "none",
                   },
-                  minHeight: 100,
+                  height:
+                    filteredProductHistory?.length === 0 ? "200px" : "auto",
                 }}
                 disableRowSelectionOnClick
                 showColumnVerticalBorder={false}
                 showCellVerticalBorder={true}
-                rows={dummyData}
-                getRowId={(row) => row?.id}
+                rows={filteredProductHistory}
+                getRowId={(row) => row?.ID}
                 columns={productsColumns}
                 hideFooter={true}
                 checkboxSelection
+                columnVisibilityModel={columnVisibilityModel}
+                onColumnVisibilityModelChange={(newModel) =>
+                  setColumnVisibilityModel(newModel)
+                }
+                slots={{
+                  noRowsOverlay: () => (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: "100%",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontFamily: "Urbanist",
+                          fontSize: "14px",
+                          fontWeight: "700",
+                          color: "#667085",
+                          textAlign: "center",
+                        }}
+                      >
+                        No history available
+                      </Typography>
+                    </Box>
+                  ),
+                }}
               />
             </Box>
             <Box className="mt-4 mx-4">
               <Stack direction={"row-reverse"}>
                 <Pagination
+                  count={totalPages}
                   variant="outlined"
                   // color="primary"
                   shape="rounded"
+                  onChange={(event, value) => {
+                    setcurrentPage(value);
+                  }}
                 />
                 <Box mx={2} width={200} height={20}>
                   <FormControl

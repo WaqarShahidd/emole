@@ -1,6 +1,8 @@
 import {
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -69,6 +71,12 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
         },
       }}
     >
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Box
         display="flex"
         flexDirection="column"
@@ -560,13 +568,19 @@ const ProductDetailModal = ({ open, handleClose, data }) => {
                           </Typography>
                           <Typography
                             sx={{
-                              color: colors.blueText,
+                              color: data?.OutOfStockCount
+                                ? colors.blueText
+                                : colors.darkText,
                               fontFamily: "PublicSans",
                               fontSize: 12,
-                              textDecorationLine: "underline",
+                              textDecorationLine: data?.OutOfStockCount
+                                ? "underline"
+                                : "none",
                             }}
                           >
-                            {data?.OutOfStockCount}
+                            {data?.OutOfStockCount
+                              ? data?.OutOfStockCount
+                              : "N/A"}
                           </Typography>
                         </Stack>
                       </Grid>

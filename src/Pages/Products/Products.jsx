@@ -13,6 +13,7 @@ import {
   CircularProgress,
   FormControl,
   Grid,
+  IconButton,
   MenuItem,
   Pagination,
   Select,
@@ -92,6 +93,12 @@ const Products = () => {
               color={colors.darkText}
               fontWeight={"bold"}
               fontSize={14}
+              sx={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                maxWidth: "90%",
+              }}
             >
               {params?.row?.Product?.Name}
             </Typography>
@@ -99,7 +106,10 @@ const Products = () => {
               fontFamily={"Urbanist"}
               fontWeight={"bold"}
               fontSize={12}
-              className="underline text-blue-500 cursor-pointer"
+              className="underline cursor-pointer"
+              sx={{
+                color: colors.blueText,
+              }}
               onClick={() => {
                 setwebsiteDetailData(params?.row?.Product?.Page?.Website);
                 setwebsiteDetail(true);
@@ -204,7 +214,10 @@ const Products = () => {
                 fontFamily={"Urbanist"}
                 fontWeight={"bold"}
                 fontSize={13}
-                className=" font-bold text-blue-500 cursor-pointer"
+                className="font-bold cursor-pointer"
+                sx={{
+                  color: "#1814F3",
+                }}
                 onClick={() => {
                   handleClickOpen();
                   setproductDetails(params.row?.Product);
@@ -366,35 +379,70 @@ const Products = () => {
           alignItems={"center"}
           height={"100%"}
         >
-          <img
-            src={require("../../assets/icons/history1.png")}
-            alt=""
-            style={{ height: "15px", width: "15px", cursor: "pointer" }}
-            onClick={() => navigate("/product-history")}
-          />
-          <img
-            src={require("../../assets/icons/view.png")}
-            alt=""
+          <IconButton
+            style={{ cursor: "pointer" }}
+            onClick={() =>
+              navigate("/product-history", {
+                state: {
+                  productId: params.row?.ProductID,
+                  productName: params.row?.Product?.Name,
+                },
+              })
+            }
+          >
+            <img
+              src={require("../../assets/icons/history1.png")}
+              alt=""
+              style={{
+                height: "15px",
+                width: "15px",
+              }}
+            />
+          </IconButton>
+          <IconButton
             style={{
-              height: "15px",
-              width: "15px",
-              margin: "0 10px",
               cursor: "pointer",
             }}
             onClick={() => {
               handleClickOpen();
               setproductDetails(params.row?.Product);
             }}
-          />
-          <img
-            src={require("../../assets/icons/delete.png")}
-            alt=""
-            style={{ height: "17.5px", width: "15px", cursor: "pointer" }}
+          >
+            <img
+              src={require("../../assets/icons/view.png")}
+              alt=""
+              style={{
+                height: "15px",
+                width: "15px",
+              }}
+            />
+          </IconButton>
+          <IconButton
+            style={{ cursor: "pointer" }}
             onClick={() => setdeleteProducts(true)}
-          />
+          >
+            <img
+              src={require("../../assets/icons/delete.png")}
+              alt=""
+              style={{
+                height: "17.5px",
+                width: "15px",
+              }}
+            />
+          </IconButton>
         </Stack>
       ),
     },
+  ];
+
+  const productColumns = [
+    { id: 1, name: "Product Name", fieldName: "productName", checked: true },
+    { id: 2, name: "Product Price", fieldName: "productPrice", checked: true },
+    { id: 3, name: "Category", fieldName: "category", checked: true },
+    { id: 4, name: "Stock Status", fieldName: "stockStatus", checked: true },
+    { id: 5, name: "Number of Stock", fieldName: "noOfStock", checked: true },
+    { id: 6, name: "Created Date", fieldName: "createdDate", checked: true },
+    { id: 7, name: "View", fieldName: "view", checked: true },
   ];
 
   const [openFilters, setopenFilters] = useState(false);
@@ -409,6 +457,9 @@ const Products = () => {
   const [currentPrice, setcurrentPrice] = useState(null);
 
   const [selectedIds, setSelectedIds] = useState([]);
+  const [websiteFilter, setwebsiteFilter] = useState(
+    state?.websiteId ? state?.websiteId : null
+  );
 
   const [totalCount, settotalCount] = useState(0);
   const [totalPages, settotalPages] = useState(1);
@@ -448,6 +499,7 @@ const Products = () => {
           page: currentPage,
           pageSize: numOfProductPerPage,
           filters: {
+            URL: websiteFilter,
             SegmentID: selectedGroupId,
             StockStatus: stockStatusFilter,
             category: [],
@@ -526,8 +578,10 @@ const Products = () => {
   useEffect(() => {
     if (stockStatusStateUpdate) {
       FetchProducts();
+    } else if (state?.websiteId) {
+      FetchProducts();
     }
-  }, [stockStatusStateUpdate]);
+  }, [stockStatusStateUpdate, state?.websiteId]);
 
   const {
     setselectedProducts,
@@ -635,6 +689,7 @@ const Products = () => {
         <ShowHideFields
           columnVisibilityModel={columnVisibilityModel}
           setColumnVisibilityModel={setColumnVisibilityModel}
+          productColumns={productColumns}
         />
 
         <DeleteModal
@@ -700,6 +755,45 @@ const Products = () => {
                   mx: 2,
                 }}
               >
+                {websiteFilter !== null && (
+                  <>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mx: 2,
+                      }}
+                    >
+                      |
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                        mr: 1,
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        setstockStatusStateUpdate(true);
+                        setwebsiteFilter(null);
+                        setcurrentPage(1);
+                      }}
+                    >
+                      X
+                    </Typography>
+                    <Typography
+                      sx={{
+                        color: colors.blueText,
+                        fontFamily: "Urbanist-bold",
+                        fontSize: 14,
+                      }}
+                    >
+                      Website: {state?.websiteName}
+                    </Typography>
+                  </>
+                )}
                 {currentPrice !== null && (
                   <>
                     <Typography
@@ -723,6 +817,7 @@ const Products = () => {
                       onClick={() => {
                         setcurrentPrice(null);
                         setstockStatusStateUpdate(true);
+                        setcurrentPage(1);
                       }}
                     >
                       X
@@ -761,6 +856,7 @@ const Products = () => {
                       onClick={() => {
                         setprevPrice(null);
                         setstockStatusStateUpdate(true);
+                        setcurrentPage(1);
                       }}
                     >
                       X
@@ -799,6 +895,7 @@ const Products = () => {
                       onClick={() => {
                         setstartDate(null);
                         setstockStatusStateUpdate(true);
+                        setcurrentPage(1);
                       }}
                     >
                       X
@@ -839,6 +936,7 @@ const Products = () => {
                         onClick={() => {
                           setendDate(dayjs());
                           setstockStatusStateUpdate(true);
+                          setcurrentPage(1);
                         }}
                       >
                         X
@@ -877,6 +975,7 @@ const Products = () => {
                       onClick={() => {
                         setstockStatusFilter(null);
                         setstockStatusStateUpdate(true);
+                        setcurrentPage(1);
                       }}
                     >
                       X
@@ -969,17 +1068,14 @@ const Products = () => {
                 }}
                 onRowSelectionModelChange={(ids) => {
                   const selectedIDs = new Set(ids);
-
                   const selectedRows = productsData?.filter((row) =>
                     selectedIDs.has(row?.ProductID)
                   );
-                  console.log(
-                    productsData?.filter((row) =>
-                      selectedIDs.has(row?.ProductID)
-                    )
-                  );
                   setselectedProducts(selectedRows);
                 }}
+                rowSelectionModel={selectedProducts.map(
+                  (product) => product?.ProductID
+                )}
                 columnVisibilityModel={columnVisibilityModel}
                 onColumnVisibilityModelChange={(newModel) =>
                   setColumnVisibilityModel(newModel)

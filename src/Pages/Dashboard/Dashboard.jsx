@@ -2,7 +2,14 @@ import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import SideDrawer from "../../components/SideDrawer";
 import Header from "../../components/Header";
-import { Button, Grid, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  IconButton,
+  Stack,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import {
   DonutLarge,
   GridViewRounded,
@@ -22,1178 +29,6 @@ import axios from "axios";
 import { BASE_URL } from "../../constants/config";
 import { useUser } from "../../constants/context";
 import moment from "moment";
-
-const latestUpdatesColumnsData = [
-  {
-    field: "product",
-    headerName: "Product name",
-    headerClassName: "super-app-theme--header",
-    flex: 0.85,
-    minWidth: 250,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="flex-col flex w-full h-full justify-center"
-        sx={{
-          whiteSpace: "nowrap",
-          overflow: "auto",
-          scrollbarWidth: "none",
-          textOverflow: "ellipsis",
-          maxWidth: "95%",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "700",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.row?.product?.Name}
-        </Typography>
-        {/* <Typography
-          fontWeight={"bold"}
-          fontSize={13}
-          className="underline text-blue-500 cursor-pointer"
-        >
-          Website Name
-        </Typography> */}
-      </Box>
-    ),
-  },
-  {
-    field: "priority",
-    headerName: "Priority",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.75,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          fontSize={13}
-          px={1}
-          py={0.1}
-          style={{
-            textAlign: "center",
-            backgroundColor: getStatusBackgroundColor(params?.value),
-            color: getStatusTextColor(params?.value),
-            fontWeight: "bold",
-            borderRadius: "8px",
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "alert_type",
-    headerName: "Data",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-        sx={{ whiteSpace: "pre-line" }}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value === "" ? "N/A" : params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "old_value",
-    headerName: "Old Value",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "new_value",
-    headerName: "New Value",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "createdAt",
-    headerName: "Date",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {moment(params?.value).format("DD.MM.YYYY")}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "read",
-    headerName: "Status",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value === 0 ? "Unread" : "Read"}
-        </Typography>
-      </Box>
-    ),
-  },
-];
-
-const newProductUpdatesColumnsData = [
-  {
-    field: "productName",
-    headerName: "Product name",
-    headerClassName: "super-app-theme--header",
-    flex: 0.75,
-    minWidth: 250,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="flex-col flex w-full h-full justify-center"
-        sx={{
-          whiteSpace: "nowrap",
-          overflow: "auto",
-          scrollbarWidth: "none",
-          textOverflow: "ellipsis",
-          maxWidth: "95%",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "700",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.row?.Product?.Name}
-        </Typography>
-        {/* <Typography
-          fontWeight={"bold"}
-          fontSize={13}
-          className="underline text-blue-500 cursor-pointer"
-        >
-          Website Name
-        </Typography> */}
-      </Box>
-    ),
-  },
-  {
-    field: "price",
-    headerName: "Price",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.row?.Product?.Price}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "date",
-    headerName: "Date",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {moment(params?.row?.Product?.createdAt).format("DD.MM.YYYY")}
-        </Typography>
-      </Box>
-    ),
-  },
-];
-
-const priceUpdateColumns = [
-  {
-    field: "productName",
-    headerName: "Product name",
-    headerClassName: "super-app-theme--header",
-    flex: 0.75,
-    minWidth: 250,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="flex-col flex w-full h-full justify-center"
-        sx={{
-          whiteSpace: "nowrap",
-          overflow: "auto",
-          scrollbarWidth: "none",
-          textOverflow: "ellipsis",
-          maxWidth: "95%",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "700",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.row?.product?.Name}
-        </Typography>
-        {/* <Typography
-          fontWeight={"bold"}
-          fontSize={13}
-          className="underline text-blue-500 cursor-pointer"
-        >
-          Website Name
-        </Typography> */}
-      </Box>
-    ),
-  },
-  {
-    field: "old_value",
-    headerName: "Old Value",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          ${params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "new_value",
-    headerName: "New Value",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          ${params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "createdAt",
-    headerName: "Date",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {moment(params?.value).format("DD.MM.YYYY")}
-        </Typography>
-      </Box>
-    ),
-  },
-];
-
-const mostAlertsColumns = [
-  {
-    field: "Name",
-    headerName: "Product name",
-    headerClassName: "super-app-theme--header",
-    flex: 0.75,
-    minWidth: 250,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="flex-col flex w-full h-full  justify-center"
-        sx={{
-          whiteSpace: "nowrap",
-          overflow: "auto",
-          scrollbarWidth: "none",
-          textOverflow: "ellipsis",
-          maxWidth: "95%",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "700",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value}
-        </Typography>
-        {/* <Typography
-          fontWeight={"bold"}
-          fontSize={13}
-          className="underline text-blue-500 cursor-pointer"
-        >
-          Website Name
-        </Typography> */}
-      </Box>
-    ),
-  },
-  {
-    field: "alertCount",
-    headerName: "Alerts",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "CreatedAt",
-    headerName: "Last Alert",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {moment(params?.value).format("DD.MM.YYYY")}
-        </Typography>
-      </Box>
-    ),
-  },
-];
-
-const mostAlertsGroupColumns = [
-  {
-    field: "Name",
-    headerName: "Group name",
-    headerClassName: "super-app-theme--header",
-    flex: 0.75,
-    minWidth: 250,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box className="flex-col flex w-full h-full  justify-center">
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "700",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.row?.Group?.GroupName}
-        </Typography>
-        {/* <Typography
-          fontWeight={"bold"}
-          fontSize={13}
-          className="underline text-blue-500 cursor-pointer"
-        >
-          Website Name
-        </Typography> */}
-      </Box>
-    ),
-  },
-  {
-    field: "alertCount",
-    headerName: "Alerts",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "CreatedAt",
-    headerName: "Last Alert",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {moment(params?.row?.Group?.createdAt).format("DD.MM.YYYY")}
-        </Typography>
-      </Box>
-    ),
-  },
-];
-
-const mostAlertsWebsiteColumns = [
-  {
-    field: "Name",
-    headerName: "Website name",
-    headerClassName: "super-app-theme--header",
-    flex: 0.75,
-    minWidth: 250,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="flex-col flex w-full h-full  justify-center"
-        sx={{
-          whiteSpace: "nowrap",
-          overflow: "auto",
-          scrollbarWidth: "none",
-          textOverflow: "ellipsis",
-          maxWidth: "95%",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "700",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value}
-        </Typography>
-        {/* <Typography
-          fontWeight={"bold"}
-          fontSize={13}
-          className="underline text-blue-500 cursor-pointer"
-        >
-          Website Name
-        </Typography> */}
-      </Box>
-    ),
-  },
-  {
-    field: "alertCount",
-    headerName: "Alerts",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "CreatedAt",
-    headerName: "Last Alert",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {moment(params?.row?.Group?.createdAt).format("DD.MM.YYYY")}
-        </Typography>
-      </Box>
-    ),
-  },
-];
-
-const stockUpdateColumns = [
-  {
-    field: "productName",
-    headerName: "Product name",
-    headerClassName: "super-app-theme--header",
-    flex: 0.75,
-    minWidth: 250,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="flex-col flex w-full h-full justify-center"
-        sx={{
-          whiteSpace: "nowrap",
-          overflow: "auto",
-          scrollbarWidth: "none",
-          textOverflow: "ellipsis",
-          maxWidth: "95%",
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "700",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.row?.product?.Name}
-        </Typography>
-        {/* <Typography
-          fontWeight={"bold"}
-          fontSize={13}
-          className="underline text-blue-500 cursor-pointer"
-        >
-          Website Name
-        </Typography> */}
-      </Box>
-    ),
-  },
-  {
-    field: "old_value",
-    headerName: "Old Value",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          fontSize={13}
-          px={1}
-          py={0.1}
-          style={{
-            textAlign: "center",
-            backgroundColor: getStatusBackgroundColor(params?.value),
-            color: getStatusTextColor(params?.value),
-            fontWeight: "bold",
-            borderRadius: "8px",
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "new_value",
-    headerName: "New Value",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          fontSize={13}
-          px={1}
-          py={0.1}
-          // className="w-full"
-          style={{
-            textAlign: "center",
-            backgroundColor: getStatusBackgroundColor(params?.value),
-            color: getStatusTextColor(params?.value),
-            fontWeight: "bold",
-            borderRadius: "8px",
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {params?.value}
-        </Typography>
-      </Box>
-    ),
-  },
-  {
-    field: "createdAt",
-    headerName: "Date",
-    headerClassName: "super-app-theme--header",
-    headerAlign: "center",
-    align: "center",
-    flex: 0.5,
-    minWidth: 150,
-    renderHeader: (params) => (
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: "700",
-          fontFamily: "Urbanist-bolder",
-          color: colors.darkText,
-        }}
-      >
-        {params?.colDef?.headerName}
-      </Typography>
-    ),
-    renderCell: (params) => (
-      <Box
-        className="w-full h-full"
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Typography
-          sx={{
-            fontSize: 13,
-            fontWeight: "500",
-            color: colors.subText,
-            fontFamily: "Urbanist-bold",
-          }}
-        >
-          {moment(params?.value).format("DD.MM.YYYY")}
-        </Typography>
-      </Box>
-    ),
-  },
-];
 
 const DashboardBox = ({ title, productCount, Icon, onClick, btnText }) => (
   <Box
@@ -1255,6 +90,1179 @@ const DashboardBox = ({ title, productCount, Icon, onClick, btnText }) => (
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const smallScreen = useMediaQuery(`(max-width: 1100px)`);
+
+  const latestUpdatesColumnsData = [
+    {
+      field: "product",
+      headerName: "Product name",
+      headerClassName: "super-app-theme--header",
+      flex: 0.85,
+      minWidth: smallScreen ? 250 : 0,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="flex-col flex w-full h-full justify-center"
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "auto",
+            scrollbarWidth: "none",
+            textOverflow: "ellipsis",
+            maxWidth: "95%",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "700",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.row?.product?.Name}
+          </Typography>
+          {/* <Typography
+            fontWeight={"bold"}
+            fontSize={13}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Website Name
+          </Typography> */}
+        </Box>
+      ),
+    },
+    {
+      field: "priority",
+      headerName: "Priority",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.75,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            fontSize={13}
+            px={1}
+            py={0.1}
+            style={{
+              textAlign: "center",
+              backgroundColor: getStatusBackgroundColor(params?.value),
+              color: getStatusTextColor(params?.value),
+              fontWeight: "bold",
+              borderRadius: "8px",
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "alert_type",
+      headerName: "Data",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+          sx={{ whiteSpace: "pre-line" }}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value === "" ? "N/A" : params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "old_value",
+      headerName: "Old Value",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "new_value",
+      headerName: "New Value",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "createdAt",
+      headerName: "Date",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {moment(params?.value).format("DD.MM.YYYY")}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "read",
+      headerName: "Status",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value === 0 ? "Unread" : "Read"}
+          </Typography>
+        </Box>
+      ),
+    },
+  ];
+
+  const newProductUpdatesColumnsData = [
+    {
+      field: "productName",
+      headerName: "Product name",
+      headerClassName: "super-app-theme--header",
+      flex: 0.75,
+      minWidth: 250,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="flex-col flex w-full h-full justify-center"
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "auto",
+            scrollbarWidth: "none",
+            textOverflow: "ellipsis",
+            maxWidth: "95%",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "700",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.row?.Product?.Name}
+          </Typography>
+          {/* <Typography
+            fontWeight={"bold"}
+            fontSize={13}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Website Name
+          </Typography> */}
+        </Box>
+      ),
+    },
+    {
+      field: "price",
+      headerName: "Price",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.row?.Product?.Price}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "date",
+      headerName: "Date",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {moment(params?.row?.Product?.createdAt).format("DD.MM.YYYY")}
+          </Typography>
+        </Box>
+      ),
+    },
+  ];
+
+  const priceUpdateColumns = [
+    {
+      field: "productName",
+      headerName: "Product name",
+      headerClassName: "super-app-theme--header",
+      flex: 0.75,
+      minWidth: 250,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="flex-col flex w-full h-full justify-center"
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "auto",
+            scrollbarWidth: "none",
+            textOverflow: "ellipsis",
+            maxWidth: "95%",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "700",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.row?.product?.Name}
+          </Typography>
+          {/* <Typography
+            fontWeight={"bold"}
+            fontSize={13}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Website Name
+          </Typography> */}
+        </Box>
+      ),
+    },
+    {
+      field: "old_value",
+      headerName: "Old Value",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            ${params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "new_value",
+      headerName: "New Value",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            ${params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "createdAt",
+      headerName: "Date",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {moment(params?.value).format("DD.MM.YYYY")}
+          </Typography>
+        </Box>
+      ),
+    },
+  ];
+
+  const mostAlertsColumns = [
+    {
+      field: "Name",
+      headerName: "Product name",
+      headerClassName: "super-app-theme--header",
+      flex: 0.75,
+      minWidth: 250,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="flex-col flex w-full h-full  justify-center"
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "auto",
+            scrollbarWidth: "none",
+            textOverflow: "ellipsis",
+            maxWidth: "95%",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "700",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value}
+          </Typography>
+          {/* <Typography
+            fontWeight={"bold"}
+            fontSize={13}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Website Name
+          </Typography> */}
+        </Box>
+      ),
+    },
+    {
+      field: "alertCount",
+      headerName: "Alerts",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "CreatedAt",
+      headerName: "Last Alert",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {moment(params?.value).format("DD.MM.YYYY")}
+          </Typography>
+        </Box>
+      ),
+    },
+  ];
+
+  const mostAlertsGroupColumns = [
+    {
+      field: "Name",
+      headerName: "Group name",
+      headerClassName: "super-app-theme--header",
+      flex: 0.75,
+      minWidth: 250,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box className="flex-col flex w-full h-full  justify-center">
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "700",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.row?.Group?.GroupName}
+          </Typography>
+          {/* <Typography
+            fontWeight={"bold"}
+            fontSize={13}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Website Name
+          </Typography> */}
+        </Box>
+      ),
+    },
+    {
+      field: "alertCount",
+      headerName: "Alerts",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "CreatedAt",
+      headerName: "Last Alert",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {moment(params?.row?.Group?.createdAt).format("DD.MM.YYYY")}
+          </Typography>
+        </Box>
+      ),
+    },
+  ];
+
+  const mostAlertsWebsiteColumns = [
+    {
+      field: "Name",
+      headerName: "Website name",
+      headerClassName: "super-app-theme--header",
+      flex: 0.75,
+      minWidth: 250,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="flex-col flex w-full h-full  justify-center"
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "auto",
+            scrollbarWidth: "none",
+            textOverflow: "ellipsis",
+            maxWidth: "95%",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "700",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value}
+          </Typography>
+          {/* <Typography
+            fontWeight={"bold"}
+            fontSize={13}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Website Name
+          </Typography> */}
+        </Box>
+      ),
+    },
+    {
+      field: "alertCount",
+      headerName: "Alerts",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "CreatedAt",
+      headerName: "Last Alert",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {moment(params?.row?.Group?.createdAt).format("DD.MM.YYYY")}
+          </Typography>
+        </Box>
+      ),
+    },
+  ];
+
+  const stockUpdateColumns = [
+    {
+      field: "productName",
+      headerName: "Product name",
+      headerClassName: "super-app-theme--header",
+      flex: 0.75,
+      minWidth: 250,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="flex-col flex w-full h-full justify-center"
+          sx={{
+            whiteSpace: "nowrap",
+            overflow: "auto",
+            scrollbarWidth: "none",
+            textOverflow: "ellipsis",
+            maxWidth: "95%",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "700",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.row?.product?.Name}
+          </Typography>
+          {/* <Typography
+            fontWeight={"bold"}
+            fontSize={13}
+            className="underline text-blue-500 cursor-pointer"
+          >
+            Website Name
+          </Typography> */}
+        </Box>
+      ),
+    },
+    {
+      field: "old_value",
+      headerName: "Old Value",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            fontSize={13}
+            px={1}
+            py={0.1}
+            style={{
+              textAlign: "center",
+              backgroundColor: getStatusBackgroundColor(params?.value),
+              color: getStatusTextColor(params?.value),
+              fontWeight: "bold",
+              borderRadius: "8px",
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "new_value",
+      headerName: "New Value",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            fontSize={13}
+            px={1}
+            py={0.1}
+            // className="w-full"
+            style={{
+              textAlign: "center",
+              backgroundColor: getStatusBackgroundColor(params?.value),
+              color: getStatusTextColor(params?.value),
+              fontWeight: "bold",
+              borderRadius: "8px",
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {params?.value}
+          </Typography>
+        </Box>
+      ),
+    },
+    {
+      field: "createdAt",
+      headerName: "Date",
+      headerClassName: "super-app-theme--header",
+      headerAlign: "center",
+      align: "center",
+      flex: 0.5,
+      minWidth: !smallScreen ? 0 : 150,
+      renderHeader: (params) => (
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: "700",
+            fontFamily: "Urbanist-bolder",
+            color: colors.darkText,
+          }}
+        >
+          {params?.colDef?.headerName}
+        </Typography>
+      ),
+      renderCell: (params) => (
+        <Box
+          className="w-full h-full"
+          display={"flex"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Typography
+            sx={{
+              fontSize: 13,
+              fontWeight: "500",
+              color: colors.subText,
+              fontFamily: "Urbanist-bold",
+            }}
+          >
+            {moment(params?.value).format("DD.MM.YYYY")}
+          </Typography>
+        </Box>
+      ),
+    },
+  ];
 
   const {
     GetWebsites,
@@ -1494,6 +1502,7 @@ const Dashboard = () => {
               sx={{
                 backgroundColor: "#fff",
                 borderRadius: "8px",
+                height: "55vh",
               }}
             >
               <Box p={2}>
@@ -1536,6 +1545,7 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
+                    height: "calc(55vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1567,6 +1577,7 @@ const Dashboard = () => {
               sx={{
                 backgroundColor: "#fff",
                 borderRadius: "8px",
+                height: "55vh",
               }}
             >
               <Box p={2}>
@@ -1609,6 +1620,7 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
+                    height: "calc(55vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1641,6 +1653,7 @@ const Dashboard = () => {
               sx={{
                 backgroundColor: "#fff",
                 borderRadius: "8px",
+                height: "55vh",
               }}
             >
               <Box p={2}>
@@ -1683,6 +1696,7 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
+                    height: "calc(55vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1723,6 +1737,7 @@ const Dashboard = () => {
               sx={{
                 backgroundColor: "#fff",
                 borderRadius: "8px",
+                height: "55vh",
               }}
             >
               <Box p={2}>
@@ -1765,6 +1780,7 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
+                    height: "calc(55vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1796,6 +1812,7 @@ const Dashboard = () => {
               sx={{
                 backgroundColor: "#fff",
                 borderRadius: "8px",
+                height: "55vh",
               }}
             >
               <Box p={2}>
@@ -1838,6 +1855,7 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
+                    height: "calc(55vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1870,6 +1888,7 @@ const Dashboard = () => {
               sx={{
                 backgroundColor: "#fff",
                 borderRadius: "8px",
+                height: "55vh",
               }}
             >
               <Box p={2}>
@@ -1912,6 +1931,7 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
+                    height: "calc(55vh - 50px)",
                   }}
                 >
                   <DataGrid
@@ -1944,6 +1964,7 @@ const Dashboard = () => {
               sx={{
                 backgroundColor: "#fff",
                 borderRadius: "8px",
+                height: "55vh",
               }}
             >
               <Box p={2}>
@@ -1986,6 +2007,7 @@ const Dashboard = () => {
                       paddingLeft: "1px",
                       border: "none",
                     },
+                    height: "calc(55vh - 50px)",
                   }}
                 >
                   <DataGrid

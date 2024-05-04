@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import { useUser } from "../../constants/context";
 import { colors } from "../../theme/theme";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { useState } from "react";
 import axios from "axios";
@@ -121,6 +121,7 @@ export const WebsiteDetailModal = () => {
     setrenameConfirm(false);
   };
 
+  const location = useLocation();
   return (
     <Drawer
       anchor={"right"}
@@ -874,7 +875,15 @@ export const WebsiteDetailModal = () => {
               setwebsiteDetail(false);
               setwebsiteModalState(false);
               setwebsiteViewProductsData(websiteDetailData);
-              navigate("/website/view-products");
+              if (location.pathname === "/products") {
+                window.location.reload();
+              }
+              navigate("/products", {
+                state: {
+                  websiteId: websiteDetailData?.WebsiteID,
+                  websiteName: websiteDetailData?.Name,
+                },
+              });
             }}
             autoFocus
           >

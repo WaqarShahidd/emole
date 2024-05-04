@@ -272,6 +272,8 @@ const Header = ({
             fontSize: "24px",
             fontWeight: "700",
             fontFamily: "Urbanist-bold",
+            maxWidth: "70%",
+            lineHeight: "25px",
           }}
         >
           {title}
@@ -444,6 +446,7 @@ const Header = ({
                       width: "100%",
                       mb: 2,
                     }}
+                    onClick={exportOnClick}
                   >
                     <FileDownloadRounded
                       sx={{
@@ -752,6 +755,7 @@ const Header = ({
                 cursor: "pointer",
                 ml: 2,
               }}
+              onClick={exportOnClick}
             >
               <FileDownloadRounded
                 sx={{

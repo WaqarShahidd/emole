@@ -324,7 +324,7 @@ const AddProduct = () => {
       setloading(true);
 
       await axios
-        .post(`http://flaskscr.us-east-2.elasticbeanstalk.com/scrape`, {
+        .post(`https://datascraper.eu-north-1.elasticbeanstalk.com/scrape`, {
           product_url: addProdFromURL,
           user_id: userData?.UserID,
         })
