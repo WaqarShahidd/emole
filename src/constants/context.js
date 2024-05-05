@@ -44,7 +44,8 @@ export function UserProvider({ children }) {
         },
       });
       const data = await response.data.websites;
-      setallWebsites(data);
+      const filteredData = data?.filter((item) => item?.products?.length > 0);
+      setallWebsites(filteredData);
     } catch (error) {
       console.error(error);
     }
