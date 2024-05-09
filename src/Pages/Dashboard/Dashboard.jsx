@@ -1477,7 +1477,7 @@ const Dashboard = () => {
           <Grid item xs={12} sm={6} md={4} lg={2.4}>
             <DashboardBox
               title="Total Alerts"
-              productCount={7}
+              productCount={countData?.alerts}
               Icon={Notifications}
               onClick={() => navigate("/notifications")}
               btnText={"See Alerts"}

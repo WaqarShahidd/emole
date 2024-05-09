@@ -315,6 +315,8 @@ const AddProduct = () => {
     )
   );
 
+  const [productCount, setproductCount] = useState(null);
+
   const AddProd = async () => {
     console.log(userData);
 
@@ -324,13 +326,14 @@ const AddProduct = () => {
       setloading(true);
 
       await axios
-        .post(`https://datascraper.eu-north-1.elasticbeanstalk.com/scrape`, {
+        .post(`http://datascraper.eu-north-1.elasticbeanstalk.com/scrape`, {
           product_url: addProdFromURL,
           user_id: userData?.UserID,
         })
         .then((res) => {
           setloading(false);
-          setdeleteConfirm(true);
+          setaddProdConfirm(true);
+          setproductCount(res.data);
         })
         .catch((e) => {
           console.log(e);
@@ -345,7 +348,10 @@ const AddProduct = () => {
     <Drawer
       anchor={"right"}
       open={addProdDrawer}
-      onClose={() => setaddProdDrawer(false)}
+      onClose={() => {
+        setaddProdDrawer(false);
+        setproductCount(null);
+      }}
       sx={{
         "& .MuiDrawer-paper": {
           maxHeight: "100%",
@@ -358,7 +364,7 @@ const AddProduct = () => {
     >
       <Snackbar
         open={deleteConfirm}
-        autoHideDuration={4000}
+        autoHideDuration={2000}
         onClose={handleCloseSnackbar}
       >
         <Alert
@@ -372,7 +378,7 @@ const AddProduct = () => {
       </Snackbar>
       <Snackbar
         open={addProdConfirm}
-        autoHideDuration={4000}
+        autoHideDuration={2000}
         onClose={handleCloseAddProdSnackbar}
       >
         <Alert
@@ -505,39 +511,43 @@ const AddProduct = () => {
                   </Button>
                 </Box>
               </Stack>
-              {/* <Divider
-                sx={{
-                  border: 0,
-                  borderTop: "1px dashed #AEB7C9",
-                  my: 2,
-                }}
-              />
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    fontWeight: "700",
-                    fontFamily: "Urbanist-bold",
-                    color: colors.blueText,
-                  }}
-                >
-                  Total products found
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: "16px",
-                    fontWeight: "700",
-                    fontFamily: "Urbanist-bold",
-                    color: colors.blueText,
-                  }}
-                >
-                  126
-                </Typography>
-              </Stack> */}
+              {productCount !== null && (
+                <>
+                  <Divider
+                    sx={{
+                      border: 0,
+                      borderTop: "1px dashed #AEB7C9",
+                      my: 2,
+                    }}
+                  />
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography
+                      sx={{
+                        fontSize: "16px",
+                        fontWeight: "700",
+                        fontFamily: "Urbanist-bold",
+                        color: colors.blueText,
+                      }}
+                    >
+                      Total products added
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: "16px",
+                        fontWeight: "700",
+                        fontFamily: "Urbanist-bold",
+                        color: colors.blueText,
+                      }}
+                    >
+                      {productCount["Total Number of Product Added: "]}
+                    </Typography>
+                  </Stack>
+                </>
+              )}
             </Box>
           </Box>
           <Box
