@@ -11,6 +11,10 @@ import {
 } from "@mui/material";
 import { colors } from "../../theme/theme";
 import moment from "moment";
+import {
+  getStatusBackgroundColor,
+  getStatusTextColor,
+} from "../../assets/DummyData";
 
 const RowComp = ({ leftText, rightText, divider }) => (
   <>
@@ -106,6 +110,39 @@ const AlertDetails = ({ deleteBtn }) => {
               borderRadius: "8px",
             }}
           >
+            <>
+              <Stack
+                direction="row"
+                alignItems="center"
+                justifyContent="space-between"
+                my={1}
+                mb={2}
+              >
+                <Typography
+                  fontFamily={"Urbanist-bolder"}
+                  fontWeight={"bold"}
+                  fontSize={14}
+                  color={colors.subText}
+                >
+                  Priority
+                </Typography>
+                <Typography
+                  sx={{
+                    fontFamily: "Urbanist-bold",
+                    fontSize: 14,
+                    backgroundColor: getStatusBackgroundColor(
+                      alertDetailsData?.priority
+                    ),
+                    color: getStatusTextColor(alertDetailsData?.priority),
+                    px: 2,
+                    py: 0.5,
+                    borderRadius: "12px",
+                  }}
+                >
+                  {alertDetailsData?.priority}
+                </Typography>
+              </Stack>
+            </>
             <RowComp
               leftText={"Date"}
               rightText={moment(alertDetailsData?.createdAt).format(
