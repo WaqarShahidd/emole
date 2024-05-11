@@ -91,6 +91,7 @@ export const CustomPasswordInput = ({
   passwordError,
   setPasswordError,
   label,
+  invalid,
 }) => {
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -124,12 +125,14 @@ export const CustomPasswordInput = ({
           }}
           placeholder={label ? `Enter ${label}` : "Enter Password"}
           type={showPassword ? "text" : "password"}
-          error={passwordError}
+          error={passwordError || invalid}
           helperText={
             passwordError
               ? value?.length < 8
                 ? "Minimum 8 characters required"
                 : "Passwords do not match"
+              : invalid
+              ? "Invalid Credentials"
               : ""
           }
           onBlur={(e) => {
@@ -137,28 +140,6 @@ export const CustomPasswordInput = ({
               setPasswordError(true);
             }
           }}
-          // endAdornment={
-          //   <InputAdornment position="end">
-          //     <IconButton
-          //       aria-label="toggle password visibility"
-          //       onClick={handleClickShowPassword}
-          //       onMouseDown={handleMouseDownPassword}
-          //       edge="end"
-          //     >
-          //       {showPassword ? <VisibilityOff /> : <Visibility />}
-          //     </IconButton>
-          //   </InputAdornment>
-          // }
-          // sx={{
-          //   height: "40px",
-          //   borderRadius: "8px",
-          //   backgroundColor: "#fff",
-          //   border: "1px solid #E0E2E7",
-          //   elevation: 0,
-          //   fontFamily: "Urbanist",
-          //   fontSize: "14px",
-          //   fontWeight: "400",
-          // }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="start">

@@ -24,7 +24,7 @@ import { colors } from "../../theme/theme";
 import { CustomInput } from "../../components/CustomInput";
 import { DataGrid } from "@mui/x-data-grid";
 import { billingRows } from "../../assets/DummyData";
-import { Delete, Visibility } from "@mui/icons-material";
+import { Close, Delete, DoneSharp, Visibility } from "@mui/icons-material";
 import DeleteModal from "../../components/DeleteModal";
 import axios from "axios";
 import { BASE_URL } from "../../constants/config";
@@ -316,12 +316,12 @@ const AddProduct = () => {
   );
 
   const [productCount, setproductCount] = useState(null);
+  const [productsAddFail, setproductsAddFail] = useState(false);
 
   const AddProd = async () => {
-    console.log(userData);
-
+    setaddProdError(false);
     if (addProdFromURL === "") {
-      seterror(true);
+      setaddProdError(true);
     } else {
       setloading(true);
 
@@ -332,11 +332,13 @@ const AddProduct = () => {
         })
         .then((res) => {
           setloading(false);
+          setaddProdError(false);
           setaddProdConfirm(true);
           setproductCount(res.data);
         })
         .catch((e) => {
-          console.log(e);
+          setaddProdError(false);
+          setproductsAddFail(true);
           setloading(false);
         });
     }
@@ -362,6 +364,281 @@ const AddProduct = () => {
         },
       }}
     >
+      {/* Products added Dialog */}
+      <Dialog
+        open={addProdConfirm}
+        onClose={() => setaddProdConfirm(false)}
+        sx={{ p: 5 }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            px: 2,
+            pt: 2,
+          }}
+        >
+          <IconButton onClick={() => setaddProdConfirm(false)}>
+            <Close />
+          </IconButton>
+        </Box>
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            p: 2,
+            maxWidth: "500px",
+            width: "100%",
+            mb: "0px",
+          }}
+        >
+          <Box
+            sx={{
+              height: "70px",
+              width: "70px",
+              borderRadius: "50%",
+              backgroundColor: "#E9FAF7",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <img
+              src={require("../../assets/icons/check.png")}
+              alt=""
+              style={{ height: "30px", width: "30px" }}
+            />
+          </Box>
+          <Typography
+            sx={{
+              color: colors.darkText,
+              fontWeight: "700",
+              fontSize: "20px",
+              fontFamily: "Urbanist-bolder",
+              mb: 2,
+            }}
+          >
+            We are getting to work
+          </Typography>
+          <Typography
+            sx={{
+              color: colors.subText,
+              fontSize: "16px",
+              fontFamily: "PublicSans",
+              mb: 1,
+              textAlign: "center",
+            }}
+          >
+            Please give us time for our platform to fully process all the
+            products in the URL you shared and their information.
+          </Typography>
+          <Typography
+            sx={{
+              color: colors.subText,
+              fontSize: "16px",
+              fontFamily: "PublicSans",
+              fontWeight: "800",
+              mt: 1,
+              textAlign: "center",
+            }}
+          >
+            The processing time depend on the amount of product inside the url
+            and we will notify you via email once this process is complete.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={() => setaddProdConfirm(false)}
+              disableElevation
+              sx={{
+                color: "#000",
+                border: "1px solid #C2C6CE",
+                fontFamily: "Urbanist",
+                fontWeight: "600",
+                fontSize: "14px",
+                borderRadius: "8px",
+                textTransform: "none",
+              }}
+            >
+              Close
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setaddProdConfirm(false);
+
+                setaddProdDrawer(false);
+                navigate("/products");
+              }}
+              disableElevation
+              sx={{
+                backgroundColor: "#1A9882",
+                color: "#fff",
+                fontFamily: "Urbanist",
+                fontSize: "14px",
+                borderRadius: "8px",
+                textTransform: "none",
+                ":hover": {
+                  backgroundColor: "#1A9882",
+                },
+              }}
+            >
+              Go to all products
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
+
+      {/* Delete Confirm Dialog */}
+      <Dialog
+        open={productsAddFail}
+        onClose={() => setproductsAddFail(false)}
+        sx={{ p: 5 }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            px: 2,
+            pt: 2,
+          }}
+        >
+          <IconButton onClick={() => setproductsAddFail(false)}>
+            <Close />
+          </IconButton>
+        </Box>
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            p: 2,
+            maxWidth: "500px",
+            width: "100%",
+            mb: "0px",
+          }}
+        >
+          <Box
+            sx={{
+              height: "70px",
+              width: "70px",
+              borderRadius: "50%",
+              backgroundColor: "#FEECEE",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            <img
+              src={require("../../assets/icons/cross.png")}
+              alt=""
+              style={{ height: "30px", width: "30px" }}
+            />
+          </Box>
+          <Typography
+            sx={{
+              color: colors.darkText,
+              fontWeight: "700",
+              fontSize: "20px",
+              fontFamily: "Urbanist-bolder",
+              mb: 2,
+            }}
+          >
+            Error Adding Your Products
+          </Typography>
+          <Typography
+            sx={{
+              color: colors.subText,
+              fontSize: "16px",
+              fontFamily: "PublicSans",
+              mb: 1,
+              textAlign: "center",
+            }}
+          >
+            An error occurred during the product addition process, please try
+            again.
+          </Typography>
+          <Typography
+            sx={{
+              color: colors.subText,
+              fontSize: "16px",
+              fontFamily: "PublicSans",
+              mt: 1,
+              textAlign: "center",
+            }}
+          >
+            Still not working? Now worries! contact out support and we will
+            costume our scraper to your needs in less than 24 hours and free of
+            charge!
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Button
+              variant="outlined"
+              onClick={() => setproductsAddFail(false)}
+              disableElevation
+              sx={{
+                color: "#000",
+                border: "1px solid #C2C6CE",
+                fontFamily: "Urbanist",
+                fontWeight: "600",
+                fontSize: "14px",
+                borderRadius: "8px",
+                textTransform: "none",
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              onClick={() => {
+                setproductsAddFail(false);
+                setaddProdDrawer(false);
+                navigate("/products");
+              }}
+              disableElevation
+              sx={{
+                backgroundColor: "#EB3D4D",
+                color: "#fff",
+                fontFamily: "Urbanist",
+                fontSize: "14px",
+                borderRadius: "8px",
+                textTransform: "none",
+                ":hover": {
+                  backgroundColor: "#EB3D4D",
+                },
+              }}
+            >
+              Go to all products
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
+
       <Snackbar
         open={deleteConfirm}
         autoHideDuration={2000}
@@ -376,7 +653,7 @@ const AddProduct = () => {
           Product Group Deleted
         </Alert>
       </Snackbar>
-      <Snackbar
+      {/* <Snackbar
         open={addProdConfirm}
         autoHideDuration={2000}
         onClose={handleCloseAddProdSnackbar}
@@ -389,7 +666,7 @@ const AddProduct = () => {
         >
           Produts Added
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
       <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}
@@ -467,7 +744,7 @@ const AddProduct = () => {
                 direction="row"
                 alignItems="center"
                 justifyContent="space-between"
-                mb={error ? 4 : 0}
+                mb={addProdError ? 2 : 0}
               >
                 <Box
                   sx={{

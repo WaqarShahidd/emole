@@ -34,6 +34,7 @@ const CustomInput = ({
   mT,
   emailError,
   setEmailError,
+  invalid,
 }) => {
   return (
     <div
@@ -60,16 +61,6 @@ const CustomInput = ({
       <FormControl fullWidth variant="outlined" sx={{ elevation: 0 }}>
         <TextField
           placeholder={placeholder}
-          // sx={{
-          //   height: "40px",
-          //   borderRadius: "8px",
-          //   backgroundColor: "#fff",
-          //   border: "1px solid #E0E2E7",
-          //   elevation: 0,
-          //   fontFamily: "Urbanist",
-          //   fontSize: "14px",
-          //   fontWeight: "400",
-          // }}
           inputProps={{
             sx: {
               height: 7,
@@ -86,8 +77,10 @@ const CustomInput = ({
           }}
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          error={emailError}
-          helperText={emailError ? "Invalid Email" : ""}
+          error={emailError || invalid}
+          helperText={
+            emailError ? "Invalid Email" : invalid ? "Invalid Credentials" : ""
+          }
           onBlur={(e) => {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             setEmailError(!emailRegex.test(e.target.value));
@@ -120,12 +113,19 @@ const Login = () => {
   };
 
   const HandleLogin = async () => {
-    if (email === "" || password === "") {
-      // seterror(true);
-      // seterrorMsg("Please fill all the fields!");
+    seterrorMsg("");
+    seterror(false);
+    setEmailError(false);
+    setPasswordError(false);
+    if (email === "" && password === "") {
       setEmailError(true);
       setPasswordError(true);
-      console.log(errorMsg);
+    } else if (password === "") {
+      setPasswordError(true);
+    } else if (email === "") {
+      setEmailError(true);
+    } else if (password.length < 8) {
+      setPasswordError(true);
     } else {
       setloading(true);
       await axios
@@ -162,7 +162,7 @@ const Login = () => {
       >
         <CircularProgress color="inherit" />
       </Backdrop>
-      <Snackbar open={error} autoHideDuration={6000} onClose={handleCloseError}>
+      {/* <Snackbar open={error} autoHideDuration={6000} onClose={handleCloseError}>
         <Alert
           onClose={handleCloseError}
           severity="error"
@@ -171,7 +171,7 @@ const Login = () => {
         >
           {errorMsg}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
 
       <Grid
         item
@@ -297,12 +297,14 @@ const Login = () => {
               placeholder="eg. youremail@email.com"
               emailError={emailError}
               setEmailError={setEmailError}
+              invalid={errorMsg}
             />
             <CustomPasswordInput
               value={password}
               setValue={setPassword}
               passwordError={passwordError}
               setPasswordError={setPasswordError}
+              invalid={errorMsg}
             />
 
             <Box
