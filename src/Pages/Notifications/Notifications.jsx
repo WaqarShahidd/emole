@@ -332,7 +332,9 @@ const Notifications = () => {
             onClick={() => {
               setalertDetailsData(params.row);
               setalertDetails(true);
-              ChangeReadStatus(params.row.read === 0 ? 1 : 0, [params.row.id]);
+              if (params.row.read === 0) {
+                ChangeReadStatus(1, [params.row.id]);
+              }
             }}
           >
             {params.row.read === 0 ? (
@@ -884,6 +886,10 @@ const Notifications = () => {
                   );
                   setselectedProducts(selectedRows);
                 }}
+                disableColumnSorting
+                disableColumnFilter
+                disableColumnMenu
+                isRowSelectable={false}
               />
             </Box>
             <Box className="mt-4 mx-4">

@@ -230,42 +230,6 @@ const Products = () => {
         );
       },
     },
-    // {
-    //   field: "linked_website",
-    //   headerName: "Linked Website",
-    //   headerClassName: "MuiDataGrid-columnHeaderTitleContainer",
-    //   headerAlign: "center",
-    //   minWidth: 160,
-    //   flex: 1,
-    //   renderHeader: (params) => (
-    //     <Typography fontFamily={"Urbanist"} fontWeight={"bold"}>
-    //       {params?.colDef?.headerName}
-    //     </Typography>
-    //   ),
-    //   renderCell: (params) => (
-    //     <Box className="flex-col flex w-full h-full  justify-center">
-    //       <Typography
-    //         fontFamily={"Urbanist"}
-    //         color={"gray"}
-    //         fontWeight={"bold"}
-    //         fontSize={13}
-    //       >
-    //         {params?.row?.Product?.Page?.Website?.URL}
-    //       </Typography>
-    //       <Typography
-    //         fontFamily={"Urbanist"}
-    //         fontWeight={"bold"}
-    //         fontSize={13}
-    //         className=" font-bold text-blue-500 cursor-pointer"
-    //         onClick={() =>
-    //           window.open(`${params?.row?.website?.website_url}`, "_blank")
-    //         }
-    //       >
-    //         {params?.row?.website?.website_url}
-    //       </Typography>
-    //     </Box>
-    //   ),
-    // },
     {
       field: "stockStatus",
       headerName: "Stock Status",
@@ -328,7 +292,9 @@ const Products = () => {
             fontWeight={"bold"}
             fontSize={13}
           >
-            {params?.row?.Product?.OutOfStockCount}
+            {params?.row?.Product?.OutOfStockCount === null
+              ? "N/A"
+              : params?.row?.Product?.OutOfStockCount}
           </Typography>
         </Box>
       ),
@@ -464,7 +430,7 @@ const Products = () => {
   const [totalCount, settotalCount] = useState(0);
   const [totalPages, settotalPages] = useState(1);
   const [currentPage, setcurrentPage] = useState(1);
-  const [numOfProductPerPage, setnumOfProductPerPage] = useState(10);
+  const [numOfProductPerPage, setnumOfProductPerPage] = useState(20);
 
   const [slectedGroup, setslectedGroup] = useState(
     state?.groupName ? state?.groupName : ""
@@ -546,7 +512,7 @@ const Products = () => {
   const DeleteProducts = async () => {
     setloading(true);
     const token = localStorage.getItem("token");
-    const deleteIds = selectedProducts.map((product) => product?.ProductID);
+    const deleteIds = selectedProducts?.map((product) => product?.ProductID);
     console.log(deleteIds);
     await axios
       .post(
@@ -696,7 +662,7 @@ const Products = () => {
           open={deleteProducts}
           onClose={() => setdeleteProducts(false)}
           onClick={DeleteProducts}
-          title="Delete Products"
+          title={`Delete ${selectedProducts?.length} Products`}
           mainText="Are you sure you want to delete these products?"
           subText="Are you sure you want to delete these products? This action cannot be undone and historical data will no longer be available."
         />
@@ -1042,6 +1008,9 @@ const Products = () => {
               }}
             >
               <DataGrid
+                disableColumnSorting
+                disableColumnFilter
+                disableColumnMenu
                 sx={{
                   "&, [class^=MuiDataGrid-main]": { borderRadius: 4 },
                   ".MuiDataGrid-columnHeaderTitleContainer": {
@@ -1082,6 +1051,7 @@ const Products = () => {
                 }
                 hideFooter={true}
                 checkboxSelection
+                isRowSelectable={false}
               />
             </Box>
             <Box className="mt-4 mx-4">
@@ -1106,27 +1076,19 @@ const Products = () => {
                       style={{ width: "100%" }}
                       margin={"1"}
                     >
-                      {/* <InputLabel
-                      style={{
-                        fontSize: 12,
-                      }}
-                      id="test-select-label"
-                    >
-                      X-Per page
-                    </InputLabel> */}
                       <Select
                         fullWidth
-                        defaultValue={10}
-                        // input={<OutlinedInput sx={{ fontSize: 14 }} label="Tag" />}
+                        defaultValue={20}
                         size="small"
                         variant="outlined"
-                        // value={num}
-
                         style={{ height: 32 }}
                         onChange={handleChangeProductPerPage}
                       >
-                        <MenuItem value={5}>Five</MenuItem>
-                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>20</MenuItem>
+                        <MenuItem value={50}>50</MenuItem>
+                        <MenuItem value={100}>100</MenuItem>
+                        <MenuItem value={200}>200</MenuItem>
+                        <MenuItem value={500}>500</MenuItem>
                       </Select>
                     </FormControl>
                   </Box>

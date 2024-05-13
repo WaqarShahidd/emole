@@ -650,7 +650,7 @@ const AccountBilling = () => {
                   fontFamily: "Urbanist-bold",
                 }}
               >
-                {currentProgress}%
+                {currentProgress?.toFixed(2)}%
               </Typography>
             </Stack>
             <BorderLinearProgress
@@ -739,7 +739,8 @@ const AccountBilling = () => {
                     mt: 2,
                   }}
                 >
-                  ** You will be charge {planPrice}$ every month
+                  ** You will be charge {planPrice}$ every{" "}
+                  {planTypeSwitch ? "month" : "year"}
                 </Typography>
               )}
               <Typography

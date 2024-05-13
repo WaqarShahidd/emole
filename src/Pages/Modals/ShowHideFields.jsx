@@ -121,7 +121,7 @@ const ShowHideFields = ({
           </Box>
         </Box>
 
-        {/* <Box
+        <Box
           sx={{
             backgroundColor: "#fff",
             p: 3,
@@ -129,6 +129,7 @@ const ShowHideFields = ({
         >
           <Stack direction={"row"} spacing={2}>
             <Button
+              onClick={() => setshowHideFieldsDrawer(false)}
               disableElevation
               style={{
                 background: "#f1f1f1",
@@ -141,25 +142,10 @@ const ShowHideFields = ({
               variant="contained"
               fullWidth
             >
-              Reset Filters
-            </Button>
-            <Button
-              disableElevation
-              style={{
-                background: colors.blueText,
-                fontFamily: "Urbanist",
-                textTransform: "none",
-                fontWeight: "bold",
-                height: "45px",
-              }}
-              variant="contained"
-              fullWidth
-              autoFocus
-            >
-              Apply
+              Close
             </Button>
           </Stack>
-        </Box> */}
+        </Box>
       </Box>
     </Drawer>
   );

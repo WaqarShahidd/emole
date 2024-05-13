@@ -343,7 +343,8 @@ const BillingPlans = () => {
                 color: "#fff",
               }}
             >
-              ** You will be charge {planPrice}$ every month
+              ** You will be charge {planPrice}$ every{" "}
+              {planTypeSwitch ? "month" : "year"}
             </Typography>
           )}
           <Typography

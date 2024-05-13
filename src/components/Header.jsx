@@ -272,7 +272,6 @@ const Header = ({
             fontSize: "24px",
             fontWeight: "700",
             fontFamily: "Urbanist-bold",
-            maxWidth: "70%",
             lineHeight: "25px",
           }}
         >
